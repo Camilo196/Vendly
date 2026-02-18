@@ -215,35 +215,6 @@ El token se obtiene al hacer login o registro.
   "paymentMethod": "cash"
 }
 ```
-
-## 🚀 Despliegue en Producción
-
-### Backend (Railway / Render)
-
-1. **Railway** (Recomendado - $5/mes):
-   - Conecta tu repositorio Git
-   - Railway detecta Node.js automáticamente
-   - Añade las variables de entorno en el dashboard
-
-2. **Render** (Opción gratuita):
-   - Crea Web Service
-   - Conecta repositorio
-   - Build: `npm install`
-   - Start: `npm start`
-
-### Frontend (Vercel / Netlify)
-
-1. Sube la carpeta `frontend` a tu repo
-2. Conecta con Vercel o Netlify
-3. Deploy automático
-
-### Base de Datos
-
-MongoDB Atlas (plan gratis hasta 512MB):
-- Ya configurado si seguiste las instrucciones
-- Backups automáticos
-- Escalable según necesites
-
 ## 💡 Próximos Pasos para Mejorar
 
 1. ✅ Agregar recuperación de contraseña por email
@@ -257,24 +228,10 @@ MongoDB Atlas (plan gratis hasta 512MB):
 
 ## 🐛 Solución de Problemas
 
-### "Error conectando a MongoDB"
-- Verifica tu connection string en `.env`
-- Asegúrate de permitir todas las IPs en MongoDB Atlas
-- Verifica usuario y password
-
-### "Token inválido"
-- El token expira después de 30 días
-- Haz login nuevamente
-
-### "Stock insuficiente"
-- Verifica que tienes suficiente stock del producto
-- Registra una compra primero
-
 ## 📞 Soporte
 
 Para cualquier duda o problema:
-- Email: soporte@tusistema.com
-- Documentación: [Link a docs]
+- Email: camiloher1961@gmail.com
 
 ## 📄 Licencia
 
