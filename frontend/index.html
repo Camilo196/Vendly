@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendly - Gestiona tu negocio, potencia tus ventas</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="spinner"></div>
+        <p>Cargando...</p>
+    </div>
+
+    <!-- Login/Register Screen -->
+    <div id="authScreen" class="auth-screen">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h1>🛍️ Vendly</h1>
+                <p class="subtitle">Gestiona tu negocio, potencia tus ventas</p>
+            </div>
+
+            <!-- Login Form -->
+            <div id="loginForm" class="auth-form active">
+                <h2>Iniciar Sesión</h2>
+                <form id="formLogin">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="loginEmail" required placeholder="tu@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <div style="position:relative;">
+                            <input type="password" id="loginPassword" required placeholder="••••••" style="width:100%; box-sizing:border-box; padding-right:40px;">
+                            <span onclick="const i=document.getElementById('loginPassword'); i.type=i.type==='password'?'text':'password'; this.textContent=i.type==='password'?'👁️':'🙈';"
+                                style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer; user-select:none;">👁️</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Entrar</button>
+                </form>
+                <!-- Registro solo por admin -->
+            </div>
+
+            <!-- Register Form -->
+            <div id="registerForm" class="auth-form">
+                <h2>Crear Cuenta</h2>
+                <form id="formRegister">
+                    <div class="form-group">
+                        <label>Nombre del Negocio</label>
+                        <input type="text" id="regBusinessName" required placeholder="Mi Tienda">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="regEmail" required placeholder="tu@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input type="password" id="regPassword" required placeholder="Mínimo 6 caracteres">
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono (opcional)</label>
+                        <input type="tel" id="regPhone" placeholder="3001234567">
+                    </div>
+                    <div class="form-group">
+                        <label>Ciudad (opcional)</label>
+                        <input type="text" id="regCity" placeholder="Pasto">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Registrarse</button>
+                </form>
+                <p class="auth-switch">
+                    ¿Ya tienes cuenta? <a href="#" id="showLogin">Iniciar sesión</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="main-app" style="display: none;">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1>📱 <span id="businessName">Mi Negocio</span></h1>
+                </div>
+                <div class="header-right">
+                    <span id="userEmail" class="user-email"></span>
+                    <button id="btnLogout" class="btn btn-sm">Salir</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="app-nav">
+            <button class="nav-btn active" data-view="dashboard">📊 Dashboard</button>
+            <button class="nav-btn" data-view="purchases">📦 Compras</button>
+            <button class="nav-btn" data-view="sales">💰 Ventas</button>
+            <button class="nav-btn" data-view="inventory">📋 Inventario</button>
+            <button class="nav-btn" data-view="technical">🔧 Servicio Técnico</button>
+            <button class="nav-btn" data-view="reports">📈 Reportes</button>
+            <button class="nav-btn" data-view="employees">👥 Empleados</button>
+            <button class="nav-btn" data-view="commissions">💰 Comisiones</button>
+        </nav>
+
+        <div id="adminPanel" style="display:none; padding:24px;"></div>
+
+        <!-- Main Content -->
+        <main class="app-content">
+            <!-- Dashboard View -->
+            <div id="viewDashboard" class="view active">
+                <h2>Dashboard</h2>
+                <div class="stats-grid" id="statsGrid">
+                    <!-- Stats cards will be inserted here -->
+                </div>
+                <div class="dashboard-content">
+                    <div class="card">
+                        <h3>Productos con Stock Bajo</h3>
+                        <div id="lowStockList"></div>
+                    </div>
+                    <div class="card">
+                        <h3>Top Productos Más Vendidos</h3>
+                        <div id="topProductsList"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Purchases View -->
+            <!-- Purchases View -->
+            <div id="viewPurchases" class="view">
+                <h2>Compras</h2>
+                <div class="card">
+                    <h3>Registrar Nueva Compra</h3>
+                    <form id="formPurchase" class="form-horizontal">
+                        <!-- Fila 1: Nombre y Cantidad -->
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 2;">
+                                <label>Nombre del Producto *</label>
+                                <input type="text" id="purchaseProductName" required placeholder="Ej: iPhone 14 Pro Max">
+                            </div>
+                            <div class="form-group">
+                                <label>Cantidad *</label>
+                                <input type="number" id="purchaseQuantity" required min="1" placeholder="1" value="1">
+                            </div>
+                        </div>
+
+                        <!-- ⭐ NUEVO: Tipo de Producto y Comisión -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Tipo de Producto *</label>
+                                <select id="purchaseProductType" required style="font-size: 16px; padding: 10px;">
+                                    <option value="otro">📦 Otro (sin comisión)</option>
+                                    <option value="celular">📱 Celular (genera comisión)</option>
+                                    <option value="accesorio">🔌 Accesorio (sin comisión)</option>
+                                </select>
+                                <small style="display: block; margin-top: 5px; color: #666;">Solo los celulares generan comisión en ventas</small>
+                            </div>
+                            
+                            <!-- ⭐ NUEVO: Comisión específica -->
+                            <div class="form-group" id="commissionRateGroup" style="display: none;">
+                                <label>% Comisión por este celular (opcional)</label>
+                                <input type="number" id="purchaseCommissionRate" min="0" max="100" step="0.5" placeholder="Ej: 5 o 7.5">
+                                <small style="display: block; margin-top: 5px; color: #666;">Si no lo llenas, usa la comisión por defecto del vendedor</small>
+                            </div>
+                        </div>
+
+                        <!-- Fila 2: Costos -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Costo Unitario *</label>
+                                <input type="number" id="purchaseUnitCost" required min="0" step="0.01" placeholder="10000">
+                            </div>
+                            <div class="form-group">
+                                <label>Precio de Venta Sugerido</label>
+                                <input type="number" id="purchaseSuggestedPrice" min="0" step="0.01" placeholder="15000">
+                                <small style="display: block; margin-top: 5px; color: #666;">Precio al que venderás este producto</small>
+                            </div>
+                        </div>
+
+                        <!-- Fila 3: Proveedor y Factura -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Proveedor (opcional)</label>
+                                <input type="text" id="purchaseSupplier" placeholder="Distribuidora XYZ">
+                            </div>
+                            <div class="form-group">
+                                <label>Factura (opcional)</label>
+                                <input type="text" id="purchaseInvoice" placeholder="FACT-001">
+                            </div>
+                        </div>
+
+                        <!-- Total -->
+                        <div class="total-display" style="background: #f0f8ff; padding: 15px; border-radius: 8px; text-align: center; font-size: 1.3em; font-weight: bold; color: #2563eb; margin: 20px 0;">
+                            Total: <span id="purchaseTotal">$0</span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Registrar Compra</button>
+                    </form>
+                </div>
+
+                <!-- Lista de Compras -->
+                <div class="card">
+                    <h3>Historial de Compras</h3>
+                    <div id="purchasesList"></div>
+                </div>
+            </div>
+
+            <!-- Sales View -->
+            <div id="viewSales" class="view">
+                <h2>Ventas</h2>
+                <div class="card">
+                    <h3>Registrar Nueva Venta</h3>
+                    
+                    <!-- 🔍 BARRA DE BÚSQUEDA -->
+                    <div class="search-bar-container">
+                        <input 
+                            type="text" 
+                            id="productSearchBar" 
+                            class="search-bar" 
+                            placeholder="🔍 Buscar producto por nombre, categoría o marca..."
+                            autocomplete="off"
+                        >
+                        <div id="searchResults" class="search-results"></div>
+                    </div>
+
+                    <form id="formSale" class="form-horizontal">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Producto Seleccionado</label>
+                                <input type="text" id="selectedProductName" readonly placeholder="Busca un producto arriba">
+                                <input type="hidden" id="saleProductId" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Stock Disponible</label>
+                                <input type="text" id="availableStock" readonly placeholder="0">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Cantidad</label>
+                                <input type="number" id="saleQuantity" required min="1" placeholder="1">
+                            </div>
+                            <div class="form-group">
+                                <label>💡 Precio Sugerido</label>
+                                <input type="text" id="suggestedPrice" readonly class="suggested-price" placeholder="$0">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="saleEmployee">Vendedor (Comisión)</label>
+                            <select id="saleEmployee">
+                                <option value="">Sin vendedor</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Precio de Venta</label>
+                                <input type="number" id="saleUnitPrice" required min="0" step="0.01" placeholder="15000">
+                            </div>
+                            <div class="form-group">
+                                <label>Método de Pago</label>
+                                <select id="salePaymentMethod">
+                                    <option value="cash">Efectivo</option>
+                                    <option value="card">Tarjeta</option>
+                                    <option value="transfer">Transferencia</option>
+                                    <option value="other">Otro</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Cliente (opcional)</label>
+                            <input type="text" id="saleCustomer" placeholder="Nombre del cliente">
+                        </div>
+
+                        <div class="total-display">
+                            Total: <span id="saleTotal">$0</span>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Registrar Venta</button>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <h3>Historial de Ventas</h3>
+                    <div id="salesList"></div>
+                </div>
+            </div>
+
+            <!-- Inventory View -->
+            <div id="viewInventory" class="view">
+                <h2>Inventario</h2>
+                <div class="card">
+                    <h3>Lista de Productos</h3>
+                    <!-- Barra de búsqueda en inventario -->
+                    <div class="search-bar-container" style="margin-bottom: 20px;">
+                        <input 
+                            type="text" 
+                            id="inventorySearchBar" 
+                            class="search-bar" 
+                            placeholder="🔍 Buscar por nombre, categoría o marca..."
+                            autocomplete="off"
+                        >
+                    </div>
+                    <div id="productsList"></div>
+                </div>
+            </div>
+
+            <!-- Technical Service View -->
+            <div id="viewTechnical" class="view">
+                <h2>🔧 Servicio Técnico</h2>
+                
+                <!-- Estadísticas Mejoradas -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Pendientes</h3>
+                        <p class="stat-value" id="statServicesPending">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>En Proceso</h3>
+                        <p class="stat-value" id="statServicesInProgress">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Cobrado</h3>
+                        <p class="stat-value" id="statServicesRevenue">$0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Mano de Obra</h3>
+                        <p class="stat-value" id="statServicesLabor">$0</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Registrar Nuevo Servicio</h3>
+                    <form id="formTechnicalService" class="form-horizontal">
+
+                        <!-- Fila 1: Cliente y Teléfono -->
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 2;">
+                                <label>Cliente *</label>
+                                <input type="text" id="customerName" required placeholder="Juan Pérez">
+                            </div>
+                            <div class="form-group">
+                                <label>Teléfono</label>
+                                <input type="tel" id="customerPhone" placeholder="+57 300 123 4567">
+                            </div>
+                        </div>
+
+                        <!-- Fila 2: Equipo, Marca, Modelo -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Tipo de Equipo *</label>
+                                <input type="text" id="deviceType" required placeholder="Celular, Laptop, PC...">
+                            </div>
+                            <div class="form-group">
+                                <label>Marca</label>
+                                <input type="text" id="deviceBrand" placeholder="Samsung, Apple, HP...">
+                            </div>
+                            <div class="form-group">
+                                <label>Modelo</label>
+                                <input type="text" id="deviceModel" placeholder="Galaxy S21, iPhone 13...">
+                            </div>
+                        </div>
+
+                        <!-- Fila 3: Problema -->
+                        <div class="form-group">
+                            <label>Problema *</label>
+                            <input type="text" id="problemDescription" required placeholder="No enciende, pantalla rota, no carga...">
+                        </div>
+
+                        <!-- Fila 4: Técnico y % comisión -->
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 2;">
+                                <label>🔧 Técnico Asignado</label>
+                                <select id="serviceTechnicianId">
+                                    <option value="">Sin técnico asignado</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>% Comisión Técnico</label>
+                                <input type="number" id="commissionRate" min="0" max="100" step="0.5" placeholder="0" value="0">
+                                <small style="color:#666;">Se carga del perfil del técnico, editable</small>
+                            </div>
+                        </div>
+
+                        <!-- Fila 5: Costos y comisión -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Mano de Obra</label>
+                                <input type="number" id="laborCost" min="0" step="1000" placeholder="50000" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Costo Repuesto (lo pagaste tú)</label>
+                                <input type="number" id="partsCost" min="0" step="1000" placeholder="35000" value="0">
+                                <small style="color:#666;">Ej: lo compraste en $35.000</small>
+                            </div>
+                            <div class="form-group">
+                                <label>Precio Repuesto (cobras al cliente)</label>
+                                <input type="number" id="partsPrice" min="0" step="1000" placeholder="135000" value="0">
+                                <small style="color:#666;">Ej: le cobras al cliente $135.000</small>
+                            </div>
+                            <div class="form-group">
+                                <label>💵 Comisión del Técnico</label>
+                                <input type="number" id="technicianCommission" min="0" step="100" placeholder="0" value="0">
+                                <small style="color:#666;">Se calcula automático, editable</small>
+                            </div>
+                        </div>
+
+                        <!-- Resumen -->
+                        <div style="background:#f0f4ff; border:1px solid #d1deff; border-radius:10px; padding:16px; margin:15px 0; font-size:14px; color:#1e293b;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                                <span>💰 Total cobrado al cliente:</span>
+                                <strong id="serviceTotal" style="color:#1d4ed8; font-size:16px;">$0</strong>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; margin-bottom:4px; padding-left:12px;">
+                                <span style="color:#555;">↳ Mano de obra:</span>
+                                <span id="serviceLaborDisplay" style="color:#555;">$0</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; margin-bottom:8px; padding-left:12px;">
+                                <span style="color:#555;">↳ Repuesto cobrado:</span>
+                                <span id="servicePartsPriceDisplay" style="color:#555;">$0</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; margin-bottom:6px; border-top:1px solid #c7d2fe; padding-top:8px;">
+                                <span>🔧 Comisión técnico:</span>
+                                <strong id="serviceTechnicianEarnings" style="color:#0369a1;">$0</strong>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                                <span>📦 Costo repuesto (lo pagaste tú):</span>
+                                <strong id="servicePartsCostDisplay" style="color:#dc2626;">$0</strong>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; background:#dcfce7; border-radius:6px; padding:8px 10px; margin-top:4px;">
+                                <span style="color:#166534; font-weight:600;">✅ Tu ganancia neta:</span>
+                                <strong id="serviceLocalEarnings" style="color:#15803d; font-size:17px;">$0</strong>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Registrar Servicio</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>Servicios Registrados</h3>
+                    <div class="filters">
+                        <select id="filterServiceStatus">
+                            <option value="">Todos</option>
+                            <option value="pending">Pendientes</option>
+                            <option value="in_progress">En Proceso</option>
+                            <option value="completed">Completados</option>
+                            <option value="delivered">Entregados</option>
+                        </select>
+                    </div>
+                    <div id="servicesList"></div>
+                </div>
+            </div>
+
+            <!-- Reports View -->
+            <div id="viewReports" class="view">
+                <h2>📈 Reportes</h2>
+                
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3>Reporte de Ventas</h3>
+                        <div style="display: flex; gap: 10px;">
+                            <select id="reportPeriod" class="form-control" style="width: 200px;">
+                                <option value="daily">Hoy</option>
+                                <option value="weekly">Últimos 7 días</option>
+                                <option value="monthly" selected>Último mes</option>
+                                <option value="yearly">Último año</option>
+                            </select>
+                            <button class="btn btn-primary" id="btnDownloadPDF">📄 PDF</button>
+                            <button class="btn btn-primary" id="btnDownloadExcel">📊 Excel</button>
+                        </div>
+                    </div>
+                    
+                    <div id="reportContent">
+                        <div class="empty-state">
+                            <p>Selecciona un período para ver el reporte</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- VISTA: EMPLEADOS -->
+            <!-- ============================================ -->
+            <div id="viewEmployees" class="view">
+                <h2>👥 Gestión de Empleados</h2>
+                
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3>Lista de Empleados</h3>
+                        <button class="btn btn-primary" onclick="app.showEmployeeModal()">
+                            ➕ Nuevo Empleado
+                        </button>
+                    </div>
+
+                    <div class="filters-bar" style="display: flex; gap: 10px; margin-bottom: 20px;">
+                        <select id="employeePositionFilter" onchange="app.loadEmployees()" class="form-control" style="flex: 1;">
+                            <option value="">Todos los puestos</option>
+                            <option value="vendedor">Vendedor</option>
+                            <option value="tecnico">Técnico</option>
+                            <option value="vendedor_tecnico">Vendedor/Técnico</option>
+                        </select>
+                        <select id="employeeStatusFilter" onchange="app.loadEmployees()" class="form-control" style="flex: 1;">
+                            <option value="true">Activos</option>
+                            <option value="false">Inactivos</option>
+                            <option value="">Todos</option>
+                        </select>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Puesto</th>
+                                    <th>Teléfono</th>
+                                    <th>Comisión Ventas</th>
+                                    <th>Comisión Servicios</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="employeesTableBody">
+                                <tr>
+                                    <td colspan="7" style="text-align: center; padding: 20px;">Cargando empleados...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- VISTA: COMISIONES -->
+            <!-- ============================================ -->
+            <div id="viewCommissions" class="view">
+                <h2>💰 Comisiones</h2>
+                
+                <div class="stats-grid" style="margin-bottom: 20px;">
+                    <div class="stat-card">
+                        <h3>Comisiones Pendientes</h3>
+                        <p class="stat-value" id="pendingCommissionsTotal">$0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Comisiones Aprobadas</h3>
+                        <p class="stat-value" id="approvedCommissionsTotal">$0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Comisiones Pagadas (Mes)</h3>
+                        <p class="stat-value" id="paidCommissionsTotal">$0</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3>Historial de Comisiones</h3>
+                        <button class="btn btn-primary" onclick="app.showPayBatchModal()">
+                            ✅ Pagar Seleccionadas
+                        </button>
+                    </div>
+
+                    <div class="filters-bar" style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                        <select id="commissionEmployeeFilter" onchange="app.loadCommissions()" class="form-control" style="flex: 1; min-width: 150px;">
+                            <option value="">Todos los empleados</option>
+                        </select>
+                        <select id="commissionStatusFilter" onchange="app.loadCommissions()" class="form-control" style="flex: 1; min-width: 150px;">
+                            <option value="">Todos los estados</option>
+                            <option value="pending">Pendientes</option>
+                            <option value="approved">Aprobadas</option>
+                            <option value="paid">Pagadas</option>
+                        </select>
+                        <select id="commissionTypeFilter" onchange="app.loadCommissions()" class="form-control" style="flex: 1; min-width: 150px;">
+                            <option value="">Todos los tipos</option>
+                            <option value="sale">Ventas</option>
+                            <option value="technical_service">Servicios Técnicos</option>
+                        </select>
+                        <button class="btn btn-secondary" onclick="app.showMonthlyReportModal()">
+                            📅 Reporte Mensual
+                        </button>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="selectAllCommissions" onchange="app.toggleAllCommissions()"></th>
+                                    <th>Fecha</th>
+                                    <th>Empleado</th>
+                                    <th>Tipo</th>
+                                    <th>Descripción</th>
+                                    <th>Monto Base</th>
+                                    <th>%</th>
+                                    <th>Comisión</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="commissionsTableBody">
+                                <tr>
+                                    <td colspan="10" style="text-align: center; padding: 20px;">Cargando comisiones...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Modal Editar Compra -->
+    <div id="purchaseModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePurchaseModal()">&times;</span>
+            <h2>Editar Compra</h2>
+            <form id="formUpdatePurchase">
+                <input type="hidden" id="updatePurchaseId">
+                
+                <div class="form-group">
+                    <label>Cantidad</label>
+                    <input type="number" id="updatePurchaseQuantity" min="1" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Costo Unitario</label>
+                    <input type="number" id="updatePurchaseUnitCost" min="0" step="0.01" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Proveedor</label>
+                    <input type="text" id="updatePurchaseSupplier">
+                </div>
+
+                <div class="form-group">
+                    <label>Precio Sugerido de Venta</label>
+                    <input type="number" id="updatePurchaseSuggestedPrice" min="0" step="0.01">
+                </div>
+
+                <div class="form-group">
+                    <label>Tipo de Producto</label>
+                    <select id="updatePurchaseProductType">
+                        <option value="celular">Celular</option>
+                        <option value="accesorio">Accesorio</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-secondary" onclick="closePurchaseModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Servicio -->
+    <div id="serviceModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeServiceModal()">&times;</span>
+            <h2>Actualizar Servicio</h2>
+            <form id="formUpdateService">
+                <input type="hidden" id="updateServiceId">
+
+                <div class="form-group">
+                    <label>Estado</label>
+                    <select id="updateStatus">
+                        <option value="pending">Pendiente</option>
+                        <option value="in_progress">En Proceso</option>
+                        <option value="waiting_parts">Esperando Repuesto</option>
+                        <option value="completed">Completado</option>
+                        <option value="delivered">Entregado</option>
+                        <option value="cancelled">Cancelado</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group" style="flex: 2;">
+                        <label>🔧 Técnico Asignado</label>
+                        <select id="updateServiceTechnicianId">
+                            <option value="">Sin técnico asignado</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>% Comisión</label>
+                        <input type="number" id="updateCommissionRate" min="0" max="100" step="0.5" value="0">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Mano de Obra</label>
+                        <input type="number" id="updateLaborCost" min="0" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Costo Repuesto</label>
+                        <input type="number" id="updatePartsCost" min="0" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label>💵 Comisión Técnico</label>
+                        <input type="number" id="updateTechnicianCommission" min="0" step="100" value="0">
+                        <small style="color:#666;">Editable manualmente</small>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeServiceModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Editar Venta -->
+    <div id="saleModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeSaleModal()">&times;</span>
+            <h2>Editar Venta</h2>
+            <form id="formUpdateSale">
+                <input type="hidden" id="updateSaleId">
+                
+                <div class="form-group">
+                    <label>Cantidad</label>
+                    <input type="number" id="updateSaleQuantity" min="1" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Precio Unitario</label>
+                    <input type="number" id="updateSaleUnitPrice" min="0" step="0.01" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Cliente</label>
+                    <input type="text" id="updateSaleCustomer">
+                </div>
+                
+                <div class="form-group">
+                    <label>Método de Pago</label>
+                    <select id="updateSalePaymentMethod">
+                        <option value="cash">Efectivo</option>
+                        <option value="card">Tarjeta</option>
+                        <option value="transfer">Transferencia</option>
+                        <option value="other">Otro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Vendedor</label>
+                    <select id="updateSaleEmployee">
+                        <option value="">Sin vendedor</option>
+                    </select>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeSaleModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Historial de Producto -->
+    <div id="productHistoryModal" class="modal">
+        <div class="modal-content" style="max-width: 900px;">
+            <span class="close" onclick="closeProductHistoryModal()">&times;</span>
+            <h2 id="productHistoryTitle">Historial del Producto</h2>
+            
+            <div class="tabs">
+                <button class="tab-btn active" onclick="showHistoryTab('purchases')">Compras</button>
+                <button class="tab-btn" onclick="showHistoryTab('sales')">Ventas</button>
+            </div>
+            
+            <div id="historyPurchasesTab" class="tab-content active">
+                <h3>Historial de Compras</h3>
+                <div id="productPurchasesList"></div>
+            </div>
+            
+            <div id="historySalesTab" class="tab-content">
+                <h3>Historial de Ventas</h3>
+                <div id="productSalesList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ajustar Stock -->
+    <div id="adjustStockModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAdjustStockModal()">&times;</span>
+            <h2>Ajustar Stock</h2>
+            <form id="formAdjustStock">
+                <input type="hidden" id="adjustProductId">
+                
+                <div class="form-group">
+                    <label>Producto</label>
+                    <input type="text" id="adjustProductName" readonly style="background: #475569; color: #cbd5e1; cursor: not-allowed;">
+                </div>
+                
+                <div class="form-group">
+                    <label>Stock Actual</label>
+                    <input type="number" id="adjustCurrentStock" readonly style="background: #475569; color: #cbd5e1; cursor: not-allowed;">
+                </div>
+                
+                <div class="form-group">
+                    <label>Ajuste (+ para agregar, - para quitar)</label>
+                    <input type="number" id="adjustmentValue" placeholder="Ej: +5 o -3" step="1" required>
+                    <small>Ejemplo: +5 agrega 5 unidades, -3 quita 3 unidades</small>
+                </div>
+                
+                <div class="form-group">
+                    <label>Razón del Ajuste</label>
+                    <select id="adjustReason" required>
+                        <option value="">Seleccionar razón...</option>
+                        <option value="Corrección de inventario">Corrección de inventario</option>
+                        <option value="Producto dañado">Producto dañado</option>
+                        <option value="Producto perdido/robado">Producto perdido/robado</option>
+                        <option value="Devolución de proveedor">Devolución de proveedor</option>
+                        <option value="Muestra/Regalo">Muestra/Regalo</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="adjustReasonOtherGroup" style="display:none;">
+                    <label>Especificar razón</label>
+                    <input type="text" id="adjustReasonOther" placeholder="Describe la razón...">
+                </div>
+                
+                <div id="newStockPreview" class="form-group" style="background: #f0f8ff; padding: 10px; border-radius: 5px; display:none;">
+                    <strong>Nuevo Stock:</strong> <span id="newStockValue">0</span>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="submit" class="btn btn-primary">Confirmar Ajuste</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeAdjustStockModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MODAL: EMPLEADO -->
+    <!-- ============================================ -->
+    <div id="employeeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="employeeModalTitle">Nuevo Empleado</h3>
+                <span class="close" onclick="app.closeEmployeeModal()">&times;</span>
+            </div>
+            <form id="employeeForm" onsubmit="app.saveEmployee(event)">
+                <input type="hidden" id="employeeId">
+                
+                <div class="form-group">
+                    <label for="employeeName">Nombre Completo *</label>
+                    <input type="text" id="employeeName" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="employeeEmail">Email</label>
+                        <input type="email" id="employeeEmail">
+                    </div>
+                    <div class="form-group">
+                        <label for="employeePhone">Teléfono</label>
+                        <input type="tel" id="employeePhone">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="employeePosition">Puesto *</label>
+                    <select id="employeePosition" required>
+                        <option value="">Seleccionar...</option>
+                        <option value="vendedor">Vendedor</option>
+                        <option value="tecnico">Técnico</option>
+                        <option value="vendedor_tecnico">Vendedor/Técnico</option>
+                    </select>
+                </div>
+
+                <h4 style="margin-top: 20px;">Configuración de Comisiones</h4>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="salesCommissionEnabled" checked>
+                            Comisiones por Ventas
+                        </label>
+                        <input type="number" id="salesCommissionRate" min="0" max="100" step="0.1" value="5" placeholder="% Comisión">
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="servicesCommissionEnabled" checked>
+                            Comisiones por Servicios
+                        </label>
+                        <input type="number" id="servicesCommissionRate" min="0" max="100" step="0.1" value="10" placeholder="% Comisión">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="employeeNotes">Notas</label>
+                    <textarea id="employeeNotes" rows="3"></textarea>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="app.closeEmployeeModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MODAL: REPORTE MENSUAL -->
+    <!-- ============================================ -->
+    <div id="monthlyReportModal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h3>📊 Reporte Mensual de Comisiones</h3>
+                <span class="close" onclick="app.closeMonthlyReportModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="reportEmployee">Empleado</label>
+                        <select id="reportEmployee" onchange="app.generateMonthlyReport()">
+                            <option value="">Seleccionar empleado...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="reportMonth">Mes</label>
+                        <input type="month" id="reportMonth" onchange="app.generateMonthlyReport()">
+                    </div>
+                </div>
+
+                <div id="monthlyReportContent" style="margin-top: 20px;">
+                    <p class="text-center">Selecciona un empleado y mes para ver el reporte</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MODAL: PAGO EN LOTE -->
+    <!-- ============================================ -->
+    <div id="payBatchModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Pagar Comisiones Seleccionadas</h3>
+                <span class="close" onclick="app.closePayBatchModal()">&times;</span>
+            </div>
+            <form onsubmit="app.payBatchCommissions(event)">
+                <div class="form-group">
+                    <label>Comisiones a pagar</label>
+                    <p id="batchPayCount">0 comisiones seleccionadas</p>
+                    <p id="batchPayTotal" style="font-size: 1.5em; font-weight: bold;">$0.00</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="batchPayNotes">Notas de pago</label>
+                    <textarea id="batchPayNotes" rows="3" placeholder="Ej: Pago de comisiones correspondiente a febrero 2026"></textarea>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="app.closePayBatchModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Confirmar Pago</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/new-features.js"></script>
+    <script src="js/additional-features.js"></script>
+    <script src="js/employees-commissions.js"></script>
+
+    <script>
+// ⭐ Mostrar campo de comisión solo cuando es celular
+document.getElementById('purchaseProductType')?.addEventListener('change', function() {
+    const commissionGroup = document.getElementById('commissionRateGroup');
+    if (this.value === 'celular') {
+        commissionGroup.style.display = 'block';
+    } else {
+        commissionGroup.style.display = 'none';
+        document.getElementById('purchaseCommissionRate').value = '';
+    }
+});
+
+// ⭐ Calcular total en tiempo real
+function updatePurchaseTotal() {
+    const quantity = parseFloat(document.getElementById('purchaseQuantity')?.value) || 0;
+    const unitCost = parseFloat(document.getElementById('purchaseUnitCost')?.value) || 0;
+    const total = quantity * unitCost;
+    
+    const totalElement = document.getElementById('purchaseTotal');
+    if (totalElement) {
+        totalElement.textContent = new Intl.NumberFormat('es-CO', {
+            style: 'currency',
+            currency: 'COP',
+            minimumFractionDigits: 0
+        }).format(total);
+    }
+}
+
+document.getElementById('purchaseQuantity')?.addEventListener('input', updatePurchaseTotal);
+document.getElementById('purchaseUnitCost')?.addEventListener('input', updatePurchaseTotal);
+</script>
+    
+</body>
+</html>
