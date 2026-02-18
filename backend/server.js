@@ -4,7 +4,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 
 // Cargar variables de entorno
-dotenv.config();
+dotenv.config({ path: '.env' });
 
 // Verificar variables de entorno críticas
 if (!process.env.MONGODB_URI) {
