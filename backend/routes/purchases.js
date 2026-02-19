@@ -165,6 +165,8 @@ router.post('/', async (req, res) => {
       console.log('  Nombre:', product.name);
       console.log('  Stock actual:', product.stock);
       console.log('  Costo promedio actual:', product.averageCost);
+
+      if (!product.isActive) product.isActive = true;
       
       console.log('\n📝 ACTUALIZANDO PRODUCTO EXISTENTE...');
       const skipPriceUpdate = suggestedPrice !== undefined && suggestedPrice > 0;
@@ -330,7 +332,7 @@ router.get('/:id', async (req, res) => {
 // @access  Private
 router.put('/:id', async (req, res) => {
   try {
-    const { quantity, unitCost, supplier, invoice, notes, suggestedPrice, productType } = req.body;
+    const {productName, quantity, unitCost, supplier, invoice, notes, suggestedPrice, productType } = req.body;
     
     const purchase = await Purchase.findOne({
       _id: req.params.id,
@@ -354,6 +356,12 @@ router.put('/:id', async (req, res) => {
     if (invoice !== undefined) purchase.invoice = invoice;
     if (notes !== undefined) purchase.notes = notes;
     if (productType !== undefined) purchase.productType = productType;
+    if (productName !== undefined && productName.trim() !== '') {
+    purchase.productName = productName.trim();
+    if (purchase.productId) {
+        await Product.findByIdAndUpdate(purchase.productId, { name: productName.trim() });
+    }
+}
 
     // También actualizar el producto si cambian precio sugerido o tipo
     if ((suggestedPrice !== undefined || productType !== undefined) && purchase.productId) {

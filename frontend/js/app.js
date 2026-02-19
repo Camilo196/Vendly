@@ -719,6 +719,7 @@ if (formUpdatePurchase) {
         
         const purchaseId = document.getElementById('updatePurchaseId').value;
         const updateData = {
+            productName: document.getElementById('updatePurchaseName').value,
             quantity: parseInt(document.getElementById('updatePurchaseQuantity').value),
             unitCost: parseFloat(document.getElementById('updatePurchaseUnitCost').value),
             supplier: document.getElementById('updatePurchaseSupplier').value,
@@ -760,6 +761,7 @@ window.editPurchase = async function(purchaseId) {
     ) : null;
 
     document.getElementById('updatePurchaseId').value = purchase._id;
+    document.getElementById('updatePurchaseName').value = purchase.productName || '';
     document.getElementById('updatePurchaseQuantity').value = purchase.quantity;
     document.getElementById('updatePurchaseUnitCost').value = purchase.unitCost;
     document.getElementById('updatePurchaseSupplier').value = purchase.supplier || '';
