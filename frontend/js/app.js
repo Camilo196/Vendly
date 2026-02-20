@@ -1,4 +1,4 @@
-// Estado global de la aplicación
+// Estado global de la aplicación v2
 const AppState = {
     user: null,
     products: [],
