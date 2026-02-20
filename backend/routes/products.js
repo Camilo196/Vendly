@@ -219,7 +219,7 @@ router.get('/:id', async (req, res) => {
 // @access  Private
 router.put('/:id', async (req, res) => {
   try {
-    const { name, category, brand, description, profitMargin } = req.body;
+    const { name, category, brand, description, profitMargin, productType, suggestedPrice, commissionRate } = req.body;
     
     const product = await Product.findOne({
       _id: req.params.id,
@@ -238,6 +238,9 @@ router.put('/:id', async (req, res) => {
     if (brand !== undefined) product.brand = brand;
     if (description !== undefined) product.description = description;
     if (profitMargin !== undefined) product.profitMargin = profitMargin;
+    if (productType !== undefined) product.productType = productType;
+    if (suggestedPrice !== undefined) product.suggestedPrice = suggestedPrice;
+    if (commissionRate !== undefined) product.commissionRate = commissionRate;
     
     await product.save();
     

@@ -766,6 +766,40 @@
     </div>
 
     <!-- Modal Historial de Producto -->
+     <!-- Modal Editar Producto -->
+<div id="editProductModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeEditProductModal()">&times;</span>
+        <h2>Editar Producto</h2>
+        <form id="formEditProduct">
+            <input type="hidden" id="editProductId">
+            <div class="form-group">
+                <label>Nombre</label>
+                <input type="text" id="editProductName" required>
+            </div>
+            <div class="form-group">
+                <label>Tipo</label>
+                <select id="editProductType">
+                    <option value="celular">📱 Celular</option>
+                    <option value="accesorio">🔌 Accesorio</option>
+                    <option value="otro">📦 Otro</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Precio Sugerido de Venta</label>
+                <input type="number" id="editProductSuggestedPrice" min="0" step="0.01">
+            </div>
+            <div class="form-group">
+                <label>Comisión (%)</label>
+                <input type="number" id="editProductCommission" min="0" max="100" step="0.1">
+            </div>
+            <div class="modal-actions">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <button type="button" class="btn btn-secondary" onclick="closeEditProductModal()">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
     <div id="productHistoryModal" class="modal">
         <div class="modal-content" style="max-width: 900px;">
             <span class="close" onclick="closeProductHistoryModal()">&times;</span>

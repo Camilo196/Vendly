@@ -431,6 +431,7 @@ const response = await api.getProducts();
                                 <td><span class="badge badge-${status}">${statusText}</span></td>
                                 <td class="action-buttons">
                                     <button class="btn btn-sm" onclick="viewProductHistory('${p._id}')" title="Ver Historial">👁️</button>
+                                    <button class="btn btn-sm" onclick="editProduct('${p._id}')">✏️</button>
                                     <button class="btn btn-sm" onclick="adjustProductStock('${p._id}', '${p.name}', ${p.stock})" title="Ajustar Stock">🔧</button>
                                     <button class="btn btn-sm btn-danger" onclick="deactivateProduct('${p._id}', '${p.name}')" title="Desactivar">❌</button>
                                 </td>
@@ -1150,3 +1151,41 @@ window.adminCrearCliente = async function() {
         alert('Error: ' + error.message);
     }
 };
+window.editProduct = function(productId) {
+    const product = AppState.products ? AppState.products.find(p => p._id === productId) : null;
+    if (!product) { utils.showToast('Producto no encontrado', 'error'); return; }
+    document.getElementById('editProductId').value = product._id;
+    document.getElementById('editProductName').value = product.name;
+    document.getElementById('editProductType').value = product.productType || 'otro';
+    document.getElementById('editProductSuggestedPrice').value = product.suggestedPrice || '';
+    document.getElementById('editProductCommission').value = product.commissionRate ?? '';
+    document.getElementById('editProductModal').classList.add('show');
+};
+
+window.closeEditProductModal = function() {
+    document.getElementById('editProductModal').classList.remove('show');
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('formEditProduct')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('editProductId').value;
+        const data = {
+            name: document.getElementById('editProductName').value.trim(),
+            productType: document.getElementById('editProductType').value,
+            suggestedPrice: parseFloat(document.getElementById('editProductSuggestedPrice').value) || undefined,
+            commissionRate: document.getElementById('editProductCommission').value !== '' 
+                ? parseFloat(document.getElementById('editProductCommission').value) 
+                : null
+        };
+        try {
+            await api.request(`/products/${id}`, { method: 'PUT', body: JSON.stringify(data) });
+            utils.showToast('Producto actualizado');
+            closeEditProductModal();
+            app.loadInventory();
+            app.loadProducts();
+        } catch (error) {
+            utils.showToast(error.message || 'Error al actualizar', 'error');
+        }
+    });
+});
