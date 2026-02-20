@@ -200,6 +200,7 @@ function displayInventoryProducts(products) {
                             <td><span class="badge badge-${status}">${statusText}</span></td>
                             <td class="action-buttons">
                                 <button class="btn btn-sm" onclick="viewProductHistory('${p._id}')" title="Ver Historial">👁️</button>
+                                <button class="btn btn-sm" onclick="editProduct('${p._id}')" title="Editar">✏️</button>
                                 <button class="btn btn-sm" onclick="adjustProductStock('${p._id}', '${p.name}', ${p.stock})" title="Ajustar Stock">🔧</button>
                                 <button class="btn btn-sm btn-danger" onclick="deactivateProduct('${p._id}', '${p.name}')" title="Desactivar">❌</button>
                             </td>
