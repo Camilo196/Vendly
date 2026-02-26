@@ -78,8 +78,11 @@
     <!-- Main App -->
     <div id="mainApp" class="main-app" style="display: none;">
 
+        <!-- Overlay para cerrar menú en móvil -->
+        <div id="sidebarOverlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
+
         <!-- Sidebar -->
-        <aside class="app-sidebar">
+        <aside class="app-sidebar" id="appSidebar">
             <div class="sidebar-brand">
                 <h1>📱 <span id="businessName">Mi Negocio</span></h1>
             </div>
@@ -103,6 +106,14 @@
 
         <!-- Right side -->
         <div class="main-wrapper">
+
+            <!-- Topbar móvil -->
+            <div class="mobile-topbar">
+                <button class="hamburger-btn" onclick="openSidebar()">☰</button>
+                <span class="mobile-title">📱 <span id="businessNameMobile">Mi Negocio</span></span>
+                <button id="btnLogoutMobile" class="btn btn-sm" onclick="document.getElementById('btnLogout').click()">Salir</button>
+            </div>
+
             <div id="adminPanel" style="display:none; padding:24px;"></div>
 
             <!-- Main Content -->
@@ -457,10 +468,10 @@
                 <h2>📈 Reportes</h2>
                 
                 <div class="card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div class="report-header">
                         <h3>Reporte de Ventas</h3>
-                        <div style="display: flex; gap: 10px;">
-                            <select id="reportPeriod" class="form-control" style="width: 200px;">
+                        <div class="report-controls">
+                            <select id="reportPeriod" class="form-control">
                                 <option value="daily">Hoy</option>
                                 <option value="weekly">Últimos 7 días</option>
                                 <option value="monthly" selected>Último mes</option>
@@ -1043,6 +1054,33 @@ function updatePurchaseTotal() {
 
 document.getElementById('purchaseQuantity')?.addEventListener('input', updatePurchaseTotal);
 document.getElementById('purchaseUnitCost')?.addEventListener('input', updatePurchaseTotal);
+
+// ── MENÚ HAMBURGUESA (móvil) ──────────────────────────────
+function openSidebar() {
+    document.getElementById('appSidebar').classList.add('open');
+    document.getElementById('sidebarOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+function closeSidebar() {
+    document.getElementById('appSidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+}
+// Cerrar menú al hacer click en un ítem de nav
+document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (window.innerWidth <= 768) closeSidebar();
+    });
+});
+// Sincronizar nombre del negocio en topbar móvil
+const businessNameObserver = new MutationObserver(() => {
+    const name = document.getElementById('businessName')?.textContent;
+    const mobileEl = document.getElementById('businessNameMobile');
+    if (mobileEl && name) mobileEl.textContent = name;
+});
+const bnEl = document.getElementById('businessName');
+if (bnEl) businessNameObserver.observe(bnEl, { childList: true, characterData: true, subtree: true });
+
 </script>
     
 </body>

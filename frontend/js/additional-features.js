@@ -185,7 +185,7 @@ function displayInventoryProducts(products) {
                     
                     return `
                         <tr>
-                            <td style="font-weight: 600;">
+                            <td data-label="Producto" style="font-weight: 600;">
                             ${p.name}
                             <br><small style="color: #666;">
                                 ${p.productType === 'celular' ? '📱 Celular' : 
@@ -193,11 +193,11 @@ function displayInventoryProducts(products) {
                                 '📦 Otro'}
                             </small>
                             </td>
-                            <td>${p.stock}</td>
-                            <td>${utils.formatMoney(p.averageCost)}</td>
-                            <td style="color: var(--success); font-weight: 600;">${utils.formatMoney(p.suggestedPrice || 0)}</td>
-                            <td style="color: var(--primary);">${utils.formatMoney(stockValue)}</td>
-                            <td><span class="badge badge-${status}">${statusText}</span></td>
+                            <td data-label="Stock">${p.stock}</td>
+                            <td data-label="Costo">${utils.formatMoney(p.averageCost)}</td>
+                            <td data-label="P. Sugerido" style="color: var(--success); font-weight: 600;">${utils.formatMoney(p.suggestedPrice || 0)}</td>
+                            <td data-label="Valor Stock" style="color: var(--primary);">${utils.formatMoney(stockValue)}</td>
+                            <td data-label="Estado"><span class="badge badge-${status}">${statusText}</span></td>
                             <td class="action-buttons">
                                 <button class="btn btn-sm" onclick="viewProductHistory('${p._id}')" title="Ver Historial">👁️</button>
                                 <button class="btn btn-sm" onclick="editProduct('${p._id}')" title="Editar">✏️</button>
@@ -298,12 +298,12 @@ function displayReport(data) {
                 <tbody>
                     ${data.byProduct.map(p => `
                         <tr>
-                            <td>${p.name}</td>
-                            <td>${p.quantity}</td>
-                            <td>$${formatNumber(p.sales)}</td>
-                            <td class="text-success">$${formatNumber(p.profit)}</td>
-                            <td style="color:#d97706;">$${formatNumber(p.commissions || 0)}</td>
-                            <td class="text-success">$${formatNumber(p.netProfit ?? p.profit)}</td>
+                            <td data-label="Producto">${p.name}</td>
+                            <td data-label="Cantidad">${p.quantity}</td>
+                            <td data-label="Ventas">$${formatNumber(p.sales)}</td>
+                            <td data-label="G. Bruta" class="text-success">$${formatNumber(p.profit)}</td>
+                            <td data-label="Comisiones" style="color:#d97706;">$${formatNumber(p.commissions || 0)}</td>
+                            <td data-label="G. Neta" class="text-success">$${formatNumber(p.netProfit ?? p.profit)}</td>
                         </tr>
                     `).join('')}
                 </tbody>
@@ -327,12 +327,12 @@ function displayReport(data) {
                 <tbody>
                     ${data.byTechnicalService.map(ts => `
                         <tr>
-                            <td>${ts.customer}</td>
-                            <td>${ts.device || '—'}</td>
-                            <td>$${formatNumber(ts.laborCost)}</td>
-                            <td style="color:#d97706;">$${formatNumber(ts.technicianCommission)}</td>
-                            <td class="text-success">$${formatNumber(ts.netProfit)}</td>
-                            <td>${ts.status}</td>
+                            <td data-label="Cliente">${ts.customer}</td>
+                            <td data-label="Equipo">${ts.device || '—'}</td>
+                            <td data-label="Mano de Obra">$${formatNumber(ts.laborCost)}</td>
+                            <td data-label="Com. Técnico" style="color:#d97706;">$${formatNumber(ts.technicianCommission)}</td>
+                            <td data-label="G. Neta" class="text-success">$${formatNumber(ts.netProfit)}</td>
+                            <td data-label="Estado">${ts.status}</td>
                         </tr>
                     `).join('')}
                     <tr style="font-weight:bold; background:var(--bg-card); color:var(--text-primary);">
