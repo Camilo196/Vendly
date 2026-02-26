@@ -77,35 +77,36 @@
 
     <!-- Main App -->
     <div id="mainApp" class="main-app" style="display: none;">
-        <!-- Header -->
-        <header class="app-header">
-            <div class="header-content">
-                <div class="header-left">
-                    <h1>📱 <span id="businessName">Mi Negocio</span></h1>
-                </div>
-                <div class="header-right">
-                    <span id="userEmail" class="user-email"></span>
-                    <button id="btnLogout" class="btn btn-sm">Salir</button>
-                </div>
+
+        <!-- Sidebar -->
+        <aside class="app-sidebar">
+            <div class="sidebar-brand">
+                <h1>📱 <span id="businessName">Mi Negocio</span></h1>
             </div>
-        </header>
 
-        <!-- Navigation -->
-        <nav class="app-nav">
-            <button class="nav-btn active" data-view="dashboard">📊 Dashboard</button>
-            <button class="nav-btn" data-view="purchases">📦 Compras</button>
-            <button class="nav-btn" data-view="sales">💰 Ventas</button>
-            <button class="nav-btn" data-view="inventory">📋 Inventario</button>
-            <button class="nav-btn" data-view="technical">🔧 Servicio Técnico</button>
-            <button class="nav-btn" data-view="reports">📈 Reportes</button>
-            <button class="nav-btn" data-view="employees">👥 Empleados</button>
-            <button class="nav-btn" data-view="commissions">💰 Comisiones</button>
-        </nav>
+            <nav class="app-nav">
+                <button class="nav-btn active" data-view="dashboard">📊 Dashboard</button>
+                <button class="nav-btn" data-view="purchases">📦 Compras</button>
+                <button class="nav-btn" data-view="sales">💰 Ventas</button>
+                <button class="nav-btn" data-view="inventory">📋 Inventario</button>
+                <button class="nav-btn" data-view="technical">🔧 Servicio Técnico</button>
+                <button class="nav-btn" data-view="reports">📈 Reportes</button>
+                <button class="nav-btn" data-view="employees">👥 Empleados</button>
+                <button class="nav-btn" data-view="commissions">💰 Comisiones</button>
+            </nav>
 
-        <div id="adminPanel" style="display:none; padding:24px;"></div>
+            <div class="sidebar-footer">
+                <span id="userEmail" class="user-email"></span>
+                <button id="btnLogout" class="btn btn-sm">Salir</button>
+            </div>
+        </aside>
 
-        <!-- Main Content -->
-        <main class="app-content">
+        <!-- Right side -->
+        <div class="main-wrapper">
+            <div id="adminPanel" style="display:none; padding:24px;"></div>
+
+            <!-- Main Content -->
+            <main class="app-content">
             <!-- Dashboard View -->
             <div id="viewDashboard" class="view active">
                 <h2>Dashboard</h2>
@@ -605,6 +606,7 @@
             </div>
 
         </main>
+        </div><!-- end main-wrapper -->
     </div>
 
     <!-- Toast -->

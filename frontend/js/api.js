@@ -1,6 +1,6 @@
 // Configuración de la API
 const API_CONFIG = {
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'https://vendly-production.up.railway.app/api',
   timeout: 10000
 };
 
