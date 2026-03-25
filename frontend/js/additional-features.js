@@ -53,6 +53,7 @@ function displaySales(sales) {
                 ${sale.customer ? `<span>Cliente: ${sale.customer}</span>` : ''}
                 ${sale.paymentMethod ? `<span>Pago: ${getPaymentLabel(sale.paymentMethod)}</span>` : ''}
                 ${sale.employeeId ? `<span>Vendedor: <strong>${sale.employeeId.name || sale.employeeName || '—'}</strong></span>` : ''}
+                ${sale.serialNumbers?.length ? `<span>IMEIs/Seriales: <strong>${sale.serialNumbers.join(', ')}</strong></span>` : ''}
             </div>
         </div>
     `).join('');
@@ -65,7 +66,12 @@ async function editSale(saleId) {
     if (!sale) return;
     
     document.getElementById('updateSaleId').value = sale._id;
-    document.getElementById('updateSaleQuantity').value = sale.quantity;
+    const quantityInput = document.getElementById('updateSaleQuantity');
+    quantityInput.value = sale.quantity;
+    quantityInput.readOnly = Array.isArray(sale.unitIds) && sale.unitIds.length > 0;
+    quantityInput.title = quantityInput.readOnly
+        ? 'Esta venta tiene IMEIs/seriales asociados. Si necesitas cambiar la cantidad, elimina la venta y regístrala de nuevo.'
+        : '';
     document.getElementById('updateSaleUnitPrice').value = sale.unitPrice;
     document.getElementById('updateSaleCustomer').value = sale.customer || '';
     document.getElementById('updateSalePaymentMethod').value = sale.paymentMethod;
@@ -233,12 +239,34 @@ async function loadInventoryProducts() {
 
 let currentReportData = null;
 
+function getReportPeriodLabel(period) {
+    return {
+        'daily': 'Hoy',
+        'weekly': 'Últimos 7 días',
+        'monthly': 'Mes actual',
+        'yearly': 'Año actual'
+    }[period] || 'Personalizado';
+}
+
+function formatDateRangeForReport(periodInfo) {
+    if (!periodInfo?.startDate || !periodInfo?.endDate) return '';
+    const endDate = new Date(new Date(periodInfo.endDate).getTime() - 86400000);
+    return `${formatDate(periodInfo.startDate)} - ${formatDate(endDate)}`;
+}
+
+function toggleMonthlyCloseButton(period) {
+    const btn = document.getElementById('btnMonthlyClosePDF');
+    if (!btn) return;
+    btn.style.display = period === 'monthly' ? 'inline-flex' : 'none';
+}
+
 async function loadReport(period) {
     try {
         const response = await api.getReportSales(period);
         
         if (response.success) {
             currentReportData = response;
+            toggleMonthlyCloseButton(response.period);
             displayReport(response);
         }
     } catch (error) {
@@ -251,16 +279,13 @@ function displayReport(data) {
     const container = document.getElementById('reportContent');
     if (!container) return;
     
-    const periodLabel = {
-        'daily': 'Hoy',
-        'weekly': 'Últimos 7 días',
-        'monthly': 'Último mes',
-        'yearly': 'Último año'
-    }[data.period] || 'Personalizado';
+    const periodLabel = getReportPeriodLabel(data.period);
+    const periodRange = formatDateRangeForReport(data.periodInfo);
     
     const html = `
         <div class="report-summary">
             <h3>Resumen ${periodLabel}</h3>
+            ${periodRange ? `<p style="margin:0 0 16px; color:var(--text-secondary);">Período: ${periodRange}</p>` : ''}
             <div class="stats-grid">
                 <div class="stat-card">
                     <h4>Ventas</h4>
@@ -272,12 +297,48 @@ function displayReport(data) {
                     <p class="stat-value">$${formatNumber(data.summary.totalCost)}</p>
                 </div>
                 <div class="stat-card">
-                    <h4>Ganancia</h4>
-                    <p class="stat-value text-success">$${formatNumber(data.summary.totalProfit)}</p>
+                    <h4>Ganancia Neta</h4>
+                    <p class="stat-value text-success">$${formatNumber(data.summary.netBusinessProfit ?? data.summary.totalProfit)}</p>
                 </div>
                 <div class="stat-card">
                     <h4>Ticket Promedio</h4>
                     <p class="stat-value">$${formatNumber(data.summary.averageTicket)}</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Compras</h4>
+                    <p class="stat-value">$${formatNumber(data.summary.totalPurchases || 0)}</p>
+                    <small>${data.summary.totalPurchaseTransactions || 0} registros</small>
+                </div>
+                <div class="stat-card">
+                    <h4>Servicios</h4>
+                    <p class="stat-value">$${formatNumber(data.summary.totalTechnicalRevenue || 0)}</p>
+                    <small>${data.summary.totalTechnicalTransactions || 0} servicios</small>
+                </div>
+                <div class="stat-card">
+                    <h4>Balance Operativo</h4>
+                    <p class="stat-value">${data.summary.operationalBalance >= 0 ? '$' + formatNumber(data.summary.operationalBalance) : '-$' + formatNumber(Math.abs(data.summary.operationalBalance || 0))}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="report-products" style="margin-top:20px;">
+            <h3>Actividad del Período</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Ítems Vendidos</h4>
+                    <p class="stat-value">${formatNumber(data.activity?.itemsSold || 0)}</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Unidades Compradas</h4>
+                    <p class="stat-value">${formatNumber(data.activity?.purchaseUnits || 0)}</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Servicios Abiertos</h4>
+                    <p class="stat-value">${formatNumber(data.activity?.openTechnicalServices || 0)}</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Servicios Cerrados</h4>
+                    <p class="stat-value">${formatNumber(data.activity?.completedTechnicalServices || 0)}</p>
                 </div>
             </div>
         </div>
@@ -347,6 +408,34 @@ function displayReport(data) {
         </div>
         ` : ''}
 
+        ${data.monthlyTimeline && data.monthlyTimeline.length > 0 ? `
+        <div class="report-products" style="margin-top:20px;">
+            <h3>Resumen por Mes</h3>
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>Mes</th>
+                        <th>Ventas</th>
+                        <th>Compras</th>
+                        <th>Servicios</th>
+                        <th>Balance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${data.monthlyTimeline.map(month => `
+                        <tr>
+                            <td data-label="Mes">${month.label}</td>
+                            <td data-label="Ventas">$${formatNumber(month.salesTotal || 0)}</td>
+                            <td data-label="Compras">$${formatNumber(month.purchaseTotal || 0)}</td>
+                            <td data-label="Servicios">$${formatNumber(month.serviceTotal || 0)}</td>
+                            <td data-label="Balance" class="${month.balance >= 0 ? 'text-success' : ''}">${month.balance >= 0 ? '$' + formatNumber(month.balance) : '-$' + formatNumber(Math.abs(month.balance || 0))}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        </div>
+        ` : ''}
+
         <div class="report-products" style="margin-top:24px; border-top:3px solid var(--primary); padding-top:16px;">
             <h3>🏦 Resumen Total</h3>
             <table class="report-table">
@@ -369,13 +458,17 @@ function displayReport(data) {
                         <td>Comisiones Técnicos</td>
                         <td style="text-align:right; font-weight:600; color:var(--warning);">- $${formatNumber(data.summary.totalTechnicalCommissions || 0)}</td>
                     </tr>
+                    <tr>
+                        <td>Inversión en Compras</td>
+                        <td style="text-align:right; font-weight:600; color:var(--warning);">- $${formatNumber(data.summary.totalPurchases || 0)}</td>
+                    </tr>
                     <tr style="font-size:1.1em; font-weight:700;">
                         <td>🏦 Ganancia Neta Total</td>
-                        <td class="text-success" style="text-align:right;">$${formatNumber(
+                        <td class="text-success" style="text-align:right;">$${formatNumber(data.summary.netBusinessProfit ?? (
                             data.summary.totalProfit
                             - (data.byProduct || []).reduce((s, p) => s + (p.commissions || 0), 0)
                             + (data.summary.totalTechnicalNetProfit || 0)
-                        )}</td>
+                        ))}</td>
                     </tr>
                 </tbody>
             </table>
@@ -392,12 +485,7 @@ function downloadReportPDF() {
     }
     
     const printWindow = window.open('', '', 'height=600,width=800');
-    const periodLabel = {
-        'daily': 'Hoy',
-        'weekly': 'Últimos 7 días',
-        'monthly': 'Último mes',
-        'yearly': 'Último año'
-    }[currentReportData.period] || 'Personalizado';
+    const periodLabel = getReportPeriodLabel(currentReportData.period);
     
     printWindow.document.write(`
         <html>
@@ -527,6 +615,167 @@ function downloadReportPDF() {
         </html>
     `);
     
+    printWindow.document.close();
+    setTimeout(() => {
+        printWindow.print();
+    }, 250);
+}
+
+function downloadMonthlyClosePDF() {
+    if (!currentReportData) {
+        utils.showToast('No hay reporte cargado', 'error');
+        return;
+    }
+
+    if (currentReportData.period !== 'monthly') {
+        utils.showToast('El cierre mensual solo se genera con el período "Mes actual"', 'warning');
+        return;
+    }
+
+    const periodRange = formatDateRangeForReport(currentReportData.periodInfo);
+    const salesCommissions = (currentReportData.byProduct || []).reduce((sum, item) => sum + (item.commissions || 0), 0);
+    const topProducts = (currentReportData.byProduct || []).slice(0, 8);
+    const monthlyTimeline = currentReportData.monthlyTimeline || [];
+
+    const printWindow = window.open('', '', 'height=760,width=980');
+    printWindow.document.write(`
+        <html>
+        <head>
+            <title>Cierre Mensual</title>
+            <style>
+                body { font-family: Arial, sans-serif; color: #0f172a; margin: 0; padding: 28px; background: #fff; }
+                h1, h2, h3, p { margin: 0; }
+                .hero { border: 2px solid #0f172a; border-radius: 16px; padding: 24px; margin-bottom: 22px; }
+                .hero p { color: #475569; margin-top: 8px; }
+                .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 18px 0 22px; }
+                .card { border: 1px solid #cbd5e1; border-radius: 14px; padding: 16px; background: #f8fafc; }
+                .card h3 { font-size: 13px; color: #475569; margin-bottom: 8px; text-transform: uppercase; letter-spacing: .04em; }
+                .card strong { font-size: 24px; }
+                .section { margin-top: 24px; }
+                .section-title { margin-bottom: 12px; font-size: 18px; }
+                .highlights { display: grid; gap: 10px; }
+                .highlight { border-left: 4px solid #2563eb; padding: 10px 14px; background: #eff6ff; border-radius: 8px; }
+                table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                th, td { border-bottom: 1px solid #e2e8f0; padding: 10px 8px; text-align: left; font-size: 13px; }
+                th { background: #f8fafc; }
+                .success { color: #059669; }
+                .warning { color: #b45309; }
+                .muted { color: #64748b; }
+                .footer { margin-top: 28px; padding-top: 14px; border-top: 2px solid #e2e8f0; color: #64748b; font-size: 12px; }
+            </style>
+        </head>
+        <body>
+            <div class="hero">
+                <h1>Cierre Mensual</h1>
+                <p>${periodRange ? `Período: ${periodRange}` : 'Mes actual'} | Generado: ${new Date().toLocaleDateString('es-CO')}</p>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h3>Ventas</h3>
+                    <strong>$${formatNumber(currentReportData.summary.totalSales || 0)}</strong>
+                    <p class="muted">${currentReportData.summary.totalTransactions || 0} transacciones</p>
+                </div>
+                <div class="card">
+                    <h3>Compras</h3>
+                    <strong>$${formatNumber(currentReportData.summary.totalPurchases || 0)}</strong>
+                    <p class="muted">${currentReportData.summary.totalPurchaseTransactions || 0} registros</p>
+                </div>
+                <div class="card">
+                    <h3>Servicios</h3>
+                    <strong>$${formatNumber(currentReportData.summary.totalTechnicalRevenue || 0)}</strong>
+                    <p class="muted">${currentReportData.summary.totalTechnicalTransactions || 0} servicios</p>
+                </div>
+                <div class="card">
+                    <h3>Ganancia Neta</h3>
+                    <strong class="success">$${formatNumber(currentReportData.summary.netBusinessProfit || 0)}</strong>
+                    <p class="muted">Resultado del mes</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Resumen Ejecutivo</h2>
+                <div class="highlights">
+                    <div class="highlight">Se vendieron <strong>${formatNumber(currentReportData.activity?.itemsSold || 0)}</strong> unidades y se registraron <strong>${formatNumber(currentReportData.summary.totalTransactions || 0)}</strong> ventas.</div>
+                    <div class="highlight">La inversión en compras fue de <strong>$${formatNumber(currentReportData.summary.totalPurchases || 0)}</strong> en <strong>${formatNumber(currentReportData.activity?.purchaseUnits || 0)}</strong> unidades.</div>
+                    <div class="highlight">Servicios técnicos: <strong>${formatNumber(currentReportData.summary.totalTechnicalTransactions || 0)}</strong> registrados, <strong>${formatNumber(currentReportData.activity?.openTechnicalServices || 0)}</strong> abiertos y <strong>${formatNumber(currentReportData.activity?.completedTechnicalServices || 0)}</strong> cerrados.</div>
+                    <div class="highlight">Balance operativo del mes: <strong>${currentReportData.summary.operationalBalance >= 0 ? '$' + formatNumber(currentReportData.summary.operationalBalance) : '-$' + formatNumber(Math.abs(currentReportData.summary.operationalBalance || 0))}</strong>.</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Top Productos</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Ventas</th>
+                            <th>Comisiones</th>
+                            <th>Ganancia Neta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${topProducts.map(item => `
+                            <tr>
+                                <td>${item.name}</td>
+                                <td>${item.quantity}</td>
+                                <td>$${formatNumber(item.sales || 0)}</td>
+                                <td class="warning">$${formatNumber(item.commissions || 0)}</td>
+                                <td class="success">$${formatNumber(item.netProfit ?? item.profit ?? 0)}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Histórico Reciente</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mes</th>
+                            <th>Ventas</th>
+                            <th>Compras</th>
+                            <th>Servicios</th>
+                            <th>Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${monthlyTimeline.map(month => `
+                            <tr>
+                                <td>${month.label}</td>
+                                <td>$${formatNumber(month.salesTotal || 0)}</td>
+                                <td>$${formatNumber(month.purchaseTotal || 0)}</td>
+                                <td>$${formatNumber(month.serviceTotal || 0)}</td>
+                                <td class="${month.balance >= 0 ? 'success' : 'warning'}">${month.balance >= 0 ? '$' + formatNumber(month.balance) : '-$' + formatNumber(Math.abs(month.balance || 0))}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Cierre Financiero</h2>
+                <table>
+                    <tbody>
+                        <tr><td>Ganancia ventas (bruta)</td><td>$${formatNumber(currentReportData.summary.totalProfit || 0)}</td></tr>
+                        <tr><td>Comisiones ventas</td><td class="warning">- $${formatNumber(salesCommissions)}</td></tr>
+                        <tr><td>Ganancia servicios técnicos</td><td>$${formatNumber(currentReportData.summary.totalTechnicalRevenue || 0)}</td></tr>
+                        <tr><td>Comisiones técnicos</td><td class="warning">- $${formatNumber(currentReportData.summary.totalTechnicalCommissions || 0)}</td></tr>
+                        <tr><td>Inversión en compras</td><td class="warning">- $${formatNumber(currentReportData.summary.totalPurchases || 0)}</td></tr>
+                        <tr><td><strong>Ganancia neta del mes</strong></td><td class="success"><strong>$${formatNumber(currentReportData.summary.netBusinessProfit || 0)}</strong></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="footer">
+                Documento generado desde el módulo de reportes. Úsalo como soporte interno del cierre mensual.
+            </div>
+        </body>
+        </html>
+    `);
+
     printWindow.document.close();
     setTimeout(() => {
         printWindow.print();
@@ -671,6 +920,12 @@ document.addEventListener('DOMContentLoaded', () => {
         btnDownloadPDF.addEventListener('click', downloadReportPDF);
     }
     
+    const btnMonthlyClosePDF = document.getElementById('btnMonthlyClosePDF');
+    if (btnMonthlyClosePDF) {
+        btnMonthlyClosePDF.addEventListener('click', downloadMonthlyClosePDF);
+        toggleMonthlyCloseButton(document.getElementById('reportPeriod')?.value || 'monthly');
+    }
+
     const btnDownloadExcel = document.getElementById('btnDownloadExcel');
     if (btnDownloadExcel) {
         btnDownloadExcel.addEventListener('click', downloadReportExcel);
@@ -683,4 +938,5 @@ window.deleteSale = deleteSale;
 window.closeSaleModal = closeSaleModal;
 window.loadReport = loadReport;
 window.downloadReportPDF = downloadReportPDF;
+window.downloadMonthlyClosePDF = downloadMonthlyClosePDF;
 window.downloadReportExcel = downloadReportExcel;

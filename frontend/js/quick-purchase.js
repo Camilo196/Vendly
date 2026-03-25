@@ -152,15 +152,24 @@ function showQPSuggestions(query, dropdown, input) {
         .slice(0, 4)
         .map(p => ({ source:'mine', name:p.name, brand:'', type:'accesorio',
                      subtype: p.productType, price: p.suggestedPrice || '', cost: p.averageCost || '',
-                     emoji: subtypeEmoji(p.productType) }));
+                      emoji: subtypeEmoji(p.productType) }));
+
+    const devices = (typeof searchPurchaseCatalog === 'function'
+        ? searchPurchaseCatalog(query, { kind: 'device', limit: 5 })
+        : [])
+        .filter(d => !mine.some(m => normalize(m.name) === normalize(d.name)))
+        .map(d => ({ source:'device_catalog', ...d, subtype: d.type }));
 
     // Catálogo local
-    const local = searchAccessoriesDB(query)
+    const local = (typeof searchPurchaseCatalog === 'function'
+        ? searchPurchaseCatalog(query, { kind: 'accessory', limit: 8 })
+        : searchAccessoriesDB(query))
         .filter(a => !mine.some(m => normalize(m.name) === normalize(a.name)))
+        .filter(a => !devices.some(d => normalize(d.name) === normalize(a.name)))
         .slice(0, 8)
         .map(a => ({ source:'local', ...a }));
 
-    results.push(...mine, ...local);
+    results.push(...mine, ...devices, ...local);
 
     if (!results.length) {
         dropdown.innerHTML = `<div class="smart-empty-msg">Sin resultados para "<b>${query}</b>"</div>`;
@@ -172,6 +181,10 @@ function showQPSuggestions(query, dropdown, input) {
     if (mine.length) {
         dropdown.appendChild(makeSepEl('📦 Tus productos'));
         mine.forEach(r => dropdown.appendChild(makeQPItem(r, input, dropdown)));
+    }
+    if (devices.length) {
+        dropdown.appendChild(makeSepEl('📱 Equipos sugeridos'));
+        devices.forEach(r => dropdown.appendChild(makeQPItem(r, input, dropdown)));
     }
     if (local.length) {
         dropdown.appendChild(makeSepEl('🗂️ Catálogo'));
@@ -190,7 +203,7 @@ function makeQPItem(r, input, dropdown) {
             <div class="smart-meta">
                 ${r.brand ? `<span>${r.brand}</span>` : ''}
                 ${r.cost  ? `<span>Costo: $${fmtN(r.cost)}</span>` : ''}
-                <span class="smart-badge ${r.source}">${r.source === 'mine' ? 'tuyo' : 'catálogo'}</span>
+                <span class="smart-badge ${r.source}">${r.source === 'mine' ? 'tuyo' : r.source === 'device_catalog' ? 'equipo' : 'catálogo'}</span>
             </div>
         </div>`;
     el.addEventListener('mousedown', e => e.preventDefault());

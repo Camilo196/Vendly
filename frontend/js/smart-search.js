@@ -36,6 +36,130 @@ function initPurchaseSmartSearch() {
     closeOnClickOutside(wrapper, dropdown);
 }
 
+function inferCatalogDeviceType(brand = '', model = '', name = '') {
+    const text = normalize(`${brand} ${model} ${name}`);
+    if (text.includes('ipad') || text.includes('tablet') || text.includes('tab ')) {
+        return 'otro';
+    }
+    return 'celular';
+}
+
+function composeCatalogDeviceName(brand = '', model = '') {
+    const normalizedBrand = normalize(brand);
+    const normalizedModel = normalize(model);
+    if (!brand) return model;
+    if (normalizedModel.startsWith(normalizedBrand)) return model;
+    return `${brand} ${model}`.trim();
+}
+
+function getPurchaseCatalog() {
+    if (window.__purchaseCatalogCache) return window.__purchaseCatalogCache;
+
+    const accessories = [];
+    const devices = [];
+    const accessorySeen = new Set();
+    const deviceSeen = new Set();
+    const localDb = Array.isArray(window.ACCESSORIES_DB) ? window.ACCESSORIES_DB : [];
+
+    localDb.forEach(item => {
+        const accessoryKey = normalize(item.name);
+        if (!accessorySeen.has(accessoryKey)) {
+            accessorySeen.add(accessoryKey);
+            accessories.push({
+                source: 'catalog',
+                kind: 'accessory',
+                name: item.name,
+                type: 'accesorio',
+                brand: item.brand || '',
+                model: item.model || '',
+                subtype: item.subtype || 'accesorio',
+                emoji: item.emoji || '📦',
+                keywords: normalize(`${item.name} ${item.brand} ${item.model} ${item.subtype} ${item.keywords || ''}`)
+            });
+        }
+
+        if (['estuche', 'vidrio', 'hidrogel'].includes(item.subtype)) {
+            const deviceName = composeCatalogDeviceName(item.brand, item.model);
+            const deviceKey = normalize(deviceName);
+            if (!deviceSeen.has(deviceKey)) {
+                deviceSeen.add(deviceKey);
+                devices.push({
+                    source: 'device_catalog',
+                    kind: 'device',
+                    name: deviceName,
+                    type: inferCatalogDeviceType(item.brand, item.model, deviceName),
+                    brand: item.brand || '',
+                    model: item.model || '',
+                    emoji: inferCatalogDeviceType(item.brand, item.model, deviceName) === 'celular' ? '📱' : '💻',
+                    keywords: normalize(`${deviceName} ${item.brand} ${item.model} celular smartphone equipo movil`)
+                });
+            }
+        }
+    });
+
+    Object.entries(MODELS).forEach(([brand, models]) => {
+        models.forEach(model => {
+            const deviceName = composeCatalogDeviceName(brand, model);
+            const deviceKey = normalize(deviceName);
+            if (deviceSeen.has(deviceKey)) return;
+            deviceSeen.add(deviceKey);
+            devices.push({
+                source: 'device_catalog',
+                kind: 'device',
+                name: deviceName,
+                type: inferCatalogDeviceType(brand, model, deviceName),
+                brand,
+                model,
+                emoji: inferCatalogDeviceType(brand, model, deviceName) === 'celular' ? '📱' : '💻',
+                keywords: normalize(`${deviceName} ${brand} ${model} celular smartphone equipo`)
+            });
+        });
+    });
+
+    window.__purchaseCatalogCache = {
+        accessories,
+        devices,
+        all: [...devices, ...accessories]
+    };
+    return window.__purchaseCatalogCache;
+}
+
+function searchPurchaseCatalog(query, { kind = 'all', limit = 8 } = {}) {
+    const q = normalize(query);
+    if (!q || q.length < 2) return [];
+
+    const words = q.split(/\s+/).filter(Boolean);
+    const catalog = getPurchaseCatalog();
+    const pool = kind === 'device'
+        ? catalog.devices
+        : kind === 'accessory'
+            ? catalog.accessories
+            : catalog.all;
+
+    return pool
+        .map(item => {
+            const haystack = item.keywords || normalize(`${item.name} ${item.brand} ${item.model}`);
+            const phraseHit = haystack.includes(q);
+            const wordsHit = words.every(word => haystack.includes(word));
+            const prefixHit = normalize(item.name).startsWith(q) || normalize(item.model).startsWith(q);
+
+            if (!phraseHit && !wordsHit && !prefixHit) return null;
+
+            let score = 0;
+            if (phraseHit) score += 5;
+            if (wordsHit) score += 3;
+            if (prefixHit) score += 2;
+
+            return { ...item, _score: score };
+        })
+        .filter(Boolean)
+        .sort((a, b) => {
+            if (b._score !== a._score) return b._score - a._score;
+            return a.name.localeCompare(b.name);
+        })
+        .slice(0, limit);
+}
+
 function renderPurchaseSuggestions(query, dropdown, input, preview) {
     const results = [];
 
@@ -45,16 +169,20 @@ function renderPurchaseSuggestions(query, dropdown, input, preview) {
             normalize(p.name).includes(normalize(query)))
         .slice(0, 5)
         .map(p => ({ source: 'mine', name: p.name, type: p.productType,
-                     price: p.suggestedPrice, cost: p.averageCost, emoji: typeEmoji(p.productType) }));
+                     price: p.suggestedPrice, cost: p.averageCost, brand: p.brand || '', emoji: typeEmoji(p.productType) }));
+
+    const suggestedDevices = searchPurchaseCatalog(query, { kind: 'device', limit: 6 })
+        .filter(d => !mine.some(m => normalize(m.name) === normalize(d.name)))
+        .map(d => ({ ...d, source: 'device_catalog' }));
 
     // 2. Base de datos local de accesorios
-    const local = searchAccessoriesDB(query)
+    const local = searchPurchaseCatalog(query, { kind: 'accessory', limit: 8 })
         .filter(a => !mine.some(m => normalize(m.name) === normalize(a.name)))
-        .slice(0, 6)
-        .map(a => ({ source: 'local', name: a.name, type: 'accesorio',
-                     brand: a.brand, model: a.model, emoji: a.emoji }));
+        .filter(a => !suggestedDevices.some(d => normalize(d.name) === normalize(a.name)))
+        .slice(0, 8)
+        .map(a => ({ ...a, source: 'local' }));
 
-    results.push(...mine, ...local);
+    results.push(...mine, ...suggestedDevices, ...local);
 
     if (results.length === 0) {
         dropdown.innerHTML = `<div class="smart-empty-msg">Sin sugerencias para "<b>${query}</b>" — escríbelo manualmente</div>`;
@@ -67,6 +195,10 @@ function renderPurchaseSuggestions(query, dropdown, input, preview) {
     if (mine.length) {
         dropdown.appendChild(makeSep('📦 Tus productos'));
         mine.forEach(r => dropdown.appendChild(makePurchaseItem(r, input, preview, dropdown)));
+    }
+    if (suggestedDevices.length) {
+        dropdown.appendChild(makeSep('📱 Equipos sugeridos'));
+        suggestedDevices.forEach(r => dropdown.appendChild(makePurchaseItem(r, input, preview, dropdown)));
     }
     if (local.length) {
         dropdown.appendChild(makeSep('🗂️ Catálogo accesorios'));
@@ -87,7 +219,7 @@ function makePurchaseItem(r, input, preview, dropdown) {
                 ${r.brand ? `<span>${r.brand}</span>` : ''}
                 ${r.model ? `<span>${r.model}</span>` : ''}
                 ${r.price ? `<span style="color:var(--success)">$${fmtNum(r.price)}</span>` : ''}
-                <span class="smart-badge ${r.source}">${r.source === 'mine' ? 'tuyo' : 'catálogo'}</span>
+                <span class="smart-badge ${r.source}">${r.source === 'mine' ? 'tuyo' : r.source === 'device_catalog' ? 'equipo' : 'catálogo'}</span>
             </div>
         </div>`;
 
@@ -114,6 +246,7 @@ function makePurchaseItem(r, input, preview, dropdown) {
                 <div class="preview-info">
                     <strong>${r.name}</strong>
                     ${r.brand ? `<span>${r.brand} ${r.model || ''}</span>` : ''}
+                    <span style="color:var(--text-secondary); font-size:.8rem;">${r.type === 'celular' ? 'Equipo sugerido del catálogo' : r.type === 'accesorio' ? 'Accesorio sugerido del catálogo' : 'Referencia sugerida'}</span>
                 </div>
                 <button type="button" class="preview-close" onclick="this.closest('.product-preview').style.display='none'">✕</button>`;
         }
@@ -179,6 +312,9 @@ function setupBrandAutocomplete(brandInput, modelInput) {
             el.addEventListener('click', () => {
                 brandInput.value = el.dataset.brand;
                 hideDropdown(dropdown);
+                if (typeof updateServiceAccessorySuggestions === 'function') {
+                    updateServiceAccessorySuggestions();
+                }
                 modelInput.focus();
                 triggerModelSuggestions(modelInput, brandInput);
             });
@@ -235,6 +371,9 @@ function triggerModelSuggestions(modelInput, brandInput, dropdown) {
         el.addEventListener('click', () => {
             modelInput.value = el.dataset.model;
             hideDropdown(dropdown);
+            if (typeof updateServiceAccessorySuggestions === 'function') {
+                updateServiceAccessorySuggestions();
+            }
         });
     });
     dropdown.style.display = 'block';
@@ -311,3 +450,5 @@ document.addEventListener('DOMContentLoaded', () => {
     const activeView = document.querySelector('.nav-btn.active')?.getAttribute('data-view');
     if (activeView) maybeInitSmartSearch(activeView);
 });
+
+window.searchPurchaseCatalog = searchPurchaseCatalog;

@@ -92,6 +92,7 @@
                 <button class="nav-btn" data-view="purchases">📦 Compras</button>
                 <button class="nav-btn" data-view="sales">💰 Ventas</button>
                 <button class="nav-btn" data-view="inventory">📋 Inventario</button>
+                <button class="nav-btn" data-view="compatibility">🧩 Compatibilidad</button>
                 <button class="nav-btn" data-view="technical">🔧 Servicio Técnico</button>
                 <button class="nav-btn" data-view="reports">📈 Reportes</button>
                 <button class="nav-btn" data-view="employees">👥 Empleados</button>
@@ -188,6 +189,12 @@
                             </div>
                         </div>
 
+                        <div class="form-group" id="purchaseSerialNumbersGroup" style="display:none;">
+                            <label>IMEIs / Seriales (opcional)</label>
+                            <textarea id="purchaseSerialNumbers" rows="4" placeholder="Uno por línea&#10;Ej: 356789123456789&#10;356789123456790"></textarea>
+                            <small style="display:block; margin-top:5px; color:#666;">Úsalo si quieres llevar control por unidad de celulares. Si lo dejas vacío, la compra entra normal por cantidad.</small>
+                        </div>
+
                         <!-- Fila 3: Proveedor y Factura -->
                         <div class="form-row">
                             <div class="form-group">
@@ -257,6 +264,16 @@
                                 <input type="text" id="suggestedPrice" readonly class="suggested-price" placeholder="$0">
                             </div>
                         </div>
+
+                        <div id="saleAccessorySuggestions" class="card" style="display:none; margin: 12px 0; padding: 14px;">
+                            <h4 style="margin:0 0 8px;">Accesorios compatibles</h4>
+                            <div id="saleAccessorySuggestionsContent"></div>
+                        </div>
+                        <div id="saleSerializedUnitsBox" class="card" style="display:none; margin: 12px 0; padding: 14px;">
+                            <h4 style="margin:0 0 8px;">Unidades con IMEI / Serial</h4>
+                            <div id="saleSerializedUnitsSummary" style="margin-bottom:8px; color:#64748b;"></div>
+                            <div id="saleSerializedUnitsList"></div>
+                        </div>
                         <div class="form-group">
                             <label for="saleEmployee">Vendedor (Comisión)</label>
                             <select id="saleEmployee">
@@ -316,6 +333,68 @@
                 </div>
             </div>
 
+            <div id="viewCompatibility" class="view">
+                <h2>Compatibilidad</h2>
+                <div class="card">
+                    <h3>Consultar Qué Accesorios Le Sirven</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Marca</label>
+                            <input type="text" id="compatibilityBrand" list="compatibilityBrandList" placeholder="Samsung, Apple, Xiaomi...">
+                            <datalist id="compatibilityBrandList"></datalist>
+                        </div>
+                        <div class="form-group">
+                            <label>Modelo</label>
+                            <input type="text" id="compatibilityModel" list="compatibilityModelList" placeholder="Galaxy A15, iPhone 13...">
+                            <datalist id="compatibilityModelList"></datalist>
+                        </div>
+                        <div class="form-group" style="flex: 1.3;">
+                            <label>Búsqueda libre</label>
+                            <input type="text" id="compatibilityQuery" placeholder="Ej: Samsung A15 o iPhone 13 Pro Max">
+                        </div>
+                        <div class="form-group">
+                            <label>Tipo de accesorio</label>
+                            <select id="compatibilitySubtype">
+                                <option value="">Todos</option>
+                                <option value="estuche">Estuche / Forro</option>
+                                <option value="vidrio">Vidrio</option>
+                                <option value="hidrogel">Hidrogel</option>
+                                <option value="cable">Cable</option>
+                                <option value="cargador">Cargador</option>
+                                <option value="audifonos">Audífonos</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row" style="align-items:end;">
+                        <button type="button" id="btnCompatibilitySearch" class="btn btn-primary btn-sm" style="width:auto;">Buscar compatibilidad</button>
+                        <button type="button" id="btnCompatibilityClear" class="btn btn-sm" style="width:auto;">Limpiar</button>
+                    </div>
+                    <div class="compatibility-quick-filters">
+                        <button type="button" class="compatibility-quick-chip active" data-subtype="">Todos</button>
+                        <button type="button" class="compatibility-quick-chip" data-subtype="estuche">Estuche</button>
+                        <button type="button" class="compatibility-quick-chip" data-subtype="vidrio">Vidrio</button>
+                        <button type="button" class="compatibility-quick-chip" data-subtype="hidrogel">Hidrogel</button>
+                        <button type="button" class="compatibility-quick-chip" data-subtype="cable">Cable</button>
+                        <button type="button" class="compatibility-quick-chip" data-subtype="cargador">Cargador</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Resumen</h3>
+                    <div id="compatibilitySummary" class="compatibility-summary-grid"></div>
+                </div>
+
+                <div class="card">
+                    <h3>Modelos Relacionados</h3>
+                    <div id="compatibilityRelatedModels"></div>
+                </div>
+
+                <div class="card">
+                    <h3>Resultados</h3>
+                    <div id="compatibilityResults"></div>
+                </div>
+            </div>
+
             <!-- Technical Service View -->
             <div id="viewTechnical" class="view">
                 <h2>🔧 Servicio Técnico</h2>
@@ -370,6 +449,19 @@
                                 <label>Modelo</label>
                                 <input type="text" id="deviceModel" placeholder="Galaxy S21, iPhone 13...">
                             </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>IMEI / Serial</label>
+                                <input type="text" id="deviceSerialNumber" placeholder="IMEI, serial o identificador del equipo">
+                                <small style="color:#666;">Te sirve para trazabilidad, garantías y entregas correctas</small>
+                            </div>
+                        </div>
+
+                        <div id="serviceAccessorySuggestions" class="card" style="display:none; margin: 12px 0; padding: 14px;">
+                            <h4 style="margin:0 0 8px;">Compatibilidad sugerida</h4>
+                            <div id="serviceAccessorySuggestionsContent"></div>
                         </div>
 
                         <!-- Fila 3: Problema -->
@@ -474,9 +566,10 @@
                             <select id="reportPeriod" class="form-control">
                                 <option value="daily">Hoy</option>
                                 <option value="weekly">Últimos 7 días</option>
-                                <option value="monthly" selected>Último mes</option>
-                                <option value="yearly">Último año</option>
+                                <option value="monthly" selected>Mes actual</option>
+                                <option value="yearly">Año actual</option>
                             </select>
+                            <button class="btn btn-primary" id="btnMonthlyClosePDF">📒 Cierre Mensual</button>
                             <button class="btn btn-primary" id="btnDownloadPDF">📄 PDF</button>
                             <button class="btn btn-primary" id="btnDownloadExcel">📊 Excel</button>
                         </div>
@@ -703,6 +796,13 @@
                     <div class="form-group">
                         <label>% Comisión</label>
                         <input type="number" id="updateCommissionRate" min="0" max="100" step="0.5" value="0">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group" style="flex: 2;">
+                        <label>IMEI / Serial</label>
+                        <input type="text" id="updateServiceSerialNumber" placeholder="IMEI, serial o identificador">
                     </div>
                 </div>
 

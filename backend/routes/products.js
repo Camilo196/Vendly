@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
+const ProductUnit = require('../models/ProductUnit');
 const { protect } = require('../middleware/auth');
 
 // Todas las rutas requieren autenticación
@@ -110,6 +111,21 @@ router.post('/:id/adjust', async (req, res) => {
         message: 'Producto no encontrado'
       });
     }
+
+    if (parseFloat(adjustment) < 0) {
+      const trackedAvailableUnits = await ProductUnit.countDocuments({
+        userId: req.user._id,
+        productId: product._id,
+        status: 'available'
+      });
+
+      if (trackedAvailableUnits > 0) {
+        return res.status(400).json({
+          success: false,
+          message: 'Este producto tiene unidades con IMEI/serial registradas. Para bajar stock, usa ventas o elimina la compra correspondiente.'
+        });
+      }
+    }
     
     const oldStock = product.stock;
     product.stock += parseFloat(adjustment);
@@ -180,6 +196,79 @@ router.put('/:id/deactivate', async (req, res) => {
       success: false,
       message: 'Error al desactivar producto'
     });
+  }
+});
+
+// @route   GET /api/products/:id/units
+// @desc    Obtener unidades serializadas de un producto
+// @access  Private
+router.get('/:id/units', async (req, res) => {
+  try {
+    const { status } = req.query;
+
+    const product = await Product.findOne({
+      _id: req.params.id,
+      userId: req.user._id
+    });
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: 'Producto no encontrado'
+      });
+    }
+
+    const query = {
+      userId: req.user._id,
+      productId: product._id
+    };
+
+    if (status) query.status = status;
+
+    const units = await ProductUnit.find(query).sort({ serialNumber: 1 });
+    const availableCount = await ProductUnit.countDocuments({
+      userId: req.user._id,
+      productId: product._id,
+      status: 'available'
+    });
+
+    res.json({
+      success: true,
+      product: {
+        _id: product._id,
+        name: product.name,
+        productType: product.productType,
+        stock: product.stock
+      },
+      count: units.length,
+      availableCount,
+      units
+    });
+  } catch (error) {
+    console.error('Error al obtener unidades serializadas:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener unidades serializadas'
+    });
+  }
+});
+
+// @route   PUT /api/products/repair/reactivate
+// @desc    Reactivar productos con isActive:false para que vuelvan a aparecer
+// @access  Private
+router.put('/repair/reactivate', async (req, res) => {
+  try {
+    const result = await Product.updateMany(
+      { userId: req.user._id, isActive: false },
+      { $set: { isActive: true } }
+    );
+    res.json({
+      success: true,
+      message: `${result.modifiedCount} productos reactivados`,
+      modifiedCount: result.modifiedCount
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error al reparar productos' });
   }
 });
 
@@ -293,25 +382,6 @@ router.delete('/:id', async (req, res) => {
       success: false,
       message: 'Error al eliminar producto'
     });
-  }
-});
-
-// @route   PUT /api/products/repair/reactivate
-// @desc    Reactivar productos con isActive:false para que vuelvan a aparecer
-// @access  Private
-router.put('/repair/reactivate', async (req, res) => {
-  try {
-    const result = await Product.updateMany(
-      { userId: req.user._id, isActive: false },
-      { $set: { isActive: true } }
-    );
-    res.json({
-      success: true,
-      message: `${result.modifiedCount} productos reactivados`,
-      modifiedCount: result.modifiedCount
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Error al reparar productos' });
   }
 });
 

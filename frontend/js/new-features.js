@@ -7,6 +7,728 @@ let allEmployees = [];
 let selectedProduct = null;
 let allServices = [];
 let allPurchases = [];
+let compatibilityCatalogMatches = [];
+let compatibilityRelatedModels = [];
+let saleSerializedUnits = [];
+
+const ACCESSORY_SUBTYPE_ORDER = {
+    estuche: 1,
+    vidrio: 2,
+    hidrogel: 3,
+    cable: 4,
+    cargador: 5,
+    audifonos: 6
+};
+
+function escapeHtml(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function normalizeWhitespace(value) {
+    return String(value || '').replace(/\s+/g, ' ').trim();
+}
+
+function compactNormalized(value) {
+    return normalize(value).replace(/[^a-z0-9]+/g, '');
+}
+
+function getAccessoryCatalogBrands() {
+    if (!Array.isArray(window.ACCESSORIES_DB)) return [];
+    return [...new Set(window.ACCESSORIES_DB.map(item => item.brand).filter(Boolean))];
+}
+
+function detectAccessoryBrand(rawText = '') {
+    const normalizedText = normalize(rawText);
+    return getAccessoryCatalogBrands()
+        .sort((a, b) => b.length - a.length)
+        .find(brand => normalizedText.includes(normalize(brand))) || '';
+}
+
+function stripKnownModelPrefixes(brand = '', model = '') {
+    let cleaned = normalizeWhitespace(model);
+    const normalizedBrand = normalize(brand);
+
+    if (!cleaned) return '';
+
+    if (normalizedBrand && normalize(cleaned).startsWith(`${normalizedBrand} `)) {
+        cleaned = cleaned.slice(brand.length).trim();
+    }
+
+    if (normalizedBrand === 'samsung') {
+        cleaned = cleaned.replace(/^galaxy\s+/i, '').trim();
+    }
+
+    if (normalizedBrand === 'motorola') {
+        cleaned = cleaned.replace(/^moto\s+/i, '').trim();
+    }
+
+    return cleaned;
+}
+
+function buildAccessoryModelAliases({ brand = '', model = '', raw = '' } = {}) {
+    const aliases = new Set();
+    const baseBrand = normalizeWhitespace(brand);
+    const baseModel = normalizeWhitespace(model || raw);
+    const strippedModel = stripKnownModelPrefixes(baseBrand, baseModel);
+    const variants = [baseModel, strippedModel].filter(Boolean);
+
+    variants.forEach(value => {
+        aliases.add(normalize(value));
+        aliases.add(compactNormalized(value));
+    });
+
+    if (baseBrand) {
+        variants.forEach(value => {
+            aliases.add(normalize(`${baseBrand} ${value}`));
+            aliases.add(compactNormalized(`${baseBrand} ${value}`));
+        });
+    }
+
+    if (normalize(baseBrand) === 'samsung' && strippedModel) {
+        aliases.add(normalize(`Galaxy ${strippedModel}`));
+        aliases.add(compactNormalized(`Galaxy ${strippedModel}`));
+        aliases.add(normalize(`Samsung Galaxy ${strippedModel}`));
+        aliases.add(compactNormalized(`Samsung Galaxy ${strippedModel}`));
+    }
+
+    if (normalize(baseBrand) === 'motorola' && strippedModel) {
+        aliases.add(normalize(`Moto ${strippedModel}`));
+        aliases.add(compactNormalized(`Moto ${strippedModel}`));
+        aliases.add(normalize(`Motorola Moto ${strippedModel}`));
+        aliases.add(compactNormalized(`Motorola Moto ${strippedModel}`));
+    }
+
+    if (normalize(baseBrand) === 'apple' && /^iphone\s+/i.test(baseModel)) {
+        const shortIphone = baseModel.replace(/^iphone\s+/i, '').trim();
+        aliases.add(normalize(shortIphone));
+        aliases.add(compactNormalized(shortIphone));
+    }
+
+    return [...aliases].filter(Boolean);
+}
+
+function extractAccessorySearchContext({ brand = '', model = '', query = '', text = '' } = {}) {
+    const normalizedBrand = normalizeWhitespace(brand);
+    const rawQuery = normalizeWhitespace(query || text);
+    const detectedBrand = normalizedBrand || detectAccessoryBrand(rawQuery);
+    const modelSource = normalizeWhitespace(model) || rawQuery.replace(new RegExp(`^${detectedBrand}\\s+`, 'i'), '').trim() || rawQuery;
+    const aliases = new Set(buildAccessoryModelAliases({
+        brand: detectedBrand,
+        model: modelSource,
+        raw: rawQuery
+    }));
+    const combined = normalizeWhitespace([detectedBrand, modelSource, rawQuery].filter(Boolean).join(' '));
+    const words = normalize(combined).split(/\s+/).filter(Boolean);
+
+    if (combined) {
+        aliases.add(normalize(combined));
+        aliases.add(compactNormalized(combined));
+    }
+
+    return {
+        brand: detectedBrand,
+        model: modelSource,
+        rawQuery,
+        words,
+        aliases: [...aliases].filter(Boolean)
+    };
+}
+
+function getAccessoryModelCore(brand = '', model = '') {
+    const base = stripKnownModelPrefixes(brand, model);
+    return compactNormalized(
+        normalize(base)
+            .replace(/\b(4g|5g|lte|2023|2024|2025|2026)\b/g, ' ')
+            .replace(/\s+/g, ' ')
+    );
+}
+
+function inferAccessoryConnector({ brand = '', model = '', rawQuery = '' } = {}) {
+    const normalizedBrand = normalize(brand || detectAccessoryBrand(rawQuery));
+    const normalizedModel = normalize(model || rawQuery);
+
+    if (normalizedBrand === 'apple' && normalizedModel.includes('iphone')) {
+        const match = normalizedModel.match(/iphone\s*(\d+)/);
+        const generation = match ? parseInt(match[1], 10) : 0;
+        return generation >= 15 ? 'usbc' : 'lightning';
+    }
+
+    if (['samsung', 'xiaomi', 'motorola', 'oppo', 'vivo', 'realme', 'huawei', 'tecno', 'infinix'].includes(normalizedBrand)) {
+        return 'usbc';
+    }
+
+    return '';
+}
+
+function getUniversalAccessoryMatches(context = {}) {
+    if (!Array.isArray(window.ACCESSORIES_DB)) return [];
+
+    const connector = inferAccessoryConnector(context);
+    const universalMatches = [];
+
+    if (connector) {
+        universalMatches.push(...window.ACCESSORIES_DB.filter(item => {
+            const compactModel = compactNormalized(item.model);
+            const itemKeywords = normalize(item.keywords || '');
+
+            if (connector === 'lightning') {
+                return compactModel.includes('lightning') || itemKeywords.includes('lightning');
+            }
+
+            if (connector === 'usbc') {
+                return compactModel.includes('usbc') || itemKeywords.includes('usb-c') || itemKeywords.includes('usb c');
+            }
+
+            return false;
+        }));
+    }
+
+    universalMatches.push(...window.ACCESSORIES_DB.filter(item =>
+        normalize(item.brand) === 'universal' &&
+        ['cargador', 'audifonos'].includes(item.subtype)
+    ));
+
+    return [...new Map(universalMatches.map(item => [item.id, item])).values()]
+        .sort((a, b) => {
+            const typeDiff = (ACCESSORY_SUBTYPE_ORDER[a.subtype] || 99) - (ACCESSORY_SUBTYPE_ORDER[b.subtype] || 99);
+            if (typeDiff !== 0) return typeDiff;
+            return a.name.localeCompare(b.name);
+        })
+        .slice(0, 8);
+}
+
+function searchAccessoryCatalog({ brand = '', model = '', query = '', text = '', subtype = '', limit = 60 } = {}) {
+    if (!Array.isArray(window.ACCESSORIES_DB)) {
+        return {
+            context: extractAccessorySearchContext({ brand, model, query, text }),
+            exactMatches: [],
+            universalMatches: [],
+            allMatches: [],
+            relatedModels: []
+        };
+    }
+
+    const context = extractAccessorySearchContext({ brand, model, query, text });
+    const normalizedSubtype = normalize(subtype);
+    const hasSearch = context.aliases.length > 0 || context.words.length > 0;
+    if (!hasSearch) {
+        return {
+            context,
+            exactMatches: [],
+            universalMatches: [],
+            allMatches: [],
+            relatedModels: []
+        };
+    }
+
+    const exactMatches = window.ACCESSORIES_DB
+        .map(item => {
+            const itemBrand = normalize(item.brand);
+            const itemAliases = buildAccessoryModelAliases({ brand: item.brand, model: item.model });
+            const itemName = normalize(item.name);
+            const itemKeywords = normalize(item.keywords || '');
+            const brandMatches = !context.brand || itemBrand === normalize(context.brand);
+            const subtypeMatches = !normalizedSubtype || normalize(item.subtype) === normalizedSubtype;
+            const aliasHit = context.aliases.some(alias => alias && itemAliases.includes(alias));
+            const compactHit = context.aliases.some(alias => alias && compactNormalized(item.model).includes(alias));
+            const wordsHit = context.words.length > 0 && context.words.every(word =>
+                itemKeywords.includes(word) ||
+                itemName.includes(word) ||
+                itemAliases.some(alias => alias.includes(word))
+            );
+
+            if ((!brandMatches && !aliasHit && !wordsHit) || !subtypeMatches) {
+                return null;
+            }
+
+            let score = 0;
+            if (brandMatches) score += 2;
+            if (aliasHit) score += 8;
+            if (compactHit) score += 4;
+            if (wordsHit) score += 3;
+
+            if (score === 0) return null;
+
+            return {
+                ...item,
+                matchType: 'catalogo',
+                _score: score
+            };
+        })
+        .filter(Boolean)
+        .sort((a, b) => {
+            if (b._score !== a._score) return b._score - a._score;
+            const modelDiff = a.model.localeCompare(b.model);
+            if (modelDiff !== 0) return modelDiff;
+            const subtypeDiff = (ACCESSORY_SUBTYPE_ORDER[a.subtype] || 99) - (ACCESSORY_SUBTYPE_ORDER[b.subtype] || 99);
+            if (subtypeDiff !== 0) return subtypeDiff;
+            return a.name.localeCompare(b.name);
+        });
+
+    const universalMatches = getUniversalAccessoryMatches(context)
+        .filter(item => !normalizedSubtype || normalize(item.subtype) === normalizedSubtype)
+        .map(item => ({
+            ...item,
+            matchType: 'universal'
+        }));
+
+    const allMatches = [...new Map(
+        [...exactMatches, ...universalMatches]
+            .slice(0, Math.max(limit, 8))
+            .map(item => [item.id, item])
+    ).values()];
+
+    const queryCore = getAccessoryModelCore(context.brand, context.model || context.rawQuery);
+    const relatedModels = queryCore
+        ? [...new Map(
+            window.ACCESSORIES_DB
+                .filter(item => {
+                    const sameBrand = !context.brand || normalize(item.brand) === normalize(context.brand);
+                    if (!sameBrand) return false;
+                    const itemCore = getAccessoryModelCore(item.brand, item.model);
+                    return itemCore && itemCore === queryCore;
+                })
+                .map(item => [`${item.brand}::${item.model}`, {
+                    brand: item.brand,
+                    model: item.model
+                }])
+        ).values()]
+            .filter(item => compactNormalized(item.model) !== compactNormalized(context.model))
+            .sort((a, b) => a.model.localeCompare(b.model))
+            .slice(0, 12)
+        : [];
+
+    return {
+        context,
+        exactMatches,
+        universalMatches,
+        allMatches: allMatches.slice(0, limit),
+        relatedModels
+    };
+}
+
+function getCompatibleAccessories({ brand = '', model = '', text = '' } = {}) {
+    return searchAccessoryCatalog({ brand, model, text, limit: 8 }).allMatches.slice(0, 8);
+}
+
+function formatAccessorySubtype(subtype) {
+    const labels = {
+        estuche: 'Estuche',
+        vidrio: 'Vidrio',
+        hidrogel: 'Hidrogel',
+        cable: 'Cable',
+        cargador: 'Cargador',
+        audifonos: 'Audifonos'
+    };
+    return labels[subtype] || subtype || 'Accesorio';
+}
+
+function renderAccessorySuggestionBox(containerId, contentId, suggestions, emptyMessage) {
+    const box = document.getElementById(containerId);
+    const content = document.getElementById(contentId);
+    if (!box || !content) return;
+
+    if (!suggestions.length) {
+        box.style.display = 'none';
+        content.innerHTML = '';
+        return;
+    }
+
+    content.innerHTML = `
+        <div style="display:grid; gap:8px;">
+            ${suggestions.map(item => `
+                <div style="display:flex; justify-content:space-between; gap:12px; padding:10px; border:1px solid #e2e8f0; border-radius:10px; background:#fff;">
+                    <div>
+                        <div style="font-weight:600;">${escapeHtml(item.name)}</div>
+                        <div style="font-size:.85rem; color:#64748b;">
+                            ${escapeHtml(item.brand)} ${escapeHtml(item.model)}
+                        </div>
+                    </div>
+                    <div style="align-self:center;">
+                        <span class="badge badge-info">${escapeHtml(formatAccessorySubtype(item.subtype))}</span>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+        ${emptyMessage ? `<small style="display:block; margin-top:8px; color:#64748b;">${escapeHtml(emptyMessage)}</small>` : ''}
+    `;
+    box.style.display = 'block';
+}
+
+function updateSaleAccessorySuggestions(product) {
+    if (!product || product.productType !== 'celular') {
+        renderAccessorySuggestionBox('saleAccessorySuggestions', 'saleAccessorySuggestionsContent', []);
+        return;
+    }
+
+    const suggestions = getCompatibleAccessories({
+        brand: product.brand,
+        text: `${product.brand || ''} ${product.name || ''}`
+    });
+
+    renderAccessorySuggestionBox(
+        'saleAccessorySuggestions',
+        'saleAccessorySuggestionsContent',
+        suggestions,
+        'Estas sugerencias salen del catálogo local y no modifican tu inventario actual.'
+    );
+}
+
+function updateServiceAccessorySuggestions() {
+    const brand = document.getElementById('deviceBrand')?.value || '';
+    const model = document.getElementById('deviceModel')?.value || '';
+
+    if (!brand && !model) {
+        renderAccessorySuggestionBox('serviceAccessorySuggestions', 'serviceAccessorySuggestionsContent', []);
+        return;
+    }
+
+    const suggestions = getCompatibleAccessories({
+        brand,
+        model,
+        text: `${brand} ${model}`
+    });
+
+    renderAccessorySuggestionBox(
+        'serviceAccessorySuggestions',
+        'serviceAccessorySuggestionsContent',
+        suggestions,
+        'Te sirve para responder rápido qué estuche, vidrio o hidrogel le queda al equipo.'
+    );
+}
+
+function clearSaleSerializedUnits() {
+    saleSerializedUnits = [];
+    const box = document.getElementById('saleSerializedUnitsBox');
+    const summary = document.getElementById('saleSerializedUnitsSummary');
+    const list = document.getElementById('saleSerializedUnitsList');
+    if (box) box.style.display = 'none';
+    if (summary) summary.textContent = '';
+    if (list) list.innerHTML = '';
+}
+
+function getSelectedSaleUnitIds() {
+    return Array.from(document.querySelectorAll('.sale-unit-checkbox:checked'))
+        .map(input => input.value);
+}
+
+function renderSaleSerializedUnits(product, units = [], availableCount = 0) {
+    const box = document.getElementById('saleSerializedUnitsBox');
+    const summary = document.getElementById('saleSerializedUnitsSummary');
+    const list = document.getElementById('saleSerializedUnitsList');
+    if (!box || !summary || !list) return;
+
+    if (!product || product.productType !== 'celular') {
+        clearSaleSerializedUnits();
+        return;
+    }
+
+    if (!units.length) {
+        box.style.display = 'block';
+        summary.textContent = 'Este producto no tiene IMEIs/seriales registrados disponibles. Puedes venderlo por cantidad normal.';
+        list.innerHTML = '';
+        return;
+    }
+
+    const totalStock = Number(product.stock) || 0;
+    const availableUntrackedStock = Math.max(0, totalStock - availableCount);
+    const stockHint = availableUntrackedStock > 0
+        ? `Tambien tienes ${availableUntrackedStock} unidad(es) sin serial que puedes vender sin seleccionar IMEI.`
+        : 'Para vender este producto, selecciona los IMEIs/seriales exactos.';
+
+    summary.textContent = `${availableCount} unidad(es) con IMEI/serial disponible(s). Si seleccionas alguna(s), la cantidad de la venta debe coincidir. ${stockHint}`;
+    list.innerHTML = `
+        <div style="display:grid; gap:8px; max-height:220px; overflow:auto;">
+            ${units.map(unit => `
+                <label style="display:flex; gap:10px; align-items:center; padding:10px; border:1px solid #e2e8f0; border-radius:10px; background:#fff; color:#0f172a;">
+                    <input type="checkbox" class="sale-unit-checkbox" value="${escapeHtml(unit._id)}">
+                    <span style="font-weight:600;">${escapeHtml(unit.serialNumber)}</span>
+                </label>
+            `).join('')}
+        </div>
+    `;
+    box.style.display = 'block';
+
+    list.querySelectorAll('.sale-unit-checkbox').forEach(input => {
+        input.addEventListener('change', () => {
+            const selectedCount = getSelectedSaleUnitIds().length;
+            const quantityInput = document.getElementById('saleQuantity');
+            if (selectedCount > 0 && quantityInput) {
+                quantityInput.value = selectedCount;
+                updateSaleTotal();
+            }
+        });
+    });
+}
+
+async function loadSaleSerializedUnits(product) {
+    if (!product || product.productType !== 'celular') {
+        clearSaleSerializedUnits();
+        return;
+    }
+
+    try {
+        const response = await api.getProductUnits(product._id, 'available');
+        saleSerializedUnits = response.units || [];
+        renderSaleSerializedUnits(product, saleSerializedUnits, response.availableCount || saleSerializedUnits.length);
+    } catch (error) {
+        console.error('Error loading serialized units:', error);
+        clearSaleSerializedUnits();
+    }
+}
+
+function getAccessoryBrands() {
+    return getAccessoryCatalogBrands().sort();
+}
+
+function getAccessoryModels(brand = '') {
+    if (!Array.isArray(window.ACCESSORIES_DB)) return [];
+    const normalizedBrand = normalize(brand);
+    return [...new Set(
+        window.ACCESSORIES_DB
+            .filter(item => !normalizedBrand || normalize(item.brand) === normalizedBrand)
+            .map(item => item.model)
+            .filter(Boolean)
+    )].sort();
+}
+
+function populateCompatibilityFilters() {
+    const brandList = document.getElementById('compatibilityBrandList');
+    const modelList = document.getElementById('compatibilityModelList');
+    const brandInput = document.getElementById('compatibilityBrand');
+    if (!brandList || !modelList || !brandInput) return;
+
+    brandList.innerHTML = getAccessoryBrands()
+        .map(brand => `<option value="${escapeHtml(brand)}"></option>`)
+        .join('');
+
+    const renderModels = () => {
+        modelList.innerHTML = getAccessoryModels(brandInput.value)
+            .map(model => `<option value="${escapeHtml(model)}"></option>`)
+            .join('');
+    };
+
+    if (!brandInput.dataset.compatibilityBound) {
+        brandInput.addEventListener('input', renderModels);
+        brandInput.dataset.compatibilityBound = '1';
+    }
+
+    renderModels();
+}
+
+function getAccessoryCatalogBaseStats() {
+    const db = Array.isArray(window.ACCESSORIES_DB) ? window.ACCESSORIES_DB : [];
+    const brands = new Set(db.map(item => item.brand).filter(Boolean)).size;
+    const models = new Set(db.map(item => `${item.brand}::${item.model}`).filter(Boolean)).size;
+    const aliases = new Set(
+        db.flatMap(item => buildAccessoryModelAliases({ brand: item.brand, model: item.model }))
+            .filter(Boolean)
+    ).size;
+    return {
+        totalAccessories: db.length,
+        totalBrands: brands,
+        totalModels: models,
+        totalAliases: aliases
+    };
+}
+
+function renderCompatibilitySummary(searchData) {
+    const container = document.getElementById('compatibilitySummary');
+    if (!container) return;
+
+    const baseStats = getAccessoryCatalogBaseStats();
+    const exactMatches = searchData?.exactMatches || [];
+    const universalMatches = searchData?.universalMatches || [];
+    const relatedModels = searchData?.relatedModels || [];
+    const workingSet = searchData?.allMatches || [];
+
+    const bySubtype = workingSet.reduce((acc, item) => {
+        const key = item.subtype || 'accesorio';
+        acc[key] = (acc[key] || 0) + 1;
+        return acc;
+    }, {});
+
+    const cards = workingSet.length ? [
+        { title: 'Compatibles directos', value: exactMatches.length },
+        { title: 'Universales', value: universalMatches.length },
+        { title: 'Modelos relacionados', value: relatedModels.length },
+        { title: 'Estuches', value: bySubtype.estuche || 0 },
+        { title: 'Vidrios / Hidrogeles', value: (bySubtype.vidrio || 0) + (bySubtype.hidrogel || 0) },
+        { title: 'Modelos encontrados', value: new Set(workingSet.map(item => item.model)).size }
+    ] : [
+        { title: 'Accesorios cargados', value: baseStats.totalAccessories },
+        { title: 'Marcas', value: baseStats.totalBrands },
+        { title: 'Modelos', value: baseStats.totalModels },
+        { title: 'Alias detectables', value: baseStats.totalAliases },
+        { title: 'Cobertura', value: 'Local' }
+    ];
+
+    container.innerHTML = cards.map(card => `
+        <div class="compatibility-summary-card">
+            <h4>${escapeHtml(card.title)}</h4>
+            <strong>${escapeHtml(card.value)}</strong>
+        </div>
+    `).join('');
+}
+
+function renderCompatibilityRelatedModels(searchData) {
+    const container = document.getElementById('compatibilityRelatedModels');
+    if (!container) return;
+
+    compatibilityRelatedModels = searchData?.relatedModels || [];
+
+    if (!compatibilityRelatedModels.length) {
+        container.innerHTML = '<div class="compatibility-empty">Cuando exista una familia parecida en el catálogo, te la mostraré aquí para comparar rápido.</div>';
+        return;
+    }
+
+    container.innerHTML = `
+        <p class="compatibility-result-caption">Estos modelos se parecen por familia o variante dentro del mismo catálogo. Úsalos para revisar si también manejas ese vidrio, hidrogel o estuche.</p>
+        <div class="compatibility-related-wrap">
+            ${compatibilityRelatedModels.map((item, index) => `
+                <button type="button" class="compatibility-related-chip" onclick="applyCompatibilityRelatedModel(${index})">
+                    ${escapeHtml(item.brand)} ${escapeHtml(item.model)}
+                </button>
+            `).join('')}
+        </div>
+    `;
+}
+
+function renderCompatibilityResults(searchData, contextLabel = '') {
+    const container = document.getElementById('compatibilityResults');
+    if (!container) return;
+
+    const exactMatches = searchData?.exactMatches || [];
+    const universalMatches = searchData?.universalMatches || [];
+    const allMatches = searchData?.allMatches || [];
+    const displayExactMatches = exactMatches.slice(0, 48);
+    const displayUniversalMatches = universalMatches.slice(0, 12);
+
+    compatibilityCatalogMatches = [...displayExactMatches, ...displayUniversalMatches];
+
+    if (!allMatches.length) {
+        container.innerHTML = contextLabel
+            ? `<div class="compatibility-empty">No encontré coincidencias para <strong>${escapeHtml(contextLabel)}</strong>. Prueba con otra marca, modelo o búsqueda libre.</div>`
+            : '<div class="compatibility-empty">Escribe una marca, un modelo o una búsqueda libre para ver qué accesorios le sirven.</div>';
+        return;
+    }
+
+    const renderCards = (items, offset = 0) => `
+        <div class="compatibility-results-grid">
+            ${items.map((item, index) => `
+                <div class="compatibility-result-card">
+                    <div>
+                        <div style="font-weight:700; font-size:1rem;">${escapeHtml(item.name)}</div>
+                        <div class="compatibility-result-meta">
+                            <span>${escapeHtml(item.brand)}</span>
+                            <span>${escapeHtml(item.model)}</span>
+                            <span class="badge badge-info">${escapeHtml(formatAccessorySubtype(item.subtype))}</span>
+                            ${item.matchType === 'universal' ? '<span class="badge badge-warning">Universal</span>' : '<span class="badge badge-success">Directo</span>'}
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <button type="button" class="btn btn-sm" onclick="sendCompatibilityToPurchase(${offset + index})" style="width:auto;">Pasar a compras</button>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+
+    const sections = [];
+    if (displayExactMatches.length) {
+        sections.push(`
+            <section class="compatibility-result-section">
+                <h4>Compatibles directos</h4>
+                <p class="compatibility-result-caption">Resultados encontrados por coincidencia de modelo, alias o forma común de escribirlo.</p>
+                ${renderCards(displayExactMatches, 0)}
+            </section>
+        `);
+    }
+
+    if (displayUniversalMatches.length) {
+        sections.push(`
+            <section class="compatibility-result-section">
+                <h4>Accesorios universales recomendados</h4>
+                <p class="compatibility-result-caption">Incluye cables, cargadores y accesorios generales que suelen funcionar con el conector o tipo de equipo detectado.</p>
+                ${renderCards(displayUniversalMatches, displayExactMatches.length)}
+            </section>
+        `);
+    }
+
+    container.innerHTML = sections.join('');
+}
+
+function syncCompatibilityQuickFilters(selectedSubtype = '') {
+    document.querySelectorAll('.compatibility-quick-chip').forEach(chip => {
+        chip.classList.toggle('active', (chip.dataset.subtype || '') === selectedSubtype);
+    });
+}
+
+function runCompatibilitySearch() {
+    const brand = document.getElementById('compatibilityBrand')?.value || '';
+    const model = document.getElementById('compatibilityModel')?.value || '';
+    const query = document.getElementById('compatibilityQuery')?.value || '';
+    const subtype = document.getElementById('compatibilitySubtype')?.value || '';
+    const subtypeLabel = subtype ? formatAccessorySubtype(subtype) : '';
+    const contextLabel = [brand, model, query, subtypeLabel].filter(Boolean).join(' · ');
+    syncCompatibilityQuickFilters(subtype);
+    const searchData = searchAccessoryCatalog({ brand, model, query, subtype, limit: 60 });
+    renderCompatibilitySummary(searchData);
+    renderCompatibilityRelatedModels(searchData);
+    renderCompatibilityResults(searchData, contextLabel);
+}
+
+async function loadCompatibilityView() {
+    populateCompatibilityFilters();
+    renderCompatibilitySummary(null);
+    renderCompatibilityRelatedModels(null);
+    runCompatibilitySearch();
+}
+
+window.sendCompatibilityToPurchase = function(index) {
+    const item = compatibilityCatalogMatches[index];
+    if (!item) return;
+
+    const purchasesBtn = document.querySelector('.nav-btn[data-view="purchases"]');
+    if (!purchasesBtn) return;
+
+    purchasesBtn.click();
+
+    setTimeout(() => {
+        const nameInput = document.getElementById('purchaseProductName');
+        const typeInput = document.getElementById('purchaseProductType');
+        const notesInput = document.getElementById('purchaseSupplier');
+
+        if (nameInput) nameInput.value = item.name;
+        if (typeInput) {
+            typeInput.value = 'accesorio';
+            typeInput.dispatchEvent(new Event('change'));
+        }
+        if (notesInput && !notesInput.value) notesInput.value = item.brand;
+        nameInput?.focus();
+        utils.showToast(`Listo para comprar: ${item.name}`);
+    }, 200);
+};
+
+window.applyCompatibilityRelatedModel = function(index) {
+    const item = compatibilityRelatedModels[index];
+    if (!item) return;
+
+    const brandInput = document.getElementById('compatibilityBrand');
+    const modelInput = document.getElementById('compatibilityModel');
+    const queryInput = document.getElementById('compatibilityQuery');
+
+    if (brandInput) brandInput.value = item.brand;
+    if (modelInput) modelInput.value = item.model;
+    if (queryInput) queryInput.value = '';
+
+    runCompatibilitySearch();
+};
 
 // Cargar productos para búsqueda
 async function loadProductsForSearch() {
@@ -142,6 +864,8 @@ function selectProductFromSearch(productId) {
     document.getElementById('searchResults').classList.remove('show');
     document.getElementById('saleQuantity').focus();
 
+    updateSaleAccessorySuggestions(selectedProduct);
+    loadSaleSerializedUnits(selectedProduct);
     updateSaleTotal();
 }
 
@@ -195,6 +919,7 @@ function displayPurchases(purchases) {
                 <span>Total: <strong>$${formatNumber(purchase.totalCost)}</strong></span>
                 ${purchase.supplier ? `<span>Proveedor: ${purchase.supplier}</span>` : ''}
                 ${purchase.invoice  ? `<span>Factura: ${purchase.invoice}</span>`   : ''}
+                ${purchase.serialNumbers?.length ? `<span>IMEIs/Seriales: ${purchase.serialNumbers.length}</span>` : ''}
             </div>
         </div>
     `).join('');
@@ -289,6 +1014,10 @@ function displayTechnicalServices(services) {
                         ${service.customer.phone ? `<span style="font-weight:400; color:var(--text-secondary); font-size:13px;"> · ${service.customer.phone}</span>` : ''}
                     </div>
                     <div class="service-device">${service.device.brand || ''} ${service.device.model || ''} ${service.device.type}</div>
+                    ${service.device.serialNumber ? `
+                    <div style="margin-top:4px; font-size:12px; color:var(--text-secondary);">
+                        IMEI / Serial: <strong>${escapeHtml(service.device.serialNumber)}</strong>
+                    </div>` : ''}
                 </div>
                 <div style="text-align: right;">
                     <span class="service-status-badge ${service.status}">
@@ -437,6 +1166,7 @@ async function editService(serviceId) {
     document.getElementById('updateStatus').value            = service.status;
     document.getElementById('updateLaborCost').value         = service.laborCost || 0;
     document.getElementById('updatePartsCost').value         = service.partsCost || 0;
+    document.getElementById('updateServiceSerialNumber').value = service.device?.serialNumber || '';
 
     // ✅ Técnico y comisión en modal de edición
     const techSelect = document.getElementById('updateServiceTechnicianId');
@@ -540,6 +1270,51 @@ function formatDate(dateString) {
 
 document.addEventListener('DOMContentLoaded', () => {
     initProductSearch();
+    populateCompatibilityFilters();
+    ['deviceBrand', 'deviceModel'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', updateServiceAccessorySuggestions);
+    });
+
+    const compatibilityBrand = document.getElementById('compatibilityBrand');
+    const compatibilityModel = document.getElementById('compatibilityModel');
+    const compatibilityQuery = document.getElementById('compatibilityQuery');
+    const compatibilitySubtype = document.getElementById('compatibilitySubtype');
+    const compatibilitySearchBtn = document.getElementById('btnCompatibilitySearch');
+    const compatibilityClearBtn = document.getElementById('btnCompatibilityClear');
+    const compatibilityQuickChips = document.querySelectorAll('.compatibility-quick-chip');
+
+    [compatibilityBrand, compatibilityModel, compatibilityQuery].forEach(el => {
+        if (!el) return;
+        el.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                runCompatibilitySearch();
+            }
+        });
+    });
+
+    compatibilitySubtype?.addEventListener('change', runCompatibilitySearch);
+    compatibilityQuickChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            if (compatibilitySubtype) {
+                compatibilitySubtype.value = chip.dataset.subtype || '';
+            }
+            runCompatibilitySearch();
+        });
+    });
+    compatibilitySearchBtn?.addEventListener('click', runCompatibilitySearch);
+    compatibilityClearBtn?.addEventListener('click', () => {
+        if (compatibilityBrand) compatibilityBrand.value = '';
+        if (compatibilityModel) compatibilityModel.value = '';
+        if (compatibilityQuery) compatibilityQuery.value = '';
+        if (compatibilitySubtype) compatibilitySubtype.value = '';
+        syncCompatibilityQuickFilters('');
+        populateCompatibilityFilters();
+        renderCompatibilitySummary(null);
+        renderCompatibilityRelatedModels(null);
+        renderCompatibilityResults(null, '');
+    });
 
     // Totales de compra
     ['purchaseQuantity', 'purchaseUnitCost'].forEach(id => {
@@ -685,7 +1460,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 device: {
                     type:  document.getElementById('deviceType').value,
                     brand: document.getElementById('deviceBrand')?.value || '',
-                    model: document.getElementById('deviceModel')?.value || ''
+                    model: document.getElementById('deviceModel')?.value || '',
+                    serialNumber: document.getElementById('deviceSerialNumber')?.value || ''
                 },
                 problemDescription:       document.getElementById('problemDescription').value,
                 laborCost,
@@ -706,6 +1482,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Limpiar comisión override
                     const commInput = document.getElementById('technicianCommission');
                     if (commInput) delete commInput.dataset.manualOverride;
+
+                    const serialInput = document.getElementById('deviceSerialNumber');
+                    if (serialInput) serialInput.value = '';
 
                     // Resetear totales
                     ['serviceTotal', 'serviceTechnicianEarnings', 'serviceLocalEarnings'].forEach(id => {
@@ -743,6 +1522,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 status:                   document.getElementById('updateStatus').value,
                 laborCost,
                 partsCost,
+                device: {
+                    ...((allServices.find(s => s._id === serviceId)?.device) || {}),
+                    serialNumber: document.getElementById('updateServiceSerialNumber')?.value || ''
+                },
                 technicianId:             techId || undefined,
                 technicianCommissionRate: rate,
                 technicianCommission:     commision
@@ -822,6 +1605,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('[data-view="sales"]').forEach(btn => {
         btn.addEventListener('click', async () => {
+            selectedProduct = null;
+            clearSaleSerializedUnits();
             await loadProductsForSearch();
         });
     });
@@ -842,3 +1627,7 @@ window.editPurchase             = editPurchase;
 window.deletePurchase           = deletePurchase;
 window.closePurchaseModal       = closePurchaseModal;
 window.loadPurchasesEnhanced    = loadPurchasesEnhanced;
+window.updateServiceAccessorySuggestions = updateServiceAccessorySuggestions;
+window.loadCompatibilityView    = loadCompatibilityView;
+window.getSelectedSaleUnitIds   = getSelectedSaleUnitIds;
+window.clearSaleSerializedUnits = clearSaleSerializedUnits;

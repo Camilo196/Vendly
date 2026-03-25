@@ -59,6 +59,11 @@ const purchaseSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+
+  serialNumbers: [{
+    type: String,
+    trim: true
+  }],
   
   // Fecha de la compra
   purchaseDate: {

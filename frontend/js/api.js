@@ -1,6 +1,18 @@
+function getDefaultApiBaseURL() {
+  const hostname = window.location.hostname || '';
+  const isLocalHost = ['localhost', '127.0.0.1'].includes(hostname);
+  const isLocalFile = window.location.protocol === 'file:';
+
+  if (isLocalHost || isLocalFile) {
+    return 'http://localhost:5000/api';
+  }
+
+  return 'https://vendly-production.up.railway.app/api';
+}
+
 // Configuración de la API
 const API_CONFIG = {
-  baseURL: 'https://vendly-production.up.railway.app/api',
+  baseURL: getDefaultApiBaseURL(),
   timeout: 10000
 };
 
@@ -106,6 +118,12 @@ class APIClient {
       purchases: purchases.purchases || [],
       sales:     sales.sales || []
     };
+  }
+
+  async getProductUnits(productId, status = 'available') {
+    const params = new URLSearchParams();
+    if (status) params.set('status', status);
+    return this.request(`/products/${productId}/units?${params.toString()}`);
   }
 
   // ============ PURCHASES ============

@@ -2,10 +2,50 @@ const express = require('express');
 const router = express.Router();
 const Purchase = require('../models/Purchase');
 const Product = require('../models/Product');
+const ProductUnit = require('../models/ProductUnit');
 const User = require('../models/User');
 const { protect } = require('../middleware/auth');
 
 router.use(protect);
+
+function getPurchaseInventoryEffect(purchaseLike) {
+  const quantity = parseFloat(purchaseLike.quantity) || 0;
+  return purchaseLike.supplier === 'AJUSTE NEGATIVO' ? -quantity : quantity;
+}
+
+function normalizeSerialNumbers(serialNumbers = []) {
+  const input = Array.isArray(serialNumbers)
+    ? serialNumbers
+    : String(serialNumbers || '').split(/\r?\n|,/);
+
+  return input
+    .map(value => String(value || '').trim().toUpperCase())
+    .filter(Boolean);
+}
+
+async function recalculateProductCostMetrics(userId, product) {
+  const purchases = await Purchase.find({
+    userId,
+    productId: product._id
+  });
+
+  let totalCostBasis = 0;
+  let totalQuantityBasis = 0;
+
+  purchases.forEach((purchase) => {
+    if (purchase.supplier === 'AJUSTE NEGATIVO') {
+      return;
+    }
+
+    totalCostBasis += purchase.totalCost || 0;
+    totalQuantityBasis += purchase.quantity || 0;
+  });
+
+  product.totalPurchased = Math.max(0, totalCostBasis);
+  product.averageCost = totalQuantityBasis > 0
+    ? totalCostBasis / totalQuantityBasis
+    : 0;
+}
 
 // @route   GET /api/purchases
 // @desc    Obtener todas las compras del usuario
@@ -64,8 +104,48 @@ router.post('/', async (req, res) => {
       invoice, 
       notes,
       productType,
-      commissionRate
+      commissionRate,
+      serialNumbers
     } = req.body;
+
+    const normalizedSerialNumbers = normalizeSerialNumbers(serialNumbers);
+
+    if (normalizedSerialNumbers.length > 0) {
+      const uniqueSerials = new Set(normalizedSerialNumbers.map(value => value.toUpperCase()));
+
+      if (uniqueSerials.size !== normalizedSerialNumbers.length) {
+        return res.status(400).json({
+          success: false,
+          message: 'Hay IMEIs/seriales repetidos en la compra'
+        });
+      }
+
+      if ((productType || 'otro') !== 'celular') {
+        return res.status(400).json({
+          success: false,
+          message: 'Solo los productos tipo celular pueden registrar IMEI/serial por unidad'
+        });
+      }
+
+      if (normalizedSerialNumbers.length > parseFloat(quantity || 0)) {
+        return res.status(400).json({
+          success: false,
+          message: 'No puedes registrar más IMEIs/seriales que la cantidad comprada'
+        });
+      }
+
+      const existingUnits = await ProductUnit.find({
+        userId: req.user._id,
+        serialNumber: { $in: normalizedSerialNumbers }
+      }).select('serialNumber');
+
+      if (existingUnits.length > 0) {
+        return res.status(400).json({
+          success: false,
+          message: `Estos IMEIs/seriales ya existen: ${existingUnits.map(unit => unit.serialNumber).join(', ')}`
+        });
+      }
+    }
     
     console.log('\n🔍 VALORES EXTRAÍDOS:');
     console.log('  productName:', JSON.stringify(productName), '(tipo:', typeof productName, ')');
@@ -235,7 +315,8 @@ router.post('/', async (req, res) => {
       totalCost: parseFloat(quantity) * parseFloat(unitCost), // ⭐ CALCULAR EXPLÍCITAMENTE
       supplier: supplier || '',
       invoice: invoice || '',
-      notes: notes || ''
+      notes: notes || '',
+      serialNumbers: normalizedSerialNumbers
     };
     
     console.log('🧾 Datos de la compra:');
@@ -245,6 +326,18 @@ router.post('/', async (req, res) => {
     const purchase = new Purchase(purchaseData);
     await purchase.save();
     console.log('✅ Compra guardada con ID:', purchase._id);
+
+    if (normalizedSerialNumbers.length > 0) {
+      await ProductUnit.insertMany(
+        normalizedSerialNumbers.map((serialNumber) => ({
+          userId: req.user._id,
+          productId: product._id,
+          purchaseId: purchase._id,
+          serialNumber,
+          status: 'available'
+        }))
+      );
+    }
     
     // Actualizar estadísticas
     console.log('\n📊 ACTUALIZANDO ESTADÍSTICAS DEL USUARIO...');
@@ -268,7 +361,8 @@ router.post('/', async (req, res) => {
         averageCost: product.averageCost,
         suggestedPrice: product.suggestedPrice,
         productType: product.productType,
-        commissionRate: product.commissionRate
+        commissionRate: product.commissionRate,
+        trackedUnits: normalizedSerialNumbers.length
       }
     });
     
@@ -345,10 +439,31 @@ router.put('/:id', async (req, res) => {
         message: 'Compra no encontrada'
       });
     }
+
+    const trackedUnits = await ProductUnit.find({
+      userId: req.user._id,
+      purchaseId: purchase._id
+    });
+
+    if (trackedUnits.length > 0) {
+      if (quantity !== undefined && parseFloat(quantity) < trackedUnits.length) {
+        return res.status(400).json({
+          success: false,
+          message: `Esta compra tiene ${trackedUnits.length} IMEIs/seriales registrados. No puedes dejar una cantidad menor.`
+        });
+      }
+
+      if (productType !== undefined && productType !== 'celular') {
+        return res.status(400).json({
+          success: false,
+          message: 'No puedes cambiar a otro tipo una compra que ya tiene IMEIs/seriales registrados'
+        });
+      }
+    }
     
-    // Guardar cantidad y costo anterior antes de modificar
+    // Guardar estado anterior antes de modificar
     const oldQuantity = purchase.quantity;
-    const oldUnitCost = purchase.unitCost;
+    const oldSupplier = purchase.supplier;
 
     if (quantity !== undefined) purchase.quantity = quantity;
     if (unitCost !== undefined) purchase.unitCost = unitCost;
@@ -392,21 +507,16 @@ router.put('/:id', async (req, res) => {
         });
       }
       if (product) {
-        // Ajustar stock si cambió la cantidad
-        if (quantity !== undefined) {
-          const diff = purchase.quantity - oldQuantity;
-          product.stock += diff;
-          if (product.stock < 0) product.stock = 0;
-        }
-        // Recalcular costo promedio si cambió precio o cantidad
-        // Fórmula: restar el aporte viejo y sumar el nuevo
-        const oldCost = oldQuantity * oldUnitCost;
-        const newCost = purchase.quantity * purchase.unitCost;
-        const otherStock = product.stock - purchase.quantity;
-        const otherValue = otherStock * product.averageCost;
-        if (product.stock > 0) {
-          product.averageCost = (otherValue + newCost) / product.stock;
-        }
+        const oldEffect = getPurchaseInventoryEffect({
+          quantity: oldQuantity,
+          supplier: oldSupplier
+        });
+        const newEffect = getPurchaseInventoryEffect(purchase);
+
+        product.stock += (newEffect - oldEffect);
+        if (product.stock < 0) product.stock = 0;
+
+        await recalculateProductCostMetrics(req.user._id, product);
         await product.save();
       }
     }
@@ -440,6 +550,19 @@ router.delete('/:id', async (req, res) => {
         message: 'Compra no encontrada'
       });
     }
+
+    const trackedUnits = await ProductUnit.find({
+      userId: req.user._id,
+      purchaseId: purchase._id
+    });
+
+    const nonAvailableUnits = trackedUnits.filter(unit => unit.status !== 'available');
+    if (nonAvailableUnits.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'No puedes eliminar esta compra porque ya tiene unidades serializadas vendidas'
+      });
+    }
     
     // Buscar el producto asociado (por ID primero, luego por nombre)
     let product = null;
@@ -454,23 +577,28 @@ router.delete('/:id', async (req, res) => {
     }
     
     if (product) {
-      // Restar la cantidad de esta compra del stock
-      product.stock -= purchase.quantity;
+      // Revertir el efecto real que esta compra tuvo sobre el inventario
+      product.stock -= getPurchaseInventoryEffect(purchase);
       
       if (product.stock <= 0) {
         product.stock = 0;
       }
-      
-      // Restar del total comprado
-      product.totalPurchased -= purchase.totalCost;
-      if (product.totalPurchased < 0) product.totalPurchased = 0;
-      
-      await product.save();
-      console.log(`✅ Inventario actualizado: ${product.name} - Stock: ${product.stock}`);
     }
     
     // Eliminar la compra
     await Purchase.deleteOne({ _id: purchase._id });
+    if (trackedUnits.length > 0) {
+      await ProductUnit.deleteMany({
+        userId: req.user._id,
+        purchaseId: purchase._id
+      });
+    }
+
+    if (product) {
+      await recalculateProductCostMetrics(req.user._id, product);
+      await product.save();
+      console.log(`✅ Inventario actualizado: ${product.name} - Stock: ${product.stock}`);
+    }
     
     res.json({
       success: true,

@@ -8,6 +8,79 @@ const { protect } = require('../middleware/auth');
 
 router.use(protect);
 
+function getDateRange(period, startDate, endDate) {
+  const now = new Date();
+  let from = null;
+  let to = null;
+  let label = 'Personalizado';
+
+  if (period === 'daily') {
+    from = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    to = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+    label = 'Hoy';
+  } else if (period === 'weekly') {
+    to = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+    from = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6);
+    label = 'Últimos 7 días';
+  } else if (period === 'monthly') {
+    from = new Date(now.getFullYear(), now.getMonth(), 1);
+    to = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    label = 'Mes actual';
+  } else if (period === 'yearly') {
+    from = new Date(now.getFullYear(), 0, 1);
+    to = new Date(now.getFullYear() + 1, 0, 1);
+    label = 'Año actual';
+  } else if (startDate && endDate) {
+    from = new Date(startDate);
+    from.setHours(0, 0, 0, 0);
+    to = new Date(endDate);
+    to.setHours(23, 59, 59, 999);
+    label = 'Personalizado';
+  }
+
+  return {
+    label,
+    from,
+    to,
+    dateFilter: from && to ? { $gte: from, $lt: to } : null
+  };
+}
+
+function buildQuery(userId, field, dateFilter) {
+  const query = { userId };
+  if (dateFilter) query[field] = dateFilter;
+  return query;
+}
+
+function buildMonthlyTimeline({ sales, purchases, services, months = 6 }) {
+  const timeline = [];
+  const now = new Date();
+
+  for (let offset = months - 1; offset >= 0; offset--) {
+    const start = new Date(now.getFullYear(), now.getMonth() - offset, 1);
+    const end = new Date(now.getFullYear(), now.getMonth() - offset + 1, 1);
+
+    const monthSales = sales.filter(item => item.saleDate >= start && item.saleDate < end);
+    const monthPurchases = purchases.filter(item => item.purchaseDate >= start && item.purchaseDate < end);
+    const monthServices = services.filter(item => item.entryDate >= start && item.entryDate < end);
+
+    timeline.push({
+      label: start.toLocaleDateString('es-CO', { month: 'short', year: 'numeric' }),
+      salesTotal: monthSales.reduce((sum, item) => sum + (item.totalSale || 0), 0),
+      salesCount: monthSales.length,
+      purchaseTotal: monthPurchases.reduce((sum, item) => sum + (item.totalCost || 0), 0),
+      purchaseCount: monthPurchases.length,
+      serviceTotal: monthServices.reduce((sum, item) => sum + (item.laborCost || 0), 0),
+      serviceCount: monthServices.length
+    });
+  }
+
+  return timeline.map(item => ({
+    ...item,
+    balance: item.salesTotal + item.serviceTotal - item.purchaseTotal
+  }));
+}
+
 // @route   GET /api/reports/sales
 // @desc    Reporte de ventas con filtros
 // @access  Private
@@ -15,36 +88,11 @@ router.get('/sales', async (req, res) => {
   try {
     const { period, startDate, endDate } = req.query;
     const userId = req.user._id;
-    
-    let dateFilter = {};
-    const now = new Date();
-    
-    if (period === 'daily') {
-      const today = new Date(now.setHours(0, 0, 0, 0));
-      dateFilter = {
-        $gte: today,
-        $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000)
-      };
-    } else if (period === 'weekly') {
-      const weekAgo = new Date(now.setDate(now.getDate() - 7));
-      dateFilter = { $gte: weekAgo };
-    } else if (period === 'monthly') {
-      const monthAgo = new Date(now.setMonth(now.getMonth() - 1));
-      dateFilter = { $gte: monthAgo };
-    } else if (period === 'yearly') {
-      const yearAgo = new Date(now.setFullYear(now.getFullYear() - 1));
-      dateFilter = { $gte: yearAgo };
-    } else if (startDate && endDate) {
-      dateFilter = {
-        $gte: new Date(startDate),
-        $lte: new Date(endDate)
-      };
-    }
-    
-    const sales = await Sale.find({
-      userId,
-      saleDate: dateFilter
-    }).populate('productId', 'name category').sort({ saleDate: -1 });
+    const { dateFilter, from, to, label } = getDateRange(period, startDate, endDate);
+
+    const sales = await Sale.find(buildQuery(userId, 'saleDate', dateFilter))
+      .populate('productId', 'name category')
+      .sort({ saleDate: -1 });
     
     const totalSales = sales.reduce((sum, sale) => sum + (sale.totalSale || 0), 0);
     const totalCost = sales.reduce((sum, sale) => sum + (sale.totalCost || 0), 0);
@@ -83,15 +131,24 @@ router.get('/sales', async (req, res) => {
       delete byProduct[key].saleIds;
     }
     
-    // Servicios técnicos en el mismo período
-    const technicalServices = await TechnicalService.find({
-      userId,
-      ...(Object.keys(dateFilter).length > 0 ? { createdAt: dateFilter } : {})
-    });
+    const purchases = await Purchase.find(buildQuery(userId, 'purchaseDate', dateFilter)).sort({ purchaseDate: -1 });
+    const technicalServices = await TechnicalService.find(buildQuery(userId, 'entryDate', dateFilter)).sort({ entryDate: -1 });
 
     const totalTechnicalRevenue = technicalServices.reduce((sum, ts) => sum + (ts.laborCost || 0), 0);
     const totalTechnicalCommissions = technicalServices.reduce((sum, ts) => sum + (ts.technicianCommission || 0), 0);
     const totalTechnicalNetProfit = totalTechnicalRevenue - totalTechnicalCommissions;
+    const totalPurchases = purchases.reduce((sum, purchase) => sum + (purchase.totalCost || 0), 0);
+    const totalPurchaseUnits = purchases.reduce((sum, purchase) => sum + (purchase.quantity || 0), 0);
+    const totalSalesCommissions = Object.values(byProduct).reduce((sum, product) => sum + (product.commissions || 0), 0);
+    const openTechnicalServices = technicalServices.filter(ts => !['delivered', 'cancelled'].includes(ts.status)).length;
+    const completedTechnicalServices = technicalServices.filter(ts => ['completed', 'delivered'].includes(ts.status)).length;
+
+    const timelineStart = new Date(new Date().getFullYear(), new Date().getMonth() - 5, 1);
+    const [timelineSales, timelinePurchases, timelineServices] = await Promise.all([
+      Sale.find(buildQuery(userId, 'saleDate', { $gte: timelineStart })).select('saleDate totalSale profit'),
+      Purchase.find(buildQuery(userId, 'purchaseDate', { $gte: timelineStart })).select('purchaseDate totalCost quantity'),
+      TechnicalService.find(buildQuery(userId, 'entryDate', { $gte: timelineStart })).select('entryDate laborCost technicianCommission')
+    ]);
 
     const byTechnicalService = technicalServices.map(ts => ({
       customer: ts.customer?.name || 'Sin nombre',
@@ -106,6 +163,11 @@ router.get('/sales', async (req, res) => {
     res.json({
       success: true,
       period: period || 'custom',
+      periodInfo: {
+        label,
+        startDate: from,
+        endDate: to
+      },
       summary: {
         totalTransactions: sales.length,
         totalSales,
@@ -113,12 +175,36 @@ router.get('/sales', async (req, res) => {
         totalProfit,
         totalItems,
         averageTicket: sales.length > 0 ? totalSales / sales.length : 0,
+        totalPurchases,
+        totalPurchaseUnits,
+        totalPurchaseTransactions: purchases.length,
+        totalSalesCommissions,
         totalTechnicalRevenue,
         totalTechnicalCommissions,
-        totalTechnicalNetProfit
+        totalTechnicalNetProfit,
+        totalTechnicalTransactions: technicalServices.length,
+        netBusinessProfit: totalProfit - totalSalesCommissions + totalTechnicalNetProfit,
+        operationalBalance: totalSales + totalTechnicalRevenue - totalPurchases,
+        openTechnicalServices,
+        completedTechnicalServices
+      },
+      activity: {
+        salesCount: sales.length,
+        itemsSold: totalItems,
+        purchaseCount: purchases.length,
+        purchaseUnits: totalPurchaseUnits,
+        purchaseInvestment: totalPurchases,
+        technicalCount: technicalServices.length,
+        openTechnicalServices,
+        completedTechnicalServices
       },
       byProduct: Object.values(byProduct).sort((a, b) => b.sales - a.sales),
       byTechnicalService,
+      monthlyTimeline: buildMonthlyTimeline({
+        sales: timelineSales,
+        purchases: timelinePurchases,
+        services: timelineServices
+      }),
       transactions: sales
     });
   } catch (error) {
@@ -137,30 +223,11 @@ router.get('/summary', async (req, res) => {
   try {
     const { period } = req.query;
     const userId = req.user._id;
-    
-    let dateFilter = {};
-    const now = new Date();
-    
-    if (period === 'daily') {
-      const today = new Date(now.setHours(0, 0, 0, 0));
-      dateFilter = {
-        $gte: today,
-        $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000)
-      };
-    } else if (period === 'weekly') {
-      const weekAgo = new Date(now.setDate(now.getDate() - 7));
-      dateFilter = { $gte: weekAgo };
-    } else if (period === 'monthly') {
-      const monthAgo = new Date(now.setMonth(now.getMonth() - 1));
-      dateFilter = { $gte: monthAgo };
-    } else if (period === 'yearly') {
-      const yearAgo = new Date(now.setFullYear(now.getFullYear() - 1));
-      dateFilter = { $gte: yearAgo };
-    }
-    
-    const sales = await Sale.find({ userId, saleDate: dateFilter });
-    const purchases = await Purchase.find({ userId, purchaseDate: dateFilter });
-    const services = await TechnicalService.find({ userId, entryDate: dateFilter });
+    const { dateFilter, label, from, to } = getDateRange(period, null, null);
+
+    const sales = await Sale.find(buildQuery(userId, 'saleDate', dateFilter));
+    const purchases = await Purchase.find(buildQuery(userId, 'purchaseDate', dateFilter));
+    const services = await TechnicalService.find(buildQuery(userId, 'entryDate', dateFilter));
     
     const totalSales = sales.reduce((sum, s) => sum + (s.totalSale || 0), 0);
     const totalProfit = sales.reduce((sum, s) => sum + (s.profit || 0), 0);
@@ -170,6 +237,11 @@ router.get('/summary', async (req, res) => {
     res.json({
       success: true,
       period: period || 'all',
+      periodInfo: {
+        label,
+        startDate: from,
+        endDate: to
+      },
       summary: {
         sales: {
           count: sales.length,

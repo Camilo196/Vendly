@@ -123,7 +123,8 @@ body {
 }
 
 .form-group input,
-.form-group select {
+.form-group select,
+.form-group textarea {
     width: 100%;
     padding: 0.875rem;
     background: var(--bg-input);
@@ -135,7 +136,8 @@ body {
 }
 
 .form-group input:focus,
-.form-group select:focus {
+.form-group select:focus,
+.form-group textarea:focus {
     outline: none;
     border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
@@ -1729,6 +1731,137 @@ textarea:focus {
     flex-shrink:0;
 }
 .preview-close:hover { background:var(--border); }
+
+.compatibility-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+}
+
+.compatibility-summary-card {
+    background: rgba(99, 102, 241, 0.12);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 12px;
+    padding: 14px;
+}
+
+.compatibility-summary-card h4 {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+
+.compatibility-summary-card strong {
+    font-size: 1.4rem;
+    color: var(--text-primary);
+}
+
+.compatibility-results-grid {
+    display: grid;
+    gap: 12px;
+}
+
+.compatibility-result-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.compatibility-result-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+}
+
+.compatibility-empty {
+    text-align: center;
+    padding: 24px;
+    color: var(--text-secondary);
+}
+
+.compatibility-quick-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.compatibility-quick-chip {
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border-radius: 999px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: all .15s ease;
+    width: auto;
+}
+
+.compatibility-quick-chip:hover {
+    border-color: var(--primary);
+    transform: translateY(-1px);
+}
+
+.compatibility-quick-chip.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+}
+
+.compatibility-related-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.compatibility-related-chip {
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    border-radius: 999px;
+    padding: 10px 14px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: transform .15s ease, border-color .15s ease;
+}
+
+.compatibility-related-chip:hover {
+    transform: translateY(-1px);
+    border-color: var(--primary);
+}
+
+.compatibility-result-section {
+    display: grid;
+    gap: 12px;
+}
+
+.compatibility-result-section + .compatibility-result-section {
+    margin-top: 20px;
+}
+
+.compatibility-result-section h4 {
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.compatibility-result-caption {
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .compatibility-result-card {
+        flex-direction: column;
+    }
+}
 
 /* ══════════════════════════════════════════
    COMPRA RÁPIDA POR LOTE

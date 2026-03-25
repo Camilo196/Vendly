@@ -62,6 +62,16 @@ const saleSchema = new mongoose.Schema({
     default: null
   },
 
+  unitIds: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'ProductUnit'
+  }],
+
+  serialNumbers: [{
+    type: String,
+    trim: true
+  }],
+
   customer: {
     type: String,
     trim: true

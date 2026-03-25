@@ -555,7 +555,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         await app.loadInventory();
                     }
                     break;
-                    
+
+                case 'compatibility':
+                    if (typeof loadCompatibilityView === 'function') {
+                        await loadCompatibilityView();
+                    }
+                    break;
+                     
                 case 'technical':                             
                     if (typeof loadTechnicalServices === 'function') {
                         await loadTechnicalServices();
@@ -596,9 +602,13 @@ document.addEventListener('DOMContentLoaded', () => {
             invoice: document.getElementById('purchaseInvoice').value.trim(),
             notes: '', // Agregar campo notes vacío
             productType: document.getElementById('purchaseProductType').value,  // ⭐ NUEVO
-            commissionRate: document.getElementById('purchaseCommissionRate').value 
-                ? parseFloat(document.getElementById('purchaseCommissionRate').value) 
-                : null  // ⭐ NUEVO
+            commissionRate: document.getElementById('purchaseCommissionRate').value
+                ? parseFloat(document.getElementById('purchaseCommissionRate').value)
+                : null,  // ⭐ NUEVO
+            serialNumbers: (document.getElementById('purchaseSerialNumbers')?.value || '')
+                .split(/\r?\n|,/)
+                .map(value => value.trim())
+                .filter(Boolean)
         };
         
         // DEBUG: Ver qué se está enviando
@@ -629,6 +639,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         message += `
 💵 Usa comisión por defecto del vendedor`;
                     }
+
+                    if (productInfo.trackedUnits) {
+                        message += `
+🔐 IMEIs/seriales registrados: ${productInfo.trackedUnits}`;
+                    }
                 } else if (productInfo.productType === 'accesorio') {
                     message += `
 🔌 Tipo: ACCESORIO (sin comisión)`;
@@ -642,6 +657,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Limpiar formulario
                 e.target.reset();
                 document.getElementById('commissionRateGroup').style.display = 'none';
+                const purchaseSerialGroup = document.getElementById('purchaseSerialNumbersGroup');
+                if (purchaseSerialGroup) purchaseSerialGroup.style.display = 'none';
                 document.getElementById('purchaseTotal').textContent = '$0';
                 
                 // Recargar listas
@@ -673,7 +690,8 @@ document.addEventListener('DOMContentLoaded', () => {
             unitPrice: parseFloat(document.getElementById('saleUnitPrice').value),
             employeeId: document.getElementById('saleEmployee').value,
             customer: document.getElementById('saleCustomer').value,
-            paymentMethod: document.getElementById('salePaymentMethod').value
+            paymentMethod: document.getElementById('salePaymentMethod').value,
+            unitIds: typeof getSelectedSaleUnitIds === 'function' ? getSelectedSaleUnitIds() : []
 
         };
 
@@ -683,6 +701,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 utils.showToast('¡Venta registrada exitosamente!');
                 e.target.reset();
                 document.getElementById('saleTotal').textContent = '$0';
+                if (typeof clearSaleSerializedUnits === 'function') {
+                    clearSaleSerializedUnits();
+                }
                 await app.loadSales();
                 await app.loadProducts();
             }
@@ -699,6 +720,16 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('saleTotal').textContent = utils.formatMoney(qty * price);
         });
     });
+
+    const purchaseTypeSelect = document.getElementById('purchaseProductType');
+    const purchaseSerialGroup = document.getElementById('purchaseSerialNumbersGroup');
+    if (purchaseTypeSelect && purchaseSerialGroup) {
+        const syncPurchaseSerialVisibility = () => {
+            purchaseSerialGroup.style.display = purchaseTypeSelect.value === 'celular' ? 'block' : 'none';
+        };
+        purchaseTypeSelect.addEventListener('change', syncPurchaseSerialVisibility);
+        syncPurchaseSerialVisibility();
+    }
 
     // Check if already logged in
     if (api.token) {
