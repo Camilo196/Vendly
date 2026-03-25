@@ -7,7 +7,7 @@ function getDefaultApiBaseURL() {
     return 'http://localhost:5000/api';
   }
 
-  return 'https://vendly-production.up.railway.app/api';
+  return 'https://vendly-jash.onrender.com/api';
 }
 
 // Configuración de la API
