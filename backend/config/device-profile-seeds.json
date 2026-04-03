@@ -1,0 +1,156 @@
+[
+  {
+    "id": "xiaomi-redmi-note-11-12-pro-4g-shell",
+    "dimensions": { "heightMm": 164.2, "widthMm": 76.1, "thicknessMm": 8.1 },
+    "physical": { "cameraLayout": "Modulo similar serie Redmi Note 11 Pro", "buttons": "Power y volumen lado derecho", "connector": "USB-C" },
+    "display": { "sizeInches": 6.67, "aspectRatio": "20:9" },
+    "confidence": 95,
+    "source": { "type": "seed_family", "name": "Perfil tecnico Vendly" }
+  },
+  {
+    "id": "samsung-galaxy-a14-4g-5g-shell",
+    "dimensions": { "heightMm": 167.7, "widthMm": 78, "thicknessMm": 9.1 },
+    "physical": { "cameraLayout": "Triple camara vertical", "buttons": "Power y volumen lado derecho", "connector": "USB-C" },
+    "display": { "sizeInches": 6.6, "aspectRatio": "20:9" },
+    "confidence": 88,
+    "source": { "type": "seed_family", "name": "Perfil tecnico Vendly" }
+  },
+  {
+    "id": "samsung-galaxy-a15-4g-5g-shell",
+    "dimensions": { "heightMm": 160.1, "widthMm": 76.8, "thicknessMm": 8.4 },
+    "physical": { "cameraLayout": "Triple camara vertical", "buttons": "Power y volumen lado derecho", "connector": "USB-C" },
+    "display": { "sizeInches": 6.5, "aspectRatio": "19.5:9" },
+    "confidence": 90,
+    "source": { "type": "seed_family", "name": "Perfil tecnico Vendly" }
+  },
+  {
+    "id": "xiaomi-redmi-13c-poco-c65-shell",
+    "dimensions": { "heightMm": 168, "widthMm": 78, "thicknessMm": 8.1 },
+    "physical": { "cameraLayout": "Modulo doble rectangular", "buttons": "Power y volumen lado derecho", "connector": "USB-C" },
+    "display": { "sizeInches": 6.74, "aspectRatio": "20.6:9" },
+    "confidence": 87,
+    "source": { "type": "seed_family", "name": "Perfil tecnico Vendly" }
+  },
+  {
+    "id": "xiaomi-redmi-note-10-5g-poco-m3-pro-shell",
+    "dimensions": { "heightMm": 161.8, "widthMm": 75.3, "thicknessMm": 8.9 },
+    "physical": { "cameraLayout": "Modulo triple vertical", "buttons": "Power y volumen lado derecho", "connector": "USB-C" },
+    "display": { "sizeInches": 6.5, "aspectRatio": "20:9" },
+    "confidence": 86,
+    "source": { "type": "seed_family", "name": "Perfil tecnico Vendly" }
+  },
+  {
+    "id": "xiaomi-redmi-note-13-pro-5g-poco-x6-shell",
+    "dimensions": { "heightMm": 161.2, "widthMm": 74.2, "thicknessMm": 8 },
+    "physical": { "cameraLayout": "Triple camara con sensor principal grande", "buttons": "Power y volumen lado derecho", "connector": "USB-C" },
+    "display": { "sizeInches": 6.67, "aspectRatio": "20:9" },
+    "confidence": 89,
+    "source": { "type": "seed_family", "name": "Perfil tecnico Vendly" }
+  },
+  {
+    "id": "xiaomi-redmi-note-13-pro-4g-poco-m6-pro-4g-shell",
+    "dimensions": { "heightMm": 161.1, "widthMm": 75, "thicknessMm": 8 },
+    "physical": { "cameraLayout": "Triple camara con sensor principal grande", "buttons": "Power y volumen lado derecho", "connector": "USB-C" },
+    "display": { "sizeInches": 6.67, "aspectRatio": "20:9" },
+    "confidence": 88,
+    "source": { "type": "seed_family", "name": "Perfil tecnico Vendly" }
+  },
+  {
+    "id": "xiaomi-redmi-note-11-11s-poco-m4-pro-4g-shell",
+    "dimensions": { "heightMm": 159.9, "widthMm": 73.9, "thicknessMm": 8.1 },
+    "physical": { "cameraLayout": "Modulo rectangular superior izquierdo", "buttons": "Power y volumen lado derecho", "connector": "USB-C" },
+    "display": { "sizeInches": 6.43, "aspectRatio": "20:9" },
+    "confidence": 86,
+    "source": { "type": "seed_family", "name": "Perfil tecnico Vendly" }
+  },
+  {
+    "id": "xiaomi-poco-x3-family-shell",
+    "dimensions": { "heightMm": 165.3, "widthMm": 76.8, "thicknessMm": 9.4 },
+    "physical": { "cameraLayout": "Modulo circular central", "buttons": "Power y volumen lado derecho", "connector": "USB-C" },
+    "display": { "sizeInches": 6.67, "aspectRatio": "20:9" },
+    "confidence": 85,
+    "source": { "type": "seed_family", "name": "Perfil tecnico Vendly" }
+  },
+  {
+    "id": "motorola-moto-g10-g20-g30-shell",
+    "dimensions": { "heightMm": 165.2, "widthMm": 75.7, "thicknessMm": 9.2 },
+    "physical": { "cameraLayout": "Modulo cuadrado superior izquierdo", "buttons": "Power y volumen lado derecho", "connector": "USB-C" },
+    "display": { "sizeInches": 6.5, "aspectRatio": "20:9" },
+    "confidence": 84,
+    "source": { "type": "seed_family", "name": "Perfil tecnico Vendly" }
+  },
+  {
+    "id": "motorola-moto-e20-e30-e40-shell",
+    "dimensions": { "heightMm": 165.1, "widthMm": 75.6, "thicknessMm": 8.5 },
+    "physical": { "cameraLayout": "Modulo rectangular superior izquierdo", "buttons": "Power y volumen lado derecho", "connector": "USB-C" },
+    "display": { "sizeInches": 6.5, "aspectRatio": "20:9" },
+    "confidence": 84,
+    "source": { "type": "seed_family", "name": "Perfil tecnico Vendly" }
+  },
+  {
+    "id": "xiaomi-redmi-note-10-5g-redmi-10-poco-m3-pro-screen",
+    "display": { "sizeInches": 6.5, "aspectRatio": "20:9" },
+    "physical": { "connector": "USB-C" },
+    "confidence": 80,
+    "source": { "type": "seed_screen_family", "name": "Perfil tecnico Vendly" }
+  },
+  {
+    "id": "motorola-moto-g14-g54-g73-screen",
+    "display": { "sizeInches": 6.5, "aspectRatio": "20:9" },
+    "physical": { "connector": "USB-C" },
+    "confidence": 79,
+    "source": { "type": "seed_screen_family", "name": "Perfil tecnico Vendly" }
+  },
+  {
+    "id": "oppo-a18-a38-shell",
+    "dimensions": { "heightMm": 163.7, "widthMm": 75, "thicknessMm": 8.2 },
+    "physical": { "cameraLayout": "Doble camara vertical", "buttons": "Power y volumen lado derecho", "connector": "USB-C" },
+    "display": { "sizeInches": 6.56, "aspectRatio": "20:9" },
+    "confidence": 85,
+    "source": { "type": "seed_family", "name": "Perfil tecnico Vendly" }
+  },
+  {
+    "id": "oppo-a60-a80-a40-a40m-screen",
+    "display": { "sizeInches": 6.67, "aspectRatio": "20:9" },
+    "physical": { "connector": "USB-C" },
+    "confidence": 79,
+    "source": { "type": "seed_screen_family", "name": "Perfil tecnico Vendly" }
+  },
+  {
+    "id": "honor-x7b-90-smart-shell",
+    "dimensions": { "heightMm": 166.7, "widthMm": 76.5, "thicknessMm": 8.2 },
+    "physical": { "cameraLayout": "Triple camara con sensor principal grande", "buttons": "Power y volumen lado derecho", "connector": "USB-C" },
+    "display": { "sizeInches": 6.8, "aspectRatio": "20.1:9" },
+    "confidence": 85,
+    "source": { "type": "seed_family", "name": "Perfil tecnico Vendly" }
+  },
+  {
+    "id": "realme-c53-c51-note50-shell",
+    "dimensions": { "heightMm": 167.2, "widthMm": 76.7, "thicknessMm": 8 },
+    "physical": { "cameraLayout": "Doble camara superior izquierda", "buttons": "Power y volumen lado derecho", "connector": "USB-C" },
+    "display": { "sizeInches": 6.74, "aspectRatio": "20.5:9" },
+    "confidence": 83,
+    "source": { "type": "seed_family", "name": "Perfil tecnico Vendly" }
+  },
+  {
+    "id": "realme-honor-entry-screen-family",
+    "display": { "sizeInches": 6.74, "aspectRatio": "20.5:9" },
+    "physical": { "connector": "USB-C" },
+    "confidence": 78,
+    "source": { "type": "seed_screen_family", "name": "Perfil tecnico Vendly" }
+  },
+  {
+    "id": "honor-x8-family-screen",
+    "display": { "sizeInches": 6.7, "aspectRatio": "20:9" },
+    "physical": { "connector": "USB-C" },
+    "confidence": 78,
+    "source": { "type": "seed_screen_family", "name": "Perfil tecnico Vendly" }
+  },
+  {
+    "id": "honor-200-lite-x8c-400-lite-screen",
+    "display": { "sizeInches": 6.7, "aspectRatio": "20:9" },
+    "physical": { "connector": "USB-C" },
+    "confidence": 80,
+    "source": { "type": "seed_screen_family", "name": "Perfil tecnico Vendly" }
+  }
+]

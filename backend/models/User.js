@@ -2,79 +2,92 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
-  // Información del local/negocio
   businessName: {
     type: String,
     required: [true, 'El nombre del negocio es obligatorio'],
     trim: true
   },
-  
-  // Credenciales
+
   email: {
     type: String,
     required: [true, 'El email es obligatorio'],
     unique: true,
     lowercase: true,
     trim: true,
-    match: [/^\S+@\S+\.\S+$/, 'Email inválido']
+    match: [/^\S+@\S+\.\S+$/, 'Email invalido']
   },
-  
+
   password: {
     type: String,
-    required: [true, 'La contraseña es obligatoria'],
-    minlength: [6, 'La contraseña debe tener al menos 6 caracteres'],
-    select: false // No devolver en queries por defecto
+    required: [true, 'La contrasena es obligatoria'],
+    minlength: [6, 'La contrasena debe tener al menos 6 caracteres'],
+    select: false
   },
-  
-  // Información de contacto
+
   phone: {
     type: String,
     trim: true
   },
-  
+
   address: {
     type: String,
     trim: true
   },
-  
+
   city: {
     type: String,
     trim: true
   },
-  
-  // Rol del usuario
+
   role: {
     type: String,
     enum: ['user', 'admin'],
     default: 'user'
   },
-  
-  // Estado de la cuenta
+
   isActive: {
     type: Boolean,
     default: true
   },
-  
-  // Plan (para futuras funcionalidades)
+
   plan: {
     type: String,
     enum: ['free', 'basic', 'premium'],
     default: 'free'
   },
-  
-  // Límites según el plan
+
   limits: {
     maxProducts: {
       type: Number,
-      default: 100 // Free: 100, Basic: 500, Premium: unlimited
+      default: 100
     },
     maxSalesPerMonth: {
       type: Number,
       default: 200
     }
   },
-  
-  // Estadísticas de uso
+
+  permissions: {
+    compatibility: {
+      canWrite: {
+        type: Boolean,
+        default: true
+      },
+      canImport: {
+        type: Boolean,
+        default: true
+      },
+      canDelete: {
+        type: Boolean,
+        default: true
+      },
+      publicApiEnabled: {
+        type: Boolean,
+        default: true
+      }
+    }
+  },
+
   stats: {
     totalProducts: {
       type: Number,
@@ -89,13 +102,12 @@ const userSchema = new mongoose.Schema({
       default: 0
     }
   },
-  
-  // Metadatos
+
   createdAt: {
     type: Date,
     default: Date.now
   },
-  
+
   lastLogin: {
     type: Date
   }
@@ -103,23 +115,20 @@ const userSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Encriptar password antes de guardar
 userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) {
     return next();
   }
-  
+
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
 
-// Método para comparar passwords
 userSchema.methods.comparePassword = async function(candidatePassword) {
-  return await bcrypt.compare(candidatePassword, this.password);
+  return bcrypt.compare(candidatePassword, this.password);
 };
 
-// Método para obtener info pública del usuario
 userSchema.methods.toPublicJSON = function() {
   return {
     id: this._id,
@@ -131,6 +140,7 @@ userSchema.methods.toPublicJSON = function() {
     role: this.role,
     plan: this.plan,
     isActive: this.isActive,
+    permissions: this.permissions,
     stats: this.stats,
     createdAt: this.createdAt,
     lastLogin: this.lastLogin

@@ -93,7 +93,9 @@
                 <button class="nav-btn" data-view="sales">💰 Ventas</button>
                 <button class="nav-btn" data-view="inventory">📋 Inventario</button>
                 <button class="nav-btn" data-view="compatibility">🧩 Compatibilidad</button>
+                <button class="nav-btn" data-view="compatibilityApi">🗄️ API Accesorios</button>
                 <button class="nav-btn" data-view="technical">🔧 Servicio Técnico</button>
+                <button class="nav-btn" data-view="expenses">🧾 Gastos</button>
                 <button class="nav-btn" data-view="reports">📈 Reportes</button>
                 <button class="nav-btn" data-view="employees">👥 Empleados</button>
                 <button class="nav-btn" data-view="commissions">💰 Comisiones</button>
@@ -395,6 +397,321 @@
                 </div>
             </div>
 
+            <div id="viewCompatibilityApi" class="view">
+                <h2>🗄️ API de Accesorios</h2>
+
+                <div class="card">
+                    <div class="report-header">
+                        <h3>Resumen del Catálogo</h3>
+                        <div class="report-controls">
+                            <button type="button" class="btn btn-primary" id="btnReloadCompatibilityAdmin">Actualizar</button>
+                        </div>
+                    </div>
+                    <div id="compatibilityAdminStats" class="stats-grid"></div>
+                </div>
+
+                <div class="card">
+                    <h3>Nueva Referencia de Accesorio</h3>
+                    <form id="formCompatibilityCatalog" class="form-horizontal">
+                        <input type="hidden" id="compatAdminCatalogId">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Nombre *</label>
+                                <input type="text" id="compatAdminCatalogName" required placeholder="Ej: Vidrio templado Samsung Galaxy A15">
+                            </div>
+                            <div class="form-group">
+                                <label>Marca *</label>
+                                <input type="text" id="compatAdminCatalogBrand" required placeholder="Samsung">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Modelo *</label>
+                                <input type="text" id="compatAdminCatalogModel" required placeholder="Galaxy A15">
+                            </div>
+                            <div class="form-group">
+                                <label>Tipo</label>
+                                <select id="compatAdminCatalogSubtype">
+                                    <option value="estuche">Estuche</option>
+                                    <option value="vidrio">Vidrio</option>
+                                    <option value="hidrogel">Hidrogel</option>
+                                    <option value="cable">Cable</option>
+                                    <option value="cargador">Cargador</option>
+                                    <option value="audifonos">Audífonos</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Keywords</label>
+                                <input type="text" id="compatAdminCatalogKeywords" placeholder="a15 samsung vidrio templado">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Proveedor</label>
+                                <input type="text" id="compatAdminCatalogSupplier" placeholder="Mayorista Central">
+                            </div>
+                            <div class="form-group">
+                                <label>SKU</label>
+                                <input type="text" id="compatAdminCatalogSku" placeholder="VID-A15-001">
+                            </div>
+                            <div class="form-group">
+                                <label>Confianza</label>
+                                <input type="number" id="compatAdminCatalogConfidence" min="0" max="100" step="1" placeholder="90">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Fuente</label>
+                                <input type="text" id="compatAdminCatalogSourceName" placeholder="Proveedor o validación manual">
+                            </div>
+                            <div class="form-group">
+                                <label>URL fuente</label>
+                                <input type="text" id="compatAdminCatalogSourceUrl" placeholder="https://...">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Imagen URL</label>
+                                <input type="text" id="compatAdminCatalogImageUrl" placeholder="https://.../imagen.jpg">
+                            </div>
+                            <div class="form-group">
+                                <label>Modelos equivalentes</label>
+                                <input type="text" id="compatAdminCatalogEquivalents" placeholder="Galaxy A15 5G, Galaxy M15 5G">
+                            </div>
+                        </div>
+                        <div class="form-row compatibility-admin-actions-row">
+                            <button type="submit" class="btn btn-primary" id="btnCompatibilityCatalogSave">Guardar Referencia</button>
+                            <button type="button" class="btn btn-sm" id="btnCompatibilityCatalogReset">Limpiar</button>
+                            <button type="button" class="btn btn-sm" id="btnCompatibilityCatalogToPurchases">Usar en Compras</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>Nuevo Grupo de Compatibilidad</h3>
+                    <form id="formCompatibilityGroup" class="form-horizontal">
+                        <input type="hidden" id="compatAdminGroupOriginalId">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>ID *</label>
+                                <input type="text" id="compatAdminGroupId" required placeholder="ej: samsung-a15-m15-shell">
+                            </div>
+                            <div class="form-group">
+                                <label>Etiqueta *</label>
+                                <input type="text" id="compatAdminGroupLabel" required placeholder="Samsung A15 / A15 5G / M15 5G">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Marca</label>
+                                <input type="text" id="compatAdminGroupBrand" placeholder="Samsung">
+                            </div>
+                            <div class="form-group">
+                                <label>Tipo de perfil</label>
+                                <select id="compatAdminGroupProfileType">
+                                    <option value="mismo_molde">Mismo molde</option>
+                                    <option value="misma_pantalla">Misma pantalla</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Subtipos soportados</label>
+                                <input type="text" id="compatAdminGroupSubtypes" placeholder="estuche, vidrio, hidrogel">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Miembros *</label>
+                            <textarea id="compatAdminGroupMembers" rows="4" required placeholder="Un modelo por línea&#10;Galaxy A15 4G&#10;Galaxy A15 5G&#10;Galaxy M15 5G"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Notas</label>
+                            <textarea id="compatAdminGroupNotes" rows="3" placeholder="Notas de compatibilidad física"></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Fuente</label>
+                                <input type="text" id="compatAdminGroupSourceName" placeholder="Proveedor o validación">
+                            </div>
+                            <div class="form-group">
+                                <label>URL fuente</label>
+                                <input type="text" id="compatAdminGroupSourceUrl" placeholder="https://...">
+                            </div>
+                            <div class="form-group">
+                                <label>Confianza</label>
+                                <input type="number" id="compatAdminGroupConfidence" min="0" max="100" step="1" placeholder="85">
+                            </div>
+                        </div>
+                        <div class="form-row compatibility-admin-actions-row">
+                            <button type="submit" class="btn btn-primary" id="btnCompatibilityGroupSave">Guardar Grupo</button>
+                            <button type="button" class="btn btn-sm" id="btnCompatibilityGroupReset">Limpiar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>Nueva Ficha Técnica</h3>
+                    <form id="formCompatibilitySpec" class="form-horizontal">
+                        <input type="hidden" id="compatAdminSpecId">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Marca *</label>
+                                <input type="text" id="compatAdminSpecBrand" required placeholder="Xiaomi">
+                            </div>
+                            <div class="form-group">
+                                <label>Modelo *</label>
+                                <input type="text" id="compatAdminSpecModel" required placeholder="Redmi Note 12 Pro 4G">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Alto (mm)</label>
+                                <input type="number" id="compatAdminSpecHeight" min="0" step="0.1" placeholder="164.2">
+                            </div>
+                            <div class="form-group">
+                                <label>Ancho (mm)</label>
+                                <input type="number" id="compatAdminSpecWidth" min="0" step="0.1" placeholder="76.1">
+                            </div>
+                            <div class="form-group">
+                                <label>Grosor (mm)</label>
+                                <input type="number" id="compatAdminSpecThickness" min="0" step="0.1" placeholder="8.1">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Perfil estuche</label>
+                                <input type="text" id="compatAdminSpecCaseProfile" placeholder="redmi-note-11-12-pro-shell">
+                            </div>
+                            <div class="form-group">
+                                <label>Perfil vidrio</label>
+                                <input type="text" id="compatAdminSpecScreenProfile" placeholder="redmi-note-11-12-pro-screen">
+                            </div>
+                            <div class="form-group">
+                                <label>Conector</label>
+                                <input type="text" id="compatAdminSpecConnector" placeholder="USB-C">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Cámaras</label>
+                                <input type="text" id="compatAdminSpecCameraLayout" placeholder="Triple cámara rectangular">
+                            </div>
+                            <div class="form-group">
+                                <label>Botones</label>
+                                <input type="text" id="compatAdminSpecButtons" placeholder="Power + volumen lado derecho">
+                            </div>
+                            <div class="form-group">
+                                <label>Confianza</label>
+                                <input type="number" id="compatAdminSpecConfidence" min="0" max="100" step="1" placeholder="92">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Fuente</label>
+                                <input type="text" id="compatAdminSpecSourceName" placeholder="Proveedor / validación">
+                            </div>
+                            <div class="form-group">
+                                <label>URL fuente</label>
+                                <input type="text" id="compatAdminSpecSourceUrl" placeholder="https://...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Modelos equivalentes</label>
+                            <input type="text" id="compatAdminSpecEquivalents" placeholder="Redmi Note 11 Pro 4G, Redmi Note 11 Pro 5G">
+                        </div>
+                        <div class="form-row compatibility-admin-actions-row">
+                            <button type="submit" class="btn btn-primary" id="btnCompatibilitySpecSave">Guardar Ficha</button>
+                            <button type="button" class="btn btn-sm" id="btnCompatibilitySpecReset">Limpiar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>Importar JSON</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Tipo</label>
+                            <select id="compatImportType">
+                                <option value="catalog">Catálogo</option>
+                                <option value="groups">Grupos</option>
+                                <option value="specs">Fichas técnicas</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Modo</label>
+                            <select id="compatImportMode">
+                                <option value="merge">Unir / actualizar</option>
+                                <option value="replace">Reemplazar todo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>O cargar archivo JSON</label>
+                        <input type="file" id="compatImportFile" accept=".json,application/json">
+                    </div>
+                    <div class="form-group">
+                        <label>Pega JSON o CSV</label>
+                        <textarea id="compatImportPayload" rows="8" placeholder='[{"id":"...","name":"..."}] o nombre,marca,modelo,subtype'></textarea>
+                    </div>
+                    <div class="form-row compatibility-admin-actions-row">
+                        <button type="button" class="btn btn-primary" id="btnCompatibilityImport">Importar</button>
+                        <button type="button" class="btn btn-sm" id="btnCompatibilityExportCatalog">Exportar Catálogo</button>
+                        <button type="button" class="btn btn-sm" id="btnCompatibilityExportGroups">Exportar Grupos</button>
+                        <button type="button" class="btn btn-sm" id="btnCompatibilityExportSpecs">Exportar Fichas</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="report-header">
+                        <h3>Fichas Técnicas</h3>
+                        <div class="report-controls">
+                            <input type="text" id="compatAdminSpecQuery" class="form-control" placeholder="Buscar ficha técnica">
+                        </div>
+                    </div>
+                    <div id="compatibilityAdminSpecs"></div>
+                </div>
+
+                <div class="card">
+                    <div class="report-header">
+                        <h3>Grupos Registrados</h3>
+                        <div class="report-controls">
+                            <select id="compatAdminGroupBrandFilter" class="form-control">
+                                <option value="">Todas las marcas</option>
+                            </select>
+                            <select id="compatAdminGroupSubtypeFilter" class="form-control">
+                                <option value="">Todos los tipos</option>
+                            </select>
+                            <input type="text" id="compatAdminGroupQuery" class="form-control" placeholder="Buscar grupo o modelo">
+                        </div>
+                    </div>
+                    <div id="compatibilityAdminGroups"></div>
+                </div>
+
+                <div class="card">
+                    <div class="report-header">
+                        <h3>Referencias del Catálogo</h3>
+                        <div class="report-controls">
+                            <select id="compatAdminCatalogBrandFilter" class="form-control">
+                                <option value="">Todas las marcas</option>
+                            </select>
+                            <select id="compatAdminCatalogSubtypeFilter" class="form-control">
+                                <option value="">Todos los tipos</option>
+                            </select>
+                            <input type="text" id="compatAdminCatalogQuery" class="form-control" placeholder="Buscar referencia">
+                        </div>
+                    </div>
+                    <div id="compatibilityAdminCatalogList"></div>
+                </div>
+
+                <div class="card">
+                    <div class="report-header">
+                        <h3>Historial de Cambios</h3>
+                        <div class="report-controls">
+                            <button type="button" class="btn btn-sm" id="btnCompatibilityAuditReload">Actualizar historial</button>
+                        </div>
+                    </div>
+                    <div id="compatibilityAdminAuditList"></div>
+                </div>
+            </div>
+
             <!-- Technical Service View -->
             <div id="viewTechnical" class="view">
                 <h2>🔧 Servicio Técnico</h2>
@@ -555,6 +872,91 @@
                 </div>
             </div>
 
+            <div id="viewExpenses" class="view">
+                <h2>🧾 Gastos</h2>
+
+                <div class="card">
+                    <h3>Registrar Gasto</h3>
+                    <form id="formExpense" class="form-horizontal">
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 2;">
+                                <label>Descripción *</label>
+                                <input type="text" id="expenseDescription" required placeholder="Ej: Pago de internet del local">
+                            </div>
+                            <div class="form-group">
+                                <label>Monto *</label>
+                                <input type="number" id="expenseAmount" required min="0" step="0.01" placeholder="50000">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Categoría</label>
+                                <select id="expenseCategory">
+                                    <option value="otros">Otros</option>
+                                    <option value="arriendo">Arriendo</option>
+                                    <option value="servicios">Servicios</option>
+                                    <option value="nomina">Nómina</option>
+                                    <option value="transporte">Transporte</option>
+                                    <option value="mercadeo">Mercadeo</option>
+                                    <option value="papeleria">Papelería</option>
+                                    <option value="mantenimiento">Mantenimiento</option>
+                                    <option value="impuestos">Impuestos</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Fecha</label>
+                                <input type="date" id="expenseDate">
+                            </div>
+                            <div class="form-group">
+                                <label>Método de pago</label>
+                                <select id="expensePaymentMethod">
+                                    <option value="cash">Efectivo</option>
+                                    <option value="transfer">Transferencia</option>
+                                    <option value="card">Tarjeta</option>
+                                    <option value="other">Otro</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Notas (opcional)</label>
+                            <textarea id="expenseNotes" rows="3" placeholder="Observaciones del gasto"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Registrar Gasto</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <div class="report-header">
+                        <h3>Historial de Gastos</h3>
+                        <div class="report-controls">
+                            <select id="expensePeriod" class="form-control">
+                                <option value="monthly" selected>Mes actual</option>
+                                <option value="previous_month">Mes anterior</option>
+                                <option value="daily">Hoy</option>
+                                <option value="all">Todo</option>
+                            </select>
+                            <select id="expenseCategoryFilter" class="form-control">
+                                <option value="">Todas las categorías</option>
+                                <option value="arriendo">Arriendo</option>
+                                <option value="servicios">Servicios</option>
+                                <option value="nomina">Nómina</option>
+                                <option value="transporte">Transporte</option>
+                                <option value="mercadeo">Mercadeo</option>
+                                <option value="papeleria">Papelería</option>
+                                <option value="mantenimiento">Mantenimiento</option>
+                                <option value="impuestos">Impuestos</option>
+                                <option value="otros">Otros</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="expensesSummary" class="stats-grid" style="margin-bottom: 16px;"></div>
+                    <div id="expensesList"></div>
+                </div>
+            </div>
+
             <!-- Reports View -->
             <div id="viewReports" class="view">
                 <h2>📈 Reportes</h2>
@@ -567,6 +969,7 @@
                                 <option value="daily">Hoy</option>
                                 <option value="weekly">Últimos 7 días</option>
                                 <option value="monthly" selected>Mes actual</option>
+                                <option value="previous_month">Mes anterior</option>
                                 <option value="yearly">Año actual</option>
                             </select>
                             <button class="btn btn-primary" id="btnMonthlyClosePDF">📒 Cierre Mensual</button>
@@ -1119,10 +1522,12 @@
     </div>
 
     <script src="js/api.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/new-features.js"></script>
-    <script src="js/additional-features.js"></script>
-    <script src="js/employees-commissions.js"></script>
+<script src="js/app.js"></script>
+<script src="js/new-features.js"></script>
+<script src="js/compatibility-admin.js"></script>
+<script src="js/additional-features.js"></script>
+<script src="js/expenses.js"></script>
+<script src="js/employees-commissions.js"></script>
 
     <script>
 // ⭐ Mostrar campo de comisión solo cuando es celular
@@ -1183,6 +1588,7 @@ if (bnEl) businessNameObserver.observe(bnEl, { childList: true, characterData: t
 
 </script>
         <script src="js/accessories-db.js"></script>
+        <script src="js/device-compatibility-profiles.js"></script>
         <script src="js/smart-search.js"></script>
         <script src="js/quick-purchase.js"></script>
 </body>

@@ -1,0 +1,5881 @@
+[
+  {
+    "id": "spec_inferred_apple_ipad-air",
+    "brand": "Apple",
+    "model": "iPad Air",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara diagonal",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "display": {
+      "sizeInches": 10.9,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-ipad-air-shell",
+      "screenProfile": "apple-ipad-air-screen",
+      "bodyProfile": "apple-ipad-air-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_ipad-pro",
+    "brand": "Apple",
+    "model": "iPad Pro",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara cuadrada",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "display": {
+      "sizeInches": 10.9,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-ipad-pro-shell",
+      "screenProfile": "apple-ipad-pro-screen",
+      "bodyProfile": "apple-ipad-pro-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-11",
+    "brand": "Apple",
+    "model": "iPhone 11",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "Lightning"
+    },
+    "display": {
+      "sizeInches": 6.1,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-11-shell",
+      "screenProfile": "apple-iphone-11-screen",
+      "bodyProfile": "apple-iphone-11-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-11-pro",
+    "brand": "Apple",
+    "model": "iPhone 11 Pro",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara cuadrada",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "Lightning"
+    },
+    "display": {
+      "sizeInches": 6.1,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-11-pro-shell",
+      "screenProfile": "apple-iphone-11-pro-screen",
+      "bodyProfile": "apple-iphone-11-pro-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-11-pro-max",
+    "brand": "Apple",
+    "model": "iPhone 11 Pro Max",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara cuadrada",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "Lightning"
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-11-pro-max-shell",
+      "screenProfile": "apple-iphone-11-pro-max-screen",
+      "bodyProfile": "apple-iphone-11-pro-max-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-12",
+    "brand": "Apple",
+    "model": "iPhone 12",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara diagonal",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "Lightning"
+    },
+    "display": {
+      "sizeInches": 6.1,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-12-shell",
+      "screenProfile": "apple-iphone-12-screen",
+      "bodyProfile": "apple-iphone-12-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-12-mini",
+    "brand": "Apple",
+    "model": "iPhone 12 Mini",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara diagonal",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "Lightning"
+    },
+    "display": {
+      "sizeInches": 5.4,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-12-mini-shell",
+      "screenProfile": "apple-iphone-12-mini-screen",
+      "bodyProfile": "apple-iphone-12-mini-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-12-pro",
+    "brand": "Apple",
+    "model": "iPhone 12 Pro",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara cuadrada",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "Lightning"
+    },
+    "display": {
+      "sizeInches": 6.1,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-12-pro-shell",
+      "screenProfile": "apple-iphone-12-pro-screen",
+      "bodyProfile": "apple-iphone-12-pro-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-12-pro-max",
+    "brand": "Apple",
+    "model": "iPhone 12 Pro Max",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara cuadrada",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "Lightning"
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-12-pro-max-shell",
+      "screenProfile": "apple-iphone-12-pro-max-screen",
+      "bodyProfile": "apple-iphone-12-pro-max-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_apple_iphone_13",
+    "brand": "Apple",
+    "model": "iPhone 13",
+    "dimensions": {
+      "heightMm": 146.7,
+      "widthMm": 71.5,
+      "thicknessMm": 7.7
+    },
+    "physical": {
+      "cameraLayout": "Doble camara diagonal",
+      "buttons": "Botones laterales Apple",
+      "connector": "Lightning"
+    },
+    "profiles": {
+      "caseProfile": "iphone-13-shell",
+      "screenProfile": "iphone-13-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 82
+  },
+  {
+    "id": "spec_inferred_apple_iphone-13-mini",
+    "brand": "Apple",
+    "model": "iPhone 13 Mini",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara diagonal",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "Lightning"
+    },
+    "display": {
+      "sizeInches": 5.4,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-13-mini-shell",
+      "screenProfile": "apple-iphone-13-mini-screen",
+      "bodyProfile": "apple-iphone-13-mini-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-13-pro",
+    "brand": "Apple",
+    "model": "iPhone 13 Pro",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara cuadrada",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "Lightning"
+    },
+    "display": {
+      "sizeInches": 6.1,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-13-pro-shell",
+      "screenProfile": "apple-iphone-13-pro-screen",
+      "bodyProfile": "apple-iphone-13-pro-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-13-pro-max",
+    "brand": "Apple",
+    "model": "iPhone 13 Pro Max",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara cuadrada",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "Lightning"
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-13-pro-max-shell",
+      "screenProfile": "apple-iphone-13-pro-max-screen",
+      "bodyProfile": "apple-iphone-13-pro-max-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_apple_iphone_14",
+    "brand": "Apple",
+    "model": "iPhone 14",
+    "dimensions": {
+      "heightMm": 146.7,
+      "widthMm": 71.5,
+      "thicknessMm": 7.8
+    },
+    "physical": {
+      "cameraLayout": "Doble camara diagonal",
+      "buttons": "Botones laterales Apple",
+      "connector": "Lightning"
+    },
+    "profiles": {
+      "caseProfile": "iphone-14-shell",
+      "screenProfile": "iphone-14-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 82
+  },
+  {
+    "id": "spec_inferred_apple_iphone-14-plus",
+    "brand": "Apple",
+    "model": "iPhone 14 Plus",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara diagonal",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "Lightning"
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-14-plus-shell",
+      "screenProfile": "apple-iphone-14-plus-screen",
+      "bodyProfile": "apple-iphone-14-plus-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-14-pro",
+    "brand": "Apple",
+    "model": "iPhone 14 Pro",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara cuadrada",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "Lightning"
+    },
+    "display": {
+      "sizeInches": 6.1,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-14-pro-shell",
+      "screenProfile": "apple-iphone-14-pro-screen",
+      "bodyProfile": "apple-iphone-14-pro-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-14-pro-max",
+    "brand": "Apple",
+    "model": "iPhone 14 Pro Max",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara cuadrada",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "Lightning"
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-14-pro-max-shell",
+      "screenProfile": "apple-iphone-14-pro-max-screen",
+      "bodyProfile": "apple-iphone-14-pro-max-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_apple_iphone_15",
+    "brand": "Apple",
+    "model": "iPhone 15",
+    "dimensions": {
+      "heightMm": 147.6,
+      "widthMm": 71.6,
+      "thicknessMm": 7.8
+    },
+    "physical": {
+      "cameraLayout": "Doble camara diagonal",
+      "buttons": "Botones laterales Apple",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "iphone-15-shell",
+      "screenProfile": "iphone-15-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 82
+  },
+  {
+    "id": "spec_inferred_apple_iphone-15-plus",
+    "brand": "Apple",
+    "model": "iPhone 15 Plus",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara diagonal",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-15-plus-shell",
+      "screenProfile": "apple-iphone-15-plus-screen",
+      "bodyProfile": "apple-iphone-15-plus-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-15-pro",
+    "brand": "Apple",
+    "model": "iPhone 15 Pro",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara cuadrada",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "display": {
+      "sizeInches": 6.1,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-15-pro-shell",
+      "screenProfile": "apple-iphone-15-pro-screen",
+      "bodyProfile": "apple-iphone-15-pro-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-15-pro-max",
+    "brand": "Apple",
+    "model": "iPhone 15 Pro Max",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara cuadrada",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-15-pro-max-shell",
+      "screenProfile": "apple-iphone-15-pro-max-screen",
+      "bodyProfile": "apple-iphone-15-pro-max-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-16",
+    "brand": "Apple",
+    "model": "iPhone 16",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara diagonal",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "display": {
+      "sizeInches": 6.1,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-16-shell",
+      "screenProfile": "apple-iphone-16-screen",
+      "bodyProfile": "apple-iphone-16-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-16-plus",
+    "brand": "Apple",
+    "model": "iPhone 16 Plus",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara diagonal",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-16-plus-shell",
+      "screenProfile": "apple-iphone-16-plus-screen",
+      "bodyProfile": "apple-iphone-16-plus-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-16-pro",
+    "brand": "Apple",
+    "model": "iPhone 16 Pro",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara cuadrada",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "display": {
+      "sizeInches": 6.1,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-16-pro-shell",
+      "screenProfile": "apple-iphone-16-pro-screen",
+      "bodyProfile": "apple-iphone-16-pro-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-16-pro-max",
+    "brand": "Apple",
+    "model": "iPhone 16 Pro Max",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara cuadrada",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-16-pro-max-shell",
+      "screenProfile": "apple-iphone-16-pro-max-screen",
+      "bodyProfile": "apple-iphone-16-pro-max-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-7",
+    "brand": "Apple",
+    "model": "iPhone 7",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara diagonal",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "Lightning"
+    },
+    "display": {
+      "sizeInches": 6.1,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-7-shell",
+      "screenProfile": "apple-iphone-7-screen",
+      "bodyProfile": "apple-iphone-7-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-7-plus",
+    "brand": "Apple",
+    "model": "iPhone 7 Plus",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara diagonal",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "Lightning"
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-7-plus-shell",
+      "screenProfile": "apple-iphone-7-plus-screen",
+      "bodyProfile": "apple-iphone-7-plus-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-8",
+    "brand": "Apple",
+    "model": "iPhone 8",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara diagonal",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "Lightning"
+    },
+    "display": {
+      "sizeInches": 6.1,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-8-shell",
+      "screenProfile": "apple-iphone-8-screen",
+      "bodyProfile": "apple-iphone-8-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-8-plus",
+    "brand": "Apple",
+    "model": "iPhone 8 Plus",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara diagonal",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "Lightning"
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-8-plus-shell",
+      "screenProfile": "apple-iphone-8-plus-screen",
+      "bodyProfile": "apple-iphone-8-plus-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-se-2020",
+    "brand": "Apple",
+    "model": "iPhone SE 2020",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Camara unica",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 4.7,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-se-2020-shell",
+      "screenProfile": "apple-iphone-se-2020-screen",
+      "bodyProfile": "apple-iphone-se-2020-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-se-2022",
+    "brand": "Apple",
+    "model": "iPhone SE 2022",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Camara unica",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 4.7,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-se-2022-shell",
+      "screenProfile": "apple-iphone-se-2022-screen",
+      "bodyProfile": "apple-iphone-se-2022-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-x",
+    "brand": "Apple",
+    "model": "iPhone X",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.1,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-x-shell",
+      "screenProfile": "apple-iphone-x-screen",
+      "bodyProfile": "apple-iphone-x-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-xr",
+    "brand": "Apple",
+    "model": "iPhone XR",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.1,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-xr-shell",
+      "screenProfile": "apple-iphone-xr-screen",
+      "bodyProfile": "apple-iphone-xr-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-xs",
+    "brand": "Apple",
+    "model": "iPhone XS",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.1,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-xs-shell",
+      "screenProfile": "apple-iphone-xs-screen",
+      "bodyProfile": "apple-iphone-xs-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_apple_iphone-xs-max",
+    "brand": "Apple",
+    "model": "iPhone XS Max",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "19.5:9"
+    },
+    "profiles": {
+      "caseProfile": "apple-iphone-xs-max-shell",
+      "screenProfile": "apple-iphone-xs-max-screen",
+      "bodyProfile": "apple-iphone-xs-max-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_honor_200-lite",
+    "brand": "Honor",
+    "model": "200 Lite",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "honor-200-lite-shell",
+      "screenProfile": "honor-200-lite-screen",
+      "bodyProfile": "honor-200-lite-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_honor_400-lite",
+    "brand": "Honor",
+    "model": "400 Lite",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "honor-400-lite-shell",
+      "screenProfile": "honor-400-lite-screen",
+      "bodyProfile": "honor-400-lite-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_honor_90-lite",
+    "brand": "Honor",
+    "model": "90 Lite",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "honor-90-lite-shell",
+      "screenProfile": "honor-90-lite-screen",
+      "bodyProfile": "honor-90-lite-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_honor_90-smart-5g",
+    "brand": "Honor",
+    "model": "90 Smart 5G",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "honor-90-smart-5g-shell",
+      "screenProfile": "honor-90-smart-5g-screen",
+      "bodyProfile": "honor-90-smart-5g-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_honor_90_smart_5g",
+    "brand": "Honor",
+    "model": "Honor 90 Smart 5G",
+    "dimensions": {
+      "heightMm": 166.7,
+      "widthMm": 76.5,
+      "thicknessMm": 8.2
+    },
+    "physical": {
+      "cameraLayout": "Triple camara con sensor principal grande",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "honor-x7b-90-smart-shell",
+      "screenProfile": "honor-x7b-90-smart-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 85,
+    "equivalents": [
+      {
+        "brand": "Honor",
+        "model": "Honor X7B",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_honor_x7b",
+    "brand": "Honor",
+    "model": "Honor X7B",
+    "dimensions": {
+      "heightMm": 166.7,
+      "widthMm": 76.5,
+      "thicknessMm": 8.2
+    },
+    "physical": {
+      "cameraLayout": "Triple camara con sensor principal grande",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "honor-x7b-90-smart-shell",
+      "screenProfile": "honor-x7b-90-smart-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 85,
+    "equivalents": [
+      {
+        "brand": "Honor",
+        "model": "Honor 90 Smart 5G",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_inferred_honor_magic5-lite",
+    "brand": "Honor",
+    "model": "Magic5 Lite",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "honor-magic5-lite-shell",
+      "screenProfile": "honor-magic5-lite-screen",
+      "bodyProfile": "honor-magic5-lite-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_honor_magic6",
+    "brand": "Honor",
+    "model": "Magic6",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "honor-magic6-shell",
+      "screenProfile": "honor-magic6-screen",
+      "bodyProfile": "honor-magic6-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_honor_x6",
+    "brand": "Honor",
+    "model": "X6",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "honor-x6-shell",
+      "screenProfile": "honor-x6-screen",
+      "bodyProfile": "honor-x6-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_honor_x6a",
+    "brand": "Honor",
+    "model": "X6A",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "honor-x6a-shell",
+      "screenProfile": "honor-x6a-screen",
+      "bodyProfile": "honor-x6a-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_honor_x7",
+    "brand": "Honor",
+    "model": "X7",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "honor-x7-shell",
+      "screenProfile": "honor-x7-screen",
+      "bodyProfile": "honor-x7-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_honor_x7a",
+    "brand": "Honor",
+    "model": "X7A",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "honor-x7a-shell",
+      "screenProfile": "honor-x7a-screen",
+      "bodyProfile": "honor-x7a-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_honor_x7b",
+    "brand": "Honor",
+    "model": "X7B",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "honor-x7b-shell",
+      "screenProfile": "honor-x7b-screen",
+      "bodyProfile": "honor-x7b-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_honor_x8",
+    "brand": "Honor",
+    "model": "X8",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "honor-x8-shell",
+      "screenProfile": "honor-x8-screen",
+      "bodyProfile": "honor-x8-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_honor_x8-5g",
+    "brand": "Honor",
+    "model": "X8 5G",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "honor-x8-5g-shell",
+      "screenProfile": "honor-x8-5g-screen",
+      "bodyProfile": "honor-x8-5g-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_honor_x8a",
+    "brand": "Honor",
+    "model": "X8A",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "honor-x8a-shell",
+      "screenProfile": "honor-x8a-screen",
+      "bodyProfile": "honor-x8a-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_honor_x8c",
+    "brand": "Honor",
+    "model": "X8C",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "honor-x8c-shell",
+      "screenProfile": "honor-x8c-screen",
+      "bodyProfile": "honor-x8c-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_honor_x9a",
+    "brand": "Honor",
+    "model": "X9A",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "honor-x9a-shell",
+      "screenProfile": "honor-x9a-screen",
+      "bodyProfile": "honor-x9a-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_huawei_mate-50",
+    "brand": "Huawei",
+    "model": "Mate 50",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "huawei-mate-50-shell",
+      "screenProfile": "huawei-mate-50-screen",
+      "bodyProfile": "huawei-mate-50-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_huawei_nova-11",
+    "brand": "Huawei",
+    "model": "Nova 11",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "huawei-nova-11-shell",
+      "screenProfile": "huawei-nova-11-screen",
+      "bodyProfile": "huawei-nova-11-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_huawei_nova-9",
+    "brand": "Huawei",
+    "model": "Nova 9",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "huawei-nova-9-shell",
+      "screenProfile": "huawei-nova-9-screen",
+      "bodyProfile": "huawei-nova-9-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_huawei_p30-lite",
+    "brand": "Huawei",
+    "model": "P30 Lite",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "huawei-p30-lite-shell",
+      "screenProfile": "huawei-p30-lite-screen",
+      "bodyProfile": "huawei-p30-lite-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_huawei_p40-lite",
+    "brand": "Huawei",
+    "model": "P40 Lite",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "huawei-p40-lite-shell",
+      "screenProfile": "huawei-p40-lite-screen",
+      "bodyProfile": "huawei-p40-lite-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_huawei_p50",
+    "brand": "Huawei",
+    "model": "P50",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "huawei-p50-shell",
+      "screenProfile": "huawei-p50-screen",
+      "bodyProfile": "huawei-p50-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_huawei_y7a",
+    "brand": "Huawei",
+    "model": "Y7a",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "huawei-y7a-shell",
+      "screenProfile": "huawei-y7a-screen",
+      "bodyProfile": "huawei-y7a-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_huawei_y8p",
+    "brand": "Huawei",
+    "model": "Y8p",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "huawei-y8p-shell",
+      "screenProfile": "huawei-y8p-screen",
+      "bodyProfile": "huawei-y8p-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_huawei_y9a",
+    "brand": "Huawei",
+    "model": "Y9a",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "huawei-y9a-shell",
+      "screenProfile": "huawei-y9a-screen",
+      "bodyProfile": "huawei-y9a-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_huawei_y9s",
+    "brand": "Huawei",
+    "model": "Y9s",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "huawei-y9s-shell",
+      "screenProfile": "huawei-y9s-screen",
+      "bodyProfile": "huawei-y9s-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_infinix_hot-10",
+    "brand": "Infinix",
+    "model": "Hot 10",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble o triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "infinix-hot-10-shell",
+      "screenProfile": "infinix-hot-10-screen",
+      "bodyProfile": "infinix-hot-10-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_infinix_hot-20",
+    "brand": "Infinix",
+    "model": "Hot 20",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble o triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "infinix-hot-20-shell",
+      "screenProfile": "infinix-hot-20-screen",
+      "bodyProfile": "infinix-hot-20-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_infinix_hot-30",
+    "brand": "Infinix",
+    "model": "Hot 30",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble o triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "infinix-hot-30-shell",
+      "screenProfile": "infinix-hot-30-screen",
+      "bodyProfile": "infinix-hot-30-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_infinix_hot-40",
+    "brand": "Infinix",
+    "model": "Hot 40",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble o triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "infinix-hot-40-shell",
+      "screenProfile": "infinix-hot-40-screen",
+      "bodyProfile": "infinix-hot-40-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_infinix_hot-40i",
+    "brand": "Infinix",
+    "model": "Hot 40i",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble o triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "infinix-hot-40i-shell",
+      "screenProfile": "infinix-hot-40i-screen",
+      "bodyProfile": "infinix-hot-40i-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_infinix_note-12",
+    "brand": "Infinix",
+    "model": "Note 12",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble o triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "infinix-note-12-shell",
+      "screenProfile": "infinix-note-12-screen",
+      "bodyProfile": "infinix-note-12-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_infinix_note-30",
+    "brand": "Infinix",
+    "model": "Note 30",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble o triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "infinix-note-30-shell",
+      "screenProfile": "infinix-note-30-screen",
+      "bodyProfile": "infinix-note-30-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_infinix_smart-8",
+    "brand": "Infinix",
+    "model": "Smart 8",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble o triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "infinix-smart-8-shell",
+      "screenProfile": "infinix-smart-8-screen",
+      "bodyProfile": "infinix-smart-8-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_motorola_edge-40",
+    "brand": "Motorola",
+    "model": "Edge 40",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "motorola-edge-40-shell",
+      "screenProfile": "motorola-edge-40-screen",
+      "bodyProfile": "motorola-edge-40-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_motorola_edge-50",
+    "brand": "Motorola",
+    "model": "Edge 50",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "motorola-edge-50-shell",
+      "screenProfile": "motorola-edge-50-screen",
+      "bodyProfile": "motorola-edge-50-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_motorola_moto_e20",
+    "brand": "Motorola",
+    "model": "Moto E20",
+    "dimensions": {
+      "heightMm": 165.1,
+      "widthMm": 75.6,
+      "thicknessMm": 8.5
+    },
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "moto-e20-e30-e40-shell",
+      "screenProfile": "moto-e20-e30-e40-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 84,
+    "equivalents": [
+      {
+        "brand": "Motorola",
+        "model": "Moto E30",
+        "kind": "full"
+      },
+      {
+        "brand": "Motorola",
+        "model": "Moto E40",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_motorola_moto_e30",
+    "brand": "Motorola",
+    "model": "Moto E30",
+    "dimensions": {
+      "heightMm": 165.1,
+      "widthMm": 75.6,
+      "thicknessMm": 8.5
+    },
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "moto-e20-e30-e40-shell",
+      "screenProfile": "moto-e20-e30-e40-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 84,
+    "equivalents": [
+      {
+        "brand": "Motorola",
+        "model": "Moto E20",
+        "kind": "full"
+      },
+      {
+        "brand": "Motorola",
+        "model": "Moto E40",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_motorola_moto_e40",
+    "brand": "Motorola",
+    "model": "Moto E40",
+    "dimensions": {
+      "heightMm": 165.1,
+      "widthMm": 75.6,
+      "thicknessMm": 8.5
+    },
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "moto-e20-e30-e40-shell",
+      "screenProfile": "moto-e20-e30-e40-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 84,
+    "equivalents": [
+      {
+        "brand": "Motorola",
+        "model": "Moto E20",
+        "kind": "full"
+      },
+      {
+        "brand": "Motorola",
+        "model": "Moto E30",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_motorola_moto_g10",
+    "brand": "Motorola",
+    "model": "Moto G10",
+    "dimensions": {
+      "heightMm": 165.2,
+      "widthMm": 75.7,
+      "thicknessMm": 9.2
+    },
+    "physical": {
+      "cameraLayout": "Modulo cuadrado superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "moto-g10-g20-g30-shell",
+      "screenProfile": "moto-g10-g20-g30-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 84,
+    "equivalents": [
+      {
+        "brand": "Motorola",
+        "model": "Moto G20",
+        "kind": "full"
+      },
+      {
+        "brand": "Motorola",
+        "model": "Moto G30",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_inferred_motorola_moto-g14",
+    "brand": "Motorola",
+    "model": "Moto G14",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "motorola-moto-g14-shell",
+      "screenProfile": "motorola-moto-g14-screen",
+      "bodyProfile": "motorola-moto-g14-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_motorola_moto_g20",
+    "brand": "Motorola",
+    "model": "Moto G20",
+    "dimensions": {
+      "heightMm": 165.2,
+      "widthMm": 75.7,
+      "thicknessMm": 9.2
+    },
+    "physical": {
+      "cameraLayout": "Modulo cuadrado superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "moto-g10-g20-g30-shell",
+      "screenProfile": "moto-g10-g20-g30-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 84,
+    "equivalents": [
+      {
+        "brand": "Motorola",
+        "model": "Moto G10",
+        "kind": "full"
+      },
+      {
+        "brand": "Motorola",
+        "model": "Moto G30",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_inferred_motorola_moto-g24",
+    "brand": "Motorola",
+    "model": "Moto G24",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "motorola-moto-g24-shell",
+      "screenProfile": "motorola-moto-g24-screen",
+      "bodyProfile": "motorola-moto-g24-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_motorola_moto_g30",
+    "brand": "Motorola",
+    "model": "Moto G30",
+    "dimensions": {
+      "heightMm": 165.2,
+      "widthMm": 75.7,
+      "thicknessMm": 9.2
+    },
+    "physical": {
+      "cameraLayout": "Modulo cuadrado superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "moto-g10-g20-g30-shell",
+      "screenProfile": "moto-g10-g20-g30-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 84,
+    "equivalents": [
+      {
+        "brand": "Motorola",
+        "model": "Moto G10",
+        "kind": "full"
+      },
+      {
+        "brand": "Motorola",
+        "model": "Moto G20",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_inferred_motorola_moto-g34",
+    "brand": "Motorola",
+    "model": "Moto G34",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "motorola-moto-g34-shell",
+      "screenProfile": "motorola-moto-g34-screen",
+      "bodyProfile": "motorola-moto-g34-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_motorola_moto-g54",
+    "brand": "Motorola",
+    "model": "Moto G54",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "motorola-moto-g54-shell",
+      "screenProfile": "motorola-moto-g54-screen",
+      "bodyProfile": "motorola-moto-g54-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_motorola_moto-g73",
+    "brand": "Motorola",
+    "model": "Moto G73",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "motorola-moto-g73-shell",
+      "screenProfile": "motorola-moto-g73-screen",
+      "bodyProfile": "motorola-moto-g73-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_motorola_moto-g84",
+    "brand": "Motorola",
+    "model": "Moto G84",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "motorola-moto-g84-shell",
+      "screenProfile": "motorola-moto-g84-screen",
+      "bodyProfile": "motorola-moto-g84-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_oppo_a17",
+    "brand": "Oppo",
+    "model": "A17",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.56,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "oppo-a17-shell",
+      "screenProfile": "oppo-a17-screen",
+      "bodyProfile": "oppo-a17-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_oppo_a18",
+    "brand": "Oppo",
+    "model": "A18",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.56,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "oppo-a18-shell",
+      "screenProfile": "oppo-a18-screen",
+      "bodyProfile": "oppo-a18-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_oppo_a38",
+    "brand": "Oppo",
+    "model": "A38",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.56,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "oppo-a38-shell",
+      "screenProfile": "oppo-a38-screen",
+      "bodyProfile": "oppo-a38-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_oppo_a40",
+    "brand": "Oppo",
+    "model": "A40",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.56,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "oppo-a40-shell",
+      "screenProfile": "oppo-a40-screen",
+      "bodyProfile": "oppo-a40-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_oppo_a40m",
+    "brand": "Oppo",
+    "model": "A40m",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.56,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "oppo-a40m-shell",
+      "screenProfile": "oppo-a40m-screen",
+      "bodyProfile": "oppo-a40m-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_oppo_a58",
+    "brand": "Oppo",
+    "model": "A58",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.56,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "oppo-a58-shell",
+      "screenProfile": "oppo-a58-screen",
+      "bodyProfile": "oppo-a58-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_oppo_a60",
+    "brand": "Oppo",
+    "model": "A60",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.56,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "oppo-a60-shell",
+      "screenProfile": "oppo-a60-screen",
+      "bodyProfile": "oppo-a60-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_oppo_a60-5g",
+    "brand": "Oppo",
+    "model": "A60 5G",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.56,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "oppo-a60-5g-shell",
+      "screenProfile": "oppo-a60-5g-screen",
+      "bodyProfile": "oppo-a60-5g-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_oppo_a80-5g",
+    "brand": "Oppo",
+    "model": "A80 5G",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.56,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "oppo-a80-5g-shell",
+      "screenProfile": "oppo-a80-5g-screen",
+      "bodyProfile": "oppo-a80-5g-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_oppo_a18",
+    "brand": "Oppo",
+    "model": "Oppo A18",
+    "dimensions": {
+      "heightMm": 163.7,
+      "widthMm": 75,
+      "thicknessMm": 8.2
+    },
+    "physical": {
+      "cameraLayout": "Doble camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "oppo-a18-a38-shell",
+      "screenProfile": "oppo-a18-a38-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 85,
+    "equivalents": [
+      {
+        "brand": "Oppo",
+        "model": "Oppo A38",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_oppo_a38",
+    "brand": "Oppo",
+    "model": "Oppo A38",
+    "dimensions": {
+      "heightMm": 163.7,
+      "widthMm": 75,
+      "thicknessMm": 8.2
+    },
+    "physical": {
+      "cameraLayout": "Doble camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "oppo-a18-a38-shell",
+      "screenProfile": "oppo-a18-a38-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 85,
+    "equivalents": [
+      {
+        "brand": "Oppo",
+        "model": "Oppo A18",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_inferred_oppo_reno-7",
+    "brand": "Oppo",
+    "model": "Reno 7",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.56,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "oppo-reno-7-shell",
+      "screenProfile": "oppo-reno-7-screen",
+      "bodyProfile": "oppo-reno-7-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_oppo_reno-8",
+    "brand": "Oppo",
+    "model": "Reno 8",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.56,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "oppo-reno-8-shell",
+      "screenProfile": "oppo-reno-8-screen",
+      "bodyProfile": "oppo-reno-8-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_realme_10",
+    "brand": "Realme",
+    "model": "10",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "realme-10-shell",
+      "screenProfile": "realme-10-screen",
+      "bodyProfile": "realme-10-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_realme_11",
+    "brand": "Realme",
+    "model": "11",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "realme-11-shell",
+      "screenProfile": "realme-11-screen",
+      "bodyProfile": "realme-11-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_realme_c30",
+    "brand": "Realme",
+    "model": "C30",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "realme-c30-shell",
+      "screenProfile": "realme-c30-screen",
+      "bodyProfile": "realme-c30-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_realme_c35",
+    "brand": "Realme",
+    "model": "C35",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "realme-c35-shell",
+      "screenProfile": "realme-c35-screen",
+      "bodyProfile": "realme-c35-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_realme_c51",
+    "brand": "Realme",
+    "model": "C51",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "realme-c51-shell",
+      "screenProfile": "realme-c51-screen",
+      "bodyProfile": "realme-c51-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_realme_c53",
+    "brand": "Realme",
+    "model": "C53",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "realme-c53-shell",
+      "screenProfile": "realme-c53-screen",
+      "bodyProfile": "realme-c53-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_realme_c55",
+    "brand": "Realme",
+    "model": "C55",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "realme-c55-shell",
+      "screenProfile": "realme-c55-screen",
+      "bodyProfile": "realme-c55-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_realme_c61",
+    "brand": "Realme",
+    "model": "C61",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "realme-c61-shell",
+      "screenProfile": "realme-c61-screen",
+      "bodyProfile": "realme-c61-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_realme_c63",
+    "brand": "Realme",
+    "model": "C63",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "realme-c63-shell",
+      "screenProfile": "realme-c63-screen",
+      "bodyProfile": "realme-c63-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_realme_gt-neo-5",
+    "brand": "Realme",
+    "model": "GT Neo 5",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "realme-gt-neo-5-shell",
+      "screenProfile": "realme-gt-neo-5-screen",
+      "bodyProfile": "realme-gt-neo-5-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_realme_note-50",
+    "brand": "Realme",
+    "model": "Note 50",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "realme-note-50-shell",
+      "screenProfile": "realme-note-50-screen",
+      "bodyProfile": "realme-note-50-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_realme_note-60",
+    "brand": "Realme",
+    "model": "Note 60",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "realme-note-60-shell",
+      "screenProfile": "realme-note-60-screen",
+      "bodyProfile": "realme-note-60-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_realme_c51",
+    "brand": "Realme",
+    "model": "Realme C51",
+    "dimensions": {
+      "heightMm": 167.2,
+      "widthMm": 76.7,
+      "thicknessMm": 8
+    },
+    "physical": {
+      "cameraLayout": "Doble camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "realme-c53-c51-note50-shell",
+      "screenProfile": "realme-entry-screen-family"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 83,
+    "equivalents": [
+      {
+        "brand": "Realme",
+        "model": "Realme C53",
+        "kind": "full"
+      },
+      {
+        "brand": "Realme",
+        "model": "Realme Note 50",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_realme_c53",
+    "brand": "Realme",
+    "model": "Realme C53",
+    "dimensions": {
+      "heightMm": 167.3,
+      "widthMm": 76.7,
+      "thicknessMm": 7.5
+    },
+    "physical": {
+      "cameraLayout": "Doble camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "realme-c53-c51-note50-shell",
+      "screenProfile": "realme-entry-screen-family"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 83,
+    "equivalents": [
+      {
+        "brand": "Realme",
+        "model": "Realme C51",
+        "kind": "full"
+      },
+      {
+        "brand": "Realme",
+        "model": "Realme Note 50",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_realme_note_50",
+    "brand": "Realme",
+    "model": "Realme Note 50",
+    "dimensions": {
+      "heightMm": 167.2,
+      "widthMm": 76.7,
+      "thicknessMm": 8
+    },
+    "physical": {
+      "cameraLayout": "Doble camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "realme-c53-c51-note50-shell",
+      "screenProfile": "realme-entry-screen-family"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 83,
+    "equivalents": [
+      {
+        "brand": "Realme",
+        "model": "Realme C53",
+        "kind": "full"
+      },
+      {
+        "brand": "Realme",
+        "model": "Realme C51",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a03",
+    "brand": "Samsung",
+    "model": "Galaxy A03",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a03-shell",
+      "screenProfile": "samsung-galaxy-a03-screen",
+      "bodyProfile": "samsung-galaxy-a03-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a04",
+    "brand": "Samsung",
+    "model": "Galaxy A04",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a04-shell",
+      "screenProfile": "samsung-galaxy-a04-screen",
+      "bodyProfile": "samsung-galaxy-a04-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a05",
+    "brand": "Samsung",
+    "model": "Galaxy A05",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a05-shell",
+      "screenProfile": "samsung-galaxy-a05-screen",
+      "bodyProfile": "samsung-galaxy-a05-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a05s",
+    "brand": "Samsung",
+    "model": "Galaxy A05s",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a05s-shell",
+      "screenProfile": "samsung-galaxy-a05s-screen",
+      "bodyProfile": "samsung-galaxy-a05s-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a06",
+    "brand": "Samsung",
+    "model": "Galaxy A06",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a06-shell",
+      "screenProfile": "samsung-galaxy-a06-screen",
+      "bodyProfile": "samsung-galaxy-a06-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a10",
+    "brand": "Samsung",
+    "model": "Galaxy A10",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a10-shell",
+      "screenProfile": "samsung-galaxy-a10-screen",
+      "bodyProfile": "samsung-galaxy-a10-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a11",
+    "brand": "Samsung",
+    "model": "Galaxy A11",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a11-shell",
+      "screenProfile": "samsung-galaxy-a11-screen",
+      "bodyProfile": "samsung-galaxy-a11-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a12",
+    "brand": "Samsung",
+    "model": "Galaxy A12",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a12-shell",
+      "screenProfile": "samsung-galaxy-a12-screen",
+      "bodyProfile": "samsung-galaxy-a12-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a13",
+    "brand": "Samsung",
+    "model": "Galaxy A13",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a13-shell",
+      "screenProfile": "samsung-galaxy-a13-screen",
+      "bodyProfile": "samsung-galaxy-a13-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a14",
+    "brand": "Samsung",
+    "model": "Galaxy A14",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a14-shell",
+      "screenProfile": "samsung-galaxy-a14-screen",
+      "bodyProfile": "samsung-galaxy-a14-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_samsung_galaxy_a14_4g",
+    "brand": "Samsung",
+    "model": "Galaxy A14 4G",
+    "dimensions": {
+      "heightMm": 167.7,
+      "widthMm": 78,
+      "thicknessMm": 9.1
+    },
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "samsung-a14-family-shell",
+      "screenProfile": "samsung-a14-family-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 88,
+    "equivalents": [
+      {
+        "brand": "Samsung",
+        "model": "Galaxy A14 5G",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_samsung_galaxy_a14_5g",
+    "brand": "Samsung",
+    "model": "Galaxy A14 5G",
+    "dimensions": {
+      "heightMm": 167.7,
+      "widthMm": 78,
+      "thicknessMm": 9.1
+    },
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "samsung-a14-family-shell",
+      "screenProfile": "samsung-a14-family-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 88,
+    "equivalents": [
+      {
+        "brand": "Samsung",
+        "model": "Galaxy A14 4G",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a15",
+    "brand": "Samsung",
+    "model": "Galaxy A15",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a15-shell",
+      "screenProfile": "samsung-galaxy-a15-screen",
+      "bodyProfile": "samsung-galaxy-a15-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_samsung_galaxy_a15_4g",
+    "brand": "Samsung",
+    "model": "Galaxy A15 4G",
+    "dimensions": {
+      "heightMm": 160.1,
+      "widthMm": 76.8,
+      "thicknessMm": 8.4
+    },
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "samsung-a15-m15-shell",
+      "screenProfile": "samsung-a15-m15-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 90,
+    "equivalents": [
+      {
+        "brand": "Samsung",
+        "model": "Galaxy A15 5G",
+        "kind": "full"
+      },
+      {
+        "brand": "Samsung",
+        "model": "Galaxy M15 5G",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_samsung_galaxy_a15_5g",
+    "brand": "Samsung",
+    "model": "Galaxy A15 5G",
+    "dimensions": {
+      "heightMm": 160.1,
+      "widthMm": 76.8,
+      "thicknessMm": 8.4
+    },
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "samsung-a15-m15-shell",
+      "screenProfile": "samsung-a15-m15-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 90,
+    "equivalents": [
+      {
+        "brand": "Samsung",
+        "model": "Galaxy A15 4G",
+        "kind": "full"
+      },
+      {
+        "brand": "Samsung",
+        "model": "Galaxy M15 5G",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a16",
+    "brand": "Samsung",
+    "model": "Galaxy A16",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a16-shell",
+      "screenProfile": "samsung-galaxy-a16-screen",
+      "bodyProfile": "samsung-galaxy-a16-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a20",
+    "brand": "Samsung",
+    "model": "Galaxy A20",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a20-shell",
+      "screenProfile": "samsung-galaxy-a20-screen",
+      "bodyProfile": "samsung-galaxy-a20-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a21",
+    "brand": "Samsung",
+    "model": "Galaxy A21",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a21-shell",
+      "screenProfile": "samsung-galaxy-a21-screen",
+      "bodyProfile": "samsung-galaxy-a21-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a22",
+    "brand": "Samsung",
+    "model": "Galaxy A22",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a22-shell",
+      "screenProfile": "samsung-galaxy-a22-screen",
+      "bodyProfile": "samsung-galaxy-a22-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a23",
+    "brand": "Samsung",
+    "model": "Galaxy A23",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a23-shell",
+      "screenProfile": "samsung-galaxy-a23-screen",
+      "bodyProfile": "samsung-galaxy-a23-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a24",
+    "brand": "Samsung",
+    "model": "Galaxy A24",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a24-shell",
+      "screenProfile": "samsung-galaxy-a24-screen",
+      "bodyProfile": "samsung-galaxy-a24-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a25",
+    "brand": "Samsung",
+    "model": "Galaxy A25",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a25-shell",
+      "screenProfile": "samsung-galaxy-a25-screen",
+      "bodyProfile": "samsung-galaxy-a25-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a30",
+    "brand": "Samsung",
+    "model": "Galaxy A30",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a30-shell",
+      "screenProfile": "samsung-galaxy-a30-screen",
+      "bodyProfile": "samsung-galaxy-a30-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a31",
+    "brand": "Samsung",
+    "model": "Galaxy A31",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a31-shell",
+      "screenProfile": "samsung-galaxy-a31-screen",
+      "bodyProfile": "samsung-galaxy-a31-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a32",
+    "brand": "Samsung",
+    "model": "Galaxy A32",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a32-shell",
+      "screenProfile": "samsung-galaxy-a32-screen",
+      "bodyProfile": "samsung-galaxy-a32-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a33",
+    "brand": "Samsung",
+    "model": "Galaxy A33",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a33-shell",
+      "screenProfile": "samsung-galaxy-a33-screen",
+      "bodyProfile": "samsung-galaxy-a33-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a34",
+    "brand": "Samsung",
+    "model": "Galaxy A34",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a34-shell",
+      "screenProfile": "samsung-galaxy-a34-screen",
+      "bodyProfile": "samsung-galaxy-a34-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a35",
+    "brand": "Samsung",
+    "model": "Galaxy A35",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a35-shell",
+      "screenProfile": "samsung-galaxy-a35-screen",
+      "bodyProfile": "samsung-galaxy-a35-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a50",
+    "brand": "Samsung",
+    "model": "Galaxy A50",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a50-shell",
+      "screenProfile": "samsung-galaxy-a50-screen",
+      "bodyProfile": "samsung-galaxy-a50-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a51",
+    "brand": "Samsung",
+    "model": "Galaxy A51",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a51-shell",
+      "screenProfile": "samsung-galaxy-a51-screen",
+      "bodyProfile": "samsung-galaxy-a51-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a52",
+    "brand": "Samsung",
+    "model": "Galaxy A52",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a52-shell",
+      "screenProfile": "samsung-galaxy-a52-screen",
+      "bodyProfile": "samsung-galaxy-a52-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a53",
+    "brand": "Samsung",
+    "model": "Galaxy A53",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a53-shell",
+      "screenProfile": "samsung-galaxy-a53-screen",
+      "bodyProfile": "samsung-galaxy-a53-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a54",
+    "brand": "Samsung",
+    "model": "Galaxy A54",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a54-shell",
+      "screenProfile": "samsung-galaxy-a54-screen",
+      "bodyProfile": "samsung-galaxy-a54-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-a55",
+    "brand": "Samsung",
+    "model": "Galaxy A55",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-a55-shell",
+      "screenProfile": "samsung-galaxy-a55-screen",
+      "bodyProfile": "samsung-galaxy-a55-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-m12",
+    "brand": "Samsung",
+    "model": "Galaxy M12",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-m12-shell",
+      "screenProfile": "samsung-galaxy-m12-screen",
+      "bodyProfile": "samsung-galaxy-m12-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-m13",
+    "brand": "Samsung",
+    "model": "Galaxy M13",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-m13-shell",
+      "screenProfile": "samsung-galaxy-m13-screen",
+      "bodyProfile": "samsung-galaxy-m13-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-m14",
+    "brand": "Samsung",
+    "model": "Galaxy M14",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-m14-shell",
+      "screenProfile": "samsung-galaxy-m14-screen",
+      "bodyProfile": "samsung-galaxy-m14-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-m15",
+    "brand": "Samsung",
+    "model": "Galaxy M15",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-m15-shell",
+      "screenProfile": "samsung-galaxy-m15-screen",
+      "bodyProfile": "samsung-galaxy-m15-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_samsung_galaxy_m15_5g",
+    "brand": "Samsung",
+    "model": "Galaxy M15 5G",
+    "dimensions": {
+      "heightMm": 160.1,
+      "widthMm": 76.8,
+      "thicknessMm": 8.4
+    },
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "samsung-a15-m15-shell",
+      "screenProfile": "samsung-a15-m15-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 90,
+    "equivalents": [
+      {
+        "brand": "Samsung",
+        "model": "Galaxy A15 4G",
+        "kind": "full"
+      },
+      {
+        "brand": "Samsung",
+        "model": "Galaxy A15 5G",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-m23",
+    "brand": "Samsung",
+    "model": "Galaxy M23",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-m23-shell",
+      "screenProfile": "samsung-galaxy-m23-screen",
+      "bodyProfile": "samsung-galaxy-m23-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-m33",
+    "brand": "Samsung",
+    "model": "Galaxy M33",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-m33-shell",
+      "screenProfile": "samsung-galaxy-m33-screen",
+      "bodyProfile": "samsung-galaxy-m33-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-m34",
+    "brand": "Samsung",
+    "model": "Galaxy M34",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.5,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-m34-shell",
+      "screenProfile": "samsung-galaxy-m34-screen",
+      "bodyProfile": "samsung-galaxy-m34-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-note-20",
+    "brand": "Samsung",
+    "model": "Galaxy Note 20",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-note-20-shell",
+      "screenProfile": "samsung-galaxy-note-20-screen",
+      "bodyProfile": "samsung-galaxy-note-20-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-s20-fe",
+    "brand": "Samsung",
+    "model": "Galaxy S20 FE",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.2,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-s20-fe-shell",
+      "screenProfile": "samsung-galaxy-s20-fe-screen",
+      "bodyProfile": "samsung-galaxy-s20-fe-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-s21",
+    "brand": "Samsung",
+    "model": "Galaxy S21",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.2,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-s21-shell",
+      "screenProfile": "samsung-galaxy-s21-screen",
+      "bodyProfile": "samsung-galaxy-s21-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-s21-fe",
+    "brand": "Samsung",
+    "model": "Galaxy S21 FE",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.2,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-s21-fe-shell",
+      "screenProfile": "samsung-galaxy-s21-fe-screen",
+      "bodyProfile": "samsung-galaxy-s21-fe-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-s22",
+    "brand": "Samsung",
+    "model": "Galaxy S22",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.2,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-s22-shell",
+      "screenProfile": "samsung-galaxy-s22-screen",
+      "bodyProfile": "samsung-galaxy-s22-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-s23",
+    "brand": "Samsung",
+    "model": "Galaxy S23",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.2,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-s23-shell",
+      "screenProfile": "samsung-galaxy-s23-screen",
+      "bodyProfile": "samsung-galaxy-s23-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-s23-fe",
+    "brand": "Samsung",
+    "model": "Galaxy S23 FE",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.2,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-s23-fe-shell",
+      "screenProfile": "samsung-galaxy-s23-fe-screen",
+      "bodyProfile": "samsung-galaxy-s23-fe-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-s24",
+    "brand": "Samsung",
+    "model": "Galaxy S24",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.2,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-s24-shell",
+      "screenProfile": "samsung-galaxy-s24-screen",
+      "bodyProfile": "samsung-galaxy-s24-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-s24-plus",
+    "brand": "Samsung",
+    "model": "Galaxy S24 Plus",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.7,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-s24-plus-shell",
+      "screenProfile": "samsung-galaxy-s24-plus-screen",
+      "bodyProfile": "samsung-galaxy-s24-plus-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-s24-ultra",
+    "brand": "Samsung",
+    "model": "Galaxy S24 Ultra",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Camaras individuales verticales",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.8,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-s24-ultra-shell",
+      "screenProfile": "samsung-galaxy-s24-ultra-screen",
+      "bodyProfile": "samsung-galaxy-s24-ultra-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_samsung_galaxy-tab-a8",
+    "brand": "Samsung",
+    "model": "Galaxy Tab A8",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Triple camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 10.5,
+      "aspectRatio": "16:10"
+    },
+    "profiles": {
+      "caseProfile": "samsung-galaxy-tab-a8-shell",
+      "screenProfile": "samsung-galaxy-tab-a8-screen",
+      "bodyProfile": "samsung-galaxy-tab-a8-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_tecno_camon-18",
+    "brand": "Tecno",
+    "model": "Camon 18",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble o triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "tecno-camon-18-shell",
+      "screenProfile": "tecno-camon-18-screen",
+      "bodyProfile": "tecno-camon-18-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_tecno_camon-20",
+    "brand": "Tecno",
+    "model": "Camon 20",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble o triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "tecno-camon-20-shell",
+      "screenProfile": "tecno-camon-20-screen",
+      "bodyProfile": "tecno-camon-20-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_tecno_pova-5",
+    "brand": "Tecno",
+    "model": "Pova 5",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble o triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "tecno-pova-5-shell",
+      "screenProfile": "tecno-pova-5-screen",
+      "bodyProfile": "tecno-pova-5-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_tecno_spark-10",
+    "brand": "Tecno",
+    "model": "Spark 10",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble o triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "tecno-spark-10-shell",
+      "screenProfile": "tecno-spark-10-screen",
+      "bodyProfile": "tecno-spark-10-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_tecno_spark-20",
+    "brand": "Tecno",
+    "model": "Spark 20",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble o triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "tecno-spark-20-shell",
+      "screenProfile": "tecno-spark-20-screen",
+      "bodyProfile": "tecno-spark-20-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_tecno_spark-20c",
+    "brand": "Tecno",
+    "model": "Spark 20C",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble o triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "tecno-spark-20c-shell",
+      "screenProfile": "tecno-spark-20c-screen",
+      "bodyProfile": "tecno-spark-20c-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_tecno_spark-go-2024",
+    "brand": "Tecno",
+    "model": "Spark Go 2024",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble o triple camara superior izquierda",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "tecno-spark-go-2024-shell",
+      "screenProfile": "tecno-spark-go-2024-screen",
+      "bodyProfile": "tecno-spark-go-2024-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_vivo_v29",
+    "brand": "Vivo",
+    "model": "V29",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.56,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "vivo-v29-shell",
+      "screenProfile": "vivo-v29-screen",
+      "bodyProfile": "vivo-v29-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_vivo_y16",
+    "brand": "Vivo",
+    "model": "Y16",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.56,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "vivo-y16-shell",
+      "screenProfile": "vivo-y16-screen",
+      "bodyProfile": "vivo-y16-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_vivo_y17s",
+    "brand": "Vivo",
+    "model": "Y17s",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.56,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "vivo-y17s-shell",
+      "screenProfile": "vivo-y17s-screen",
+      "bodyProfile": "vivo-y17s-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_vivo_y22",
+    "brand": "Vivo",
+    "model": "Y22",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.56,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "vivo-y22-shell",
+      "screenProfile": "vivo-y22-screen",
+      "bodyProfile": "vivo-y22-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_vivo_y27",
+    "brand": "Vivo",
+    "model": "Y27",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.56,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "vivo-y27-shell",
+      "screenProfile": "vivo-y27-screen",
+      "bodyProfile": "vivo-y27-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_vivo_y36",
+    "brand": "Vivo",
+    "model": "Y36",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Doble camara vertical",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.56,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "vivo-y36-shell",
+      "screenProfile": "vivo-y36-screen",
+      "bodyProfile": "vivo-y36-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_xiaomi_poco_c65",
+    "brand": "Xiaomi",
+    "model": "Poco C65",
+    "dimensions": {
+      "heightMm": 168,
+      "widthMm": 78,
+      "thicknessMm": 8.1
+    },
+    "physical": {
+      "cameraLayout": "Modulo doble rectangular",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "redmi-13c-c65-shell",
+      "screenProfile": "redmi-13c-c65-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 87,
+    "equivalents": [
+      {
+        "brand": "Xiaomi",
+        "model": "Redmi 13C",
+        "kind": "full"
+      },
+      {
+        "brand": "Xiaomi",
+        "model": "Redmi 13C 5G",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_inferred_xiaomi_poco-m3-pro-5g",
+    "brand": "Xiaomi",
+    "model": "POCO M3 Pro 5G",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.67,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "xiaomi-poco-m3-pro-5g-shell",
+      "screenProfile": "xiaomi-poco-m3-pro-5g-screen",
+      "bodyProfile": "xiaomi-poco-m3-pro-5g-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_xiaomi_poco-m4-pro",
+    "brand": "Xiaomi",
+    "model": "POCO M4 Pro",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.67,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "xiaomi-poco-m4-pro-shell",
+      "screenProfile": "xiaomi-poco-m4-pro-screen",
+      "bodyProfile": "xiaomi-poco-m4-pro-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_xiaomi_poco_m4_pro_4g",
+    "brand": "Xiaomi",
+    "model": "Poco M4 Pro 4G",
+    "dimensions": {
+      "heightMm": 159.9,
+      "widthMm": 73.9,
+      "thicknessMm": 8.1
+    },
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "redmi-note-11-m4pro4g-shell",
+      "screenProfile": "redmi-note-11-m4pro4g-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 86,
+    "equivalents": [
+      {
+        "brand": "Xiaomi",
+        "model": "Redmi Note 11 4G",
+        "kind": "full"
+      },
+      {
+        "brand": "Xiaomi",
+        "model": "Redmi Note 11S",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_inferred_xiaomi_poco-m5",
+    "brand": "Xiaomi",
+    "model": "POCO M5",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.67,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "xiaomi-poco-m5-shell",
+      "screenProfile": "xiaomi-poco-m5-screen",
+      "bodyProfile": "xiaomi-poco-m5-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_xiaomi_poco-m6-pro",
+    "brand": "Xiaomi",
+    "model": "POCO M6 Pro",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.67,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "xiaomi-poco-m6-pro-shell",
+      "screenProfile": "xiaomi-poco-m6-pro-screen",
+      "bodyProfile": "xiaomi-poco-m6-pro-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_xiaomi_poco_m6_pro_4g",
+    "brand": "Xiaomi",
+    "model": "Poco M6 Pro 4G",
+    "dimensions": {
+      "heightMm": 161.1,
+      "widthMm": 75,
+      "thicknessMm": 8
+    },
+    "physical": {
+      "cameraLayout": "Triple camara con sensor principal grande",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "redmi-note-13-pro-4g-m6pro-shell",
+      "screenProfile": "redmi-note-13-pro-4g-m6pro-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 88,
+    "equivalents": [
+      {
+        "brand": "Xiaomi",
+        "model": "Redmi Note 13 Pro 4G",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_inferred_xiaomi_poco-x3",
+    "brand": "Xiaomi",
+    "model": "POCO X3",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo circular central",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.67,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "xiaomi-poco-x3-shell",
+      "screenProfile": "xiaomi-poco-x3-screen",
+      "bodyProfile": "xiaomi-poco-x3-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_xiaomi_poco-x4-pro",
+    "brand": "Xiaomi",
+    "model": "POCO X4 Pro",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.67,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "xiaomi-poco-x4-pro-shell",
+      "screenProfile": "xiaomi-poco-x4-pro-screen",
+      "bodyProfile": "xiaomi-poco-x4-pro-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_xiaomi_poco-x5",
+    "brand": "Xiaomi",
+    "model": "POCO X5",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.67,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "xiaomi-poco-x5-shell",
+      "screenProfile": "xiaomi-poco-x5-screen",
+      "bodyProfile": "xiaomi-poco-x5-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_xiaomi_poco-x6",
+    "brand": "Xiaomi",
+    "model": "POCO X6",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.67,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "xiaomi-poco-x6-shell",
+      "screenProfile": "xiaomi-poco-x6-screen",
+      "bodyProfile": "xiaomi-poco-x6-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_xiaomi_poco_x6_5g",
+    "brand": "Xiaomi",
+    "model": "Poco X6 5G",
+    "dimensions": {
+      "heightMm": 161.2,
+      "widthMm": 74.2,
+      "thicknessMm": 8
+    },
+    "physical": {
+      "cameraLayout": "Triple camara con sensor principal grande",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "redmi-note-13-pro-5g-x6-shell",
+      "screenProfile": "redmi-note-13-pro-5g-x6-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 89,
+    "equivalents": [
+      {
+        "brand": "Xiaomi",
+        "model": "Redmi Note 13 Pro 5G",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_inferred_xiaomi_redmi-10",
+    "brand": "Xiaomi",
+    "model": "Redmi 10",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "xiaomi-redmi-10-shell",
+      "screenProfile": "xiaomi-redmi-10-screen",
+      "bodyProfile": "xiaomi-redmi-10-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_xiaomi_redmi-10a",
+    "brand": "Xiaomi",
+    "model": "Redmi 10A",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "xiaomi-redmi-10a-shell",
+      "screenProfile": "xiaomi-redmi-10a-screen",
+      "bodyProfile": "xiaomi-redmi-10a-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_xiaomi_redmi-10c",
+    "brand": "Xiaomi",
+    "model": "Redmi 10C",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "xiaomi-redmi-10c-shell",
+      "screenProfile": "xiaomi-redmi-10c-screen",
+      "bodyProfile": "xiaomi-redmi-10c-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_xiaomi_redmi-12",
+    "brand": "Xiaomi",
+    "model": "Redmi 12",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "xiaomi-redmi-12-shell",
+      "screenProfile": "xiaomi-redmi-12-screen",
+      "bodyProfile": "xiaomi-redmi-12-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_xiaomi_redmi-12c",
+    "brand": "Xiaomi",
+    "model": "Redmi 12C",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "xiaomi-redmi-12c-shell",
+      "screenProfile": "xiaomi-redmi-12c-screen",
+      "bodyProfile": "xiaomi-redmi-12c-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_xiaomi_redmi-13",
+    "brand": "Xiaomi",
+    "model": "Redmi 13",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "xiaomi-redmi-13-shell",
+      "screenProfile": "xiaomi-redmi-13-screen",
+      "bodyProfile": "xiaomi-redmi-13-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_xiaomi_redmi_13c",
+    "brand": "Xiaomi",
+    "model": "Redmi 13C",
+    "dimensions": {
+      "heightMm": 168,
+      "widthMm": 78,
+      "thicknessMm": 8.1
+    },
+    "physical": {
+      "cameraLayout": "Modulo doble rectangular",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "redmi-13c-c65-shell",
+      "screenProfile": "redmi-13c-c65-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 87,
+    "equivalents": [
+      {
+        "brand": "Xiaomi",
+        "model": "Redmi 13C 5G",
+        "kind": "full"
+      },
+      {
+        "brand": "Xiaomi",
+        "model": "Poco C65",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_xiaomi_redmi_13c_5g",
+    "brand": "Xiaomi",
+    "model": "Redmi 13C 5G",
+    "dimensions": {
+      "heightMm": 168,
+      "widthMm": 78,
+      "thicknessMm": 8.1
+    },
+    "physical": {
+      "cameraLayout": "Modulo doble rectangular",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "redmi-13c-c65-shell",
+      "screenProfile": "redmi-13c-c65-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 87,
+    "equivalents": [
+      {
+        "brand": "Xiaomi",
+        "model": "Redmi 13C",
+        "kind": "full"
+      },
+      {
+        "brand": "Xiaomi",
+        "model": "Poco C65",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_inferred_xiaomi_redmi-9a",
+    "brand": "Xiaomi",
+    "model": "Redmi 9A",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "xiaomi-redmi-9a-shell",
+      "screenProfile": "xiaomi-redmi-9a-screen",
+      "bodyProfile": "xiaomi-redmi-9a-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_xiaomi_redmi-9c",
+    "brand": "Xiaomi",
+    "model": "Redmi 9C",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.6,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "xiaomi-redmi-9c-shell",
+      "screenProfile": "xiaomi-redmi-9c-screen",
+      "bodyProfile": "xiaomi-redmi-9c-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_xiaomi_redmi-note-10",
+    "brand": "Xiaomi",
+    "model": "Redmi Note 10",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.67,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "xiaomi-redmi-note-10-shell",
+      "screenProfile": "xiaomi-redmi-note-10-screen",
+      "bodyProfile": "xiaomi-redmi-note-10-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_xiaomi_redmi-note-10-5g",
+    "brand": "Xiaomi",
+    "model": "Redmi Note 10 5G",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.67,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "xiaomi-redmi-note-10-5g-shell",
+      "screenProfile": "xiaomi-redmi-note-10-5g-screen",
+      "bodyProfile": "xiaomi-redmi-note-10-5g-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_xiaomi_redmi-note-11",
+    "brand": "Xiaomi",
+    "model": "Redmi Note 11",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.67,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "xiaomi-redmi-note-11-shell",
+      "screenProfile": "xiaomi-redmi-note-11-screen",
+      "bodyProfile": "xiaomi-redmi-note-11-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_xiaomi_redmi_note_11",
+    "brand": "Xiaomi",
+    "model": "Redmi Note 11 4G",
+    "dimensions": {
+      "heightMm": 159.9,
+      "widthMm": 73.9,
+      "thicknessMm": 8.1
+    },
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "redmi-note-11-m4pro4g-shell",
+      "screenProfile": "redmi-note-11-m4pro4g-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 86,
+    "equivalents": [
+      {
+        "brand": "Xiaomi",
+        "model": "Redmi Note 11S",
+        "kind": "full"
+      },
+      {
+        "brand": "Xiaomi",
+        "model": "Poco M4 Pro 4G",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_inferred_xiaomi_redmi-note-11-pro",
+    "brand": "Xiaomi",
+    "model": "Redmi Note 11 Pro",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.67,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "xiaomi-redmi-note-11-pro-shell",
+      "screenProfile": "xiaomi-redmi-note-11-pro-screen",
+      "bodyProfile": "xiaomi-redmi-note-11-pro-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_redmi_note_11_pro_4g",
+    "brand": "Xiaomi",
+    "model": "Redmi Note 11 Pro 4G",
+    "aliases": [
+      "Xiaomi Redmi Note 11 Pro 4G"
+    ],
+    "dimensions": {
+      "heightMm": 164.2,
+      "widthMm": 76.1,
+      "thicknessMm": 8.1
+    },
+    "physical": {
+      "cameraLayout": "Modulo similar serie Redmi Note 11 Pro",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "redmi-note-11-12-pro-shell",
+      "screenProfile": "redmi-note-11-12-pro-screen"
+    },
+    "source": {
+      "type": "manual_validated",
+      "name": "Validacion interna de tienda"
+    },
+    "confidence": 95,
+    "equivalents": [
+      {
+        "brand": "Xiaomi",
+        "model": "Redmi Note 12 Pro 4G",
+        "kind": "full"
+      },
+      {
+        "brand": "Xiaomi",
+        "model": "Redmi Note 11 Pro 5G",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_redmi_note_11_pro_5g",
+    "brand": "Xiaomi",
+    "model": "Redmi Note 11 Pro 5G",
+    "aliases": [
+      "Xiaomi Redmi Note 11 Pro 5G"
+    ],
+    "dimensions": {
+      "heightMm": 164.2,
+      "widthMm": 76.1,
+      "thicknessMm": 8.1
+    },
+    "physical": {
+      "cameraLayout": "Modulo similar serie Redmi Note 11 Pro",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "redmi-note-11-12-pro-shell",
+      "screenProfile": "redmi-note-11-12-pro-screen"
+    },
+    "source": {
+      "type": "manual_validated",
+      "name": "Validacion interna de tienda"
+    },
+    "confidence": 95,
+    "equivalents": [
+      {
+        "brand": "Xiaomi",
+        "model": "Redmi Note 12 Pro 4G",
+        "kind": "full"
+      },
+      {
+        "brand": "Xiaomi",
+        "model": "Redmi Note 11 Pro 4G",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_xiaomi_redmi_note_11s",
+    "brand": "Xiaomi",
+    "model": "Redmi Note 11S",
+    "dimensions": {
+      "heightMm": 159.9,
+      "widthMm": 73.9,
+      "thicknessMm": 8.1
+    },
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "redmi-note-11-m4pro4g-shell",
+      "screenProfile": "redmi-note-11-m4pro4g-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 86,
+    "equivalents": [
+      {
+        "brand": "Xiaomi",
+        "model": "Redmi Note 11 4G",
+        "kind": "full"
+      },
+      {
+        "brand": "Xiaomi",
+        "model": "Poco M4 Pro 4G",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_inferred_xiaomi_redmi-note-12",
+    "brand": "Xiaomi",
+    "model": "Redmi Note 12",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.67,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "xiaomi-redmi-note-12-shell",
+      "screenProfile": "xiaomi-redmi-note-12-screen",
+      "bodyProfile": "xiaomi-redmi-note-12-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_redmi_note_12_pro_4g",
+    "brand": "Xiaomi",
+    "model": "Redmi Note 12 Pro 4G",
+    "aliases": [
+      "Xiaomi Redmi Note 12 Pro 4G"
+    ],
+    "dimensions": {
+      "heightMm": 164.2,
+      "widthMm": 76.1,
+      "thicknessMm": 8.1
+    },
+    "physical": {
+      "cameraLayout": "Modulo similar serie Redmi Note 11 Pro",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "redmi-note-11-12-pro-shell",
+      "screenProfile": "redmi-note-11-12-pro-screen"
+    },
+    "source": {
+      "type": "manual_validated",
+      "name": "Validacion interna de tienda"
+    },
+    "confidence": 95,
+    "equivalents": [
+      {
+        "brand": "Xiaomi",
+        "model": "Redmi Note 11 Pro 4G",
+        "kind": "full"
+      },
+      {
+        "brand": "Xiaomi",
+        "model": "Redmi Note 11 Pro 5G",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_inferred_xiaomi_redmi-note-13",
+    "brand": "Xiaomi",
+    "model": "Redmi Note 13",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.67,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "xiaomi-redmi-note-13-shell",
+      "screenProfile": "xiaomi-redmi-note-13-screen",
+      "bodyProfile": "xiaomi-redmi-note-13-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_inferred_xiaomi_redmi-note-13-pro",
+    "brand": "Xiaomi",
+    "model": "Redmi Note 13 Pro",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.67,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "xiaomi-redmi-note-13-pro-shell",
+      "screenProfile": "xiaomi-redmi-note-13-pro-screen",
+      "bodyProfile": "xiaomi-redmi-note-13-pro-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  },
+  {
+    "id": "spec_xiaomi_redmi_note_13_pro_4g",
+    "brand": "Xiaomi",
+    "model": "Redmi Note 13 Pro 4G",
+    "dimensions": {
+      "heightMm": 161.1,
+      "widthMm": 75,
+      "thicknessMm": 8
+    },
+    "physical": {
+      "cameraLayout": "Triple camara con sensor principal grande",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "redmi-note-13-pro-4g-m6pro-shell",
+      "screenProfile": "redmi-note-13-pro-4g-m6pro-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 88,
+    "equivalents": [
+      {
+        "brand": "Xiaomi",
+        "model": "Poco M6 Pro 4G",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_xiaomi_redmi_note_13_pro_5g",
+    "brand": "Xiaomi",
+    "model": "Redmi Note 13 Pro 5G",
+    "dimensions": {
+      "heightMm": 161.2,
+      "widthMm": 74.2,
+      "thicknessMm": 8
+    },
+    "physical": {
+      "cameraLayout": "Triple camara con sensor principal grande",
+      "buttons": "Power y volumen lado derecho",
+      "connector": "USB-C"
+    },
+    "profiles": {
+      "caseProfile": "redmi-note-13-pro-5g-x6-shell",
+      "screenProfile": "redmi-note-13-pro-5g-x6-screen"
+    },
+    "source": {
+      "type": "manual_seed",
+      "name": "Carga inicial Vendly"
+    },
+    "confidence": 89,
+    "equivalents": [
+      {
+        "brand": "Xiaomi",
+        "model": "Poco X6 5G",
+        "kind": "full"
+      }
+    ]
+  },
+  {
+    "id": "spec_inferred_xiaomi_redmi-note-9",
+    "brand": "Xiaomi",
+    "model": "Redmi Note 9",
+    "aliases": [],
+    "physical": {
+      "cameraLayout": "Modulo rectangular superior izquierdo",
+      "buttons": "Power y volumen lado derecho",
+      "connector": ""
+    },
+    "display": {
+      "sizeInches": 6.67,
+      "aspectRatio": "20:9"
+    },
+    "profiles": {
+      "caseProfile": "xiaomi-redmi-note-9-shell",
+      "screenProfile": "xiaomi-redmi-note-9-screen",
+      "bodyProfile": "xiaomi-redmi-note-9-body"
+    },
+    "source": {
+      "type": "inferred_catalog_seed",
+      "name": "Semilla inferida Vendly"
+    },
+    "confidence": 42,
+    "notes": "Ficha base inferida desde el catalogo interno. Requiere validacion manual si se va a usar para compatibilidad fisica estricta."
+  }
+]

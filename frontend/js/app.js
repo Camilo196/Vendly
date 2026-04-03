@@ -118,7 +118,6 @@ const auth = {
             adminCargarUsuarios();
         } else {
             app.loadDashboard();
-            app.loadProducts();
             // Cargar empleados al inicio para tenerlos disponibles en el select de ventas
             api.getEmployees({ isActive: true }).then(r => {
                 if (r.employees) AppState.employees = r.employees;
@@ -445,7 +444,8 @@ const response = await api.getProducts();
 },
     async loadReports() {
         try {
-            await loadReport('monthly');
+            const selectedPeriod = document.getElementById('reportPeriod')?.value || 'monthly';
+            await loadReport(selectedPeriod);
         } catch (error) {
             utils.showToast('Error al cargar reportes', 'error');
         }
@@ -561,12 +561,24 @@ document.addEventListener('DOMContentLoaded', () => {
                         await loadCompatibilityView();
                     }
                     break;
+
+                case 'compatibilityApi':
+                    if (typeof loadCompatibilityApiView === 'function') {
+                        await loadCompatibilityApiView();
+                    }
+                    break;
                      
                 case 'technical':                             
                     if (typeof loadTechnicalServices === 'function') {
                         await loadTechnicalServices();
                     }
                     break;                                     
+
+                case 'expenses':
+                    if (typeof loadExpensesView === 'function') {
+                        await loadExpensesView();
+                    }
+                    break;
                     
                 case 'reports':
                     await app.loadReports();

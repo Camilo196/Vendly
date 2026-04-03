@@ -4,6 +4,7 @@ const Sale = require('../models/Sale');
 const Purchase = require('../models/Purchase');
 const TechnicalService = require('../models/TechnicalService');
 const Commission = require('../models/Commission');
+const Expense = require('../models/Expense');
 const { protect } = require('../middleware/auth');
 
 router.use(protect);
@@ -26,6 +27,10 @@ function getDateRange(period, startDate, endDate) {
     from = new Date(now.getFullYear(), now.getMonth(), 1);
     to = new Date(now.getFullYear(), now.getMonth() + 1, 1);
     label = 'Mes actual';
+  } else if (period === 'previous_month') {
+    from = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    to = new Date(now.getFullYear(), now.getMonth(), 1);
+    label = 'Mes anterior';
   } else if (period === 'yearly') {
     from = new Date(now.getFullYear(), 0, 1);
     to = new Date(now.getFullYear() + 1, 0, 1);
@@ -52,7 +57,7 @@ function buildQuery(userId, field, dateFilter) {
   return query;
 }
 
-function buildMonthlyTimeline({ sales, purchases, services, months = 6 }) {
+function buildMonthlyTimeline({ sales, purchases, services, expenses, months = 6 }) {
   const timeline = [];
   const now = new Date();
 
@@ -63,6 +68,7 @@ function buildMonthlyTimeline({ sales, purchases, services, months = 6 }) {
     const monthSales = sales.filter(item => item.saleDate >= start && item.saleDate < end);
     const monthPurchases = purchases.filter(item => item.purchaseDate >= start && item.purchaseDate < end);
     const monthServices = services.filter(item => item.entryDate >= start && item.entryDate < end);
+    const monthExpenses = expenses.filter(item => item.expenseDate >= start && item.expenseDate < end);
 
     timeline.push({
       label: start.toLocaleDateString('es-CO', { month: 'short', year: 'numeric' }),
@@ -71,13 +77,15 @@ function buildMonthlyTimeline({ sales, purchases, services, months = 6 }) {
       purchaseTotal: monthPurchases.reduce((sum, item) => sum + (item.totalCost || 0), 0),
       purchaseCount: monthPurchases.length,
       serviceTotal: monthServices.reduce((sum, item) => sum + (item.laborCost || 0), 0),
-      serviceCount: monthServices.length
+      serviceCount: monthServices.length,
+      expenseTotal: monthExpenses.reduce((sum, item) => sum + (item.amount || 0), 0),
+      expenseCount: monthExpenses.length
     });
   }
 
   return timeline.map(item => ({
     ...item,
-    balance: item.salesTotal + item.serviceTotal - item.purchaseTotal
+    balance: item.salesTotal + item.serviceTotal - item.purchaseTotal - item.expenseTotal
   }));
 }
 
@@ -133,10 +141,12 @@ router.get('/sales', async (req, res) => {
     
     const purchases = await Purchase.find(buildQuery(userId, 'purchaseDate', dateFilter)).sort({ purchaseDate: -1 });
     const technicalServices = await TechnicalService.find(buildQuery(userId, 'entryDate', dateFilter)).sort({ entryDate: -1 });
+    const expenses = await Expense.find(buildQuery(userId, 'expenseDate', dateFilter)).sort({ expenseDate: -1 });
 
     const totalTechnicalRevenue = technicalServices.reduce((sum, ts) => sum + (ts.laborCost || 0), 0);
     const totalTechnicalCommissions = technicalServices.reduce((sum, ts) => sum + (ts.technicianCommission || 0), 0);
     const totalTechnicalNetProfit = totalTechnicalRevenue - totalTechnicalCommissions;
+    const totalExpenses = expenses.reduce((sum, item) => sum + (item.amount || 0), 0);
     const totalPurchases = purchases.reduce((sum, purchase) => sum + (purchase.totalCost || 0), 0);
     const totalPurchaseUnits = purchases.reduce((sum, purchase) => sum + (purchase.quantity || 0), 0);
     const totalSalesCommissions = Object.values(byProduct).reduce((sum, product) => sum + (product.commissions || 0), 0);
@@ -149,6 +159,7 @@ router.get('/sales', async (req, res) => {
       Purchase.find(buildQuery(userId, 'purchaseDate', { $gte: timelineStart })).select('purchaseDate totalCost quantity'),
       TechnicalService.find(buildQuery(userId, 'entryDate', { $gte: timelineStart })).select('entryDate laborCost technicianCommission')
     ]);
+    const timelineExpenses = await Expense.find(buildQuery(userId, 'expenseDate', { $gte: timelineStart })).select('expenseDate amount category');
 
     const byTechnicalService = technicalServices.map(ts => ({
       customer: ts.customer?.name || 'Sin nombre',
@@ -159,6 +170,12 @@ router.get('/sales', async (req, res) => {
       status: ts.status,
       date: ts.createdAt
     }));
+    const byExpenseCategory = Object.entries(expenses.reduce((acc, item) => {
+      const key = item.category || 'otros';
+      acc[key] = (acc[key] || 0) + (item.amount || 0);
+      return acc;
+    }, {})).map(([category, total]) => ({ category, total }))
+      .sort((a, b) => b.total - a.total);
 
     res.json({
       success: true,
@@ -178,13 +195,15 @@ router.get('/sales', async (req, res) => {
         totalPurchases,
         totalPurchaseUnits,
         totalPurchaseTransactions: purchases.length,
+        totalExpenses,
+        totalExpenseTransactions: expenses.length,
         totalSalesCommissions,
         totalTechnicalRevenue,
         totalTechnicalCommissions,
         totalTechnicalNetProfit,
         totalTechnicalTransactions: technicalServices.length,
-        netBusinessProfit: totalProfit - totalSalesCommissions + totalTechnicalNetProfit,
-        operationalBalance: totalSales + totalTechnicalRevenue - totalPurchases,
+        netBusinessProfit: totalProfit - totalSalesCommissions + totalTechnicalNetProfit - totalExpenses,
+        operationalBalance: totalSales + totalTechnicalRevenue - totalPurchases - totalExpenses,
         openTechnicalServices,
         completedTechnicalServices
       },
@@ -194,16 +213,20 @@ router.get('/sales', async (req, res) => {
         purchaseCount: purchases.length,
         purchaseUnits: totalPurchaseUnits,
         purchaseInvestment: totalPurchases,
+        expenseCount: expenses.length,
+        expenseTotal: totalExpenses,
         technicalCount: technicalServices.length,
         openTechnicalServices,
         completedTechnicalServices
       },
       byProduct: Object.values(byProduct).sort((a, b) => b.sales - a.sales),
       byTechnicalService,
+      byExpenseCategory,
       monthlyTimeline: buildMonthlyTimeline({
         sales: timelineSales,
         purchases: timelinePurchases,
-        services: timelineServices
+        services: timelineServices,
+        expenses: timelineExpenses
       }),
       transactions: sales
     });
@@ -228,11 +251,13 @@ router.get('/summary', async (req, res) => {
     const sales = await Sale.find(buildQuery(userId, 'saleDate', dateFilter));
     const purchases = await Purchase.find(buildQuery(userId, 'purchaseDate', dateFilter));
     const services = await TechnicalService.find(buildQuery(userId, 'entryDate', dateFilter));
+    const expenses = await Expense.find(buildQuery(userId, 'expenseDate', dateFilter));
     
     const totalSales = sales.reduce((sum, s) => sum + (s.totalSale || 0), 0);
     const totalProfit = sales.reduce((sum, s) => sum + (s.profit || 0), 0);
     const totalPurchases = purchases.reduce((sum, p) => sum + (p.totalCost || 0), 0);
     const totalServices = services.reduce((sum, s) => sum + (s.totalCost || 0), 0);
+    const totalExpenses = expenses.reduce((sum, item) => sum + (item.amount || 0), 0);
     
     res.json({
       success: true,
@@ -256,7 +281,11 @@ router.get('/summary', async (req, res) => {
           count: services.length,
           total: totalServices
         },
-        balance: totalSales + totalServices - totalPurchases
+        expenses: {
+          count: expenses.length,
+          total: totalExpenses
+        },
+        balance: totalSales + totalServices - totalPurchases - totalExpenses
       }
     });
   } catch (error) {

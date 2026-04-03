@@ -247,6 +247,152 @@ class APIClient {
     return this.request(`/reports/summary?period=${period}`);
   }
 
+  // ============ EXPENSES ============
+  async getExpenses(filters = {}) {
+    const params = new URLSearchParams(filters);
+    return this.request(`/expenses?${params}`);
+  }
+
+  async createExpense(expenseData) {
+    return this.request('/expenses', {
+      method: 'POST',
+      body: JSON.stringify(expenseData)
+    });
+  }
+
+  async updateExpense(id, expenseData) {
+    return this.request(`/expenses/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(expenseData)
+    });
+  }
+
+  async deleteExpense(id) {
+    return this.request(`/expenses/${id}`, {
+      method: 'DELETE'
+    });
+  }
+
+  // ============ COMPATIBILITY ============
+  async getCompatibilityMeta() {
+    return this.request('/compatibility/meta');
+  }
+
+  async getCompatibilityBrands() {
+    return this.request('/compatibility/brands');
+  }
+
+  async getCompatibilityModels(brand = '') {
+    const params = new URLSearchParams();
+    if (brand) params.set('brand', brand);
+    return this.request(`/compatibility/models?${params}`);
+  }
+
+  async getCompatibilitySubtypes() {
+    return this.request('/compatibility/subtypes');
+  }
+
+  async getCompatibilitySpecs(filters = {}) {
+    const params = new URLSearchParams(filters);
+    return this.request(`/compatibility/specs?${params}`);
+  }
+
+  async getCompatibilityGroups(filters = {}) {
+    const params = new URLSearchParams(filters);
+    return this.request(`/compatibility/groups?${params}`);
+  }
+
+  async getCompatibilityCatalog(filters = {}) {
+    const params = new URLSearchParams(filters);
+    return this.request(`/compatibility/catalog?${params}`);
+  }
+
+  async getCompatibilityDevice(filters = {}) {
+    const params = new URLSearchParams(filters);
+    return this.request(`/compatibility/device?${params}`);
+  }
+
+  async searchCompatibility(filters = {}) {
+    const params = new URLSearchParams(filters);
+    return this.request(`/compatibility/search?${params}`);
+  }
+
+  async getCompatibilityPurchaseSuggestions(query, limit = 18) {
+    const params = new URLSearchParams({ q: query, limit: String(limit) });
+    return this.request(`/compatibility/purchase-suggestions?${params}`);
+  }
+
+  async createCompatibilityCatalogItem(data) {
+    return this.request('/compatibility/admin/catalog', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async updateCompatibilityCatalogItem(id, data) {
+    return this.request(`/compatibility/admin/catalog/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async deleteCompatibilityCatalogItem(id) {
+    return this.request(`/compatibility/admin/catalog/${id}`, {
+      method: 'DELETE'
+    });
+  }
+
+  async createCompatibilityGroup(data) {
+    return this.request('/compatibility/admin/groups', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async updateCompatibilityGroup(id, data) {
+    return this.request(`/compatibility/admin/groups/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async deleteCompatibilityGroup(id) {
+    return this.request(`/compatibility/admin/groups/${id}`, {
+      method: 'DELETE'
+    });
+  }
+
+  async createCompatibilitySpec(data) {
+    return this.request('/compatibility/admin/specs', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async updateCompatibilitySpec(id, data) {
+    return this.request(`/compatibility/admin/specs/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async deleteCompatibilitySpec(id) {
+    return this.request(`/compatibility/admin/specs/${id}`, {
+      method: 'DELETE'
+    });
+  }
+
+  async importCompatibilityData(data) {
+    return this.request('/compatibility/admin/import', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async getCompatibilityAuditLog(limit = 100) {
+    return this.request(`/compatibility/admin/audit?limit=${encodeURIComponent(limit)}`);
+  }
+
   // ============ EMPLOYEES ============
   async getEmployees(filters = {}) {
     const params = new URLSearchParams(filters);

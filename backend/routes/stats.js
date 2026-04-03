@@ -4,6 +4,8 @@ const Sale = require('../models/Sale');
 const Purchase = require('../models/Purchase');
 const Product = require('../models/Product');
 const TechnicalService = require('../models/TechnicalService');
+const Commission = require('../models/Commission');
+const Expense = require('../models/Expense');
 const { protect } = require('../middleware/auth');
 
 router.use(protect);
@@ -20,7 +22,6 @@ router.get('/dashboard', async (req, res) => {
     const totalProducts = products.length;
     const totalStock = products.reduce((sum, p) => sum + p.stock, 0);
     const currentInvestment = products.reduce((sum, p) => sum + (p.stock * p.averageCost), 0);
-    const Commission = require('../models/Commission');
     const paidCommissions = await Commission.find({ userId: req.user._id, status: 'paid' });
     const totalPaidCommissions = paidCommissions.reduce((sum, c) => sum + c.commissionAmount, 0);
     const pendingCommissions = await Commission.find({ userId: req.user._id, status: { $in: ['pending', 'approved'] } });
@@ -42,12 +43,14 @@ router.get('/dashboard', async (req, res) => {
       return sum + Math.max(0, partsPrice - partsCost);
     }, 0);
     const totalTechnicalProfit = totalTechnicalRevenue + totalTechnicalPartsProfit;
+    const expenses = await Expense.find({ userId });
+    const totalExpenses = expenses.reduce((sum, item) => sum + (item.amount || 0), 0);
 
     // Ganancia total combinada (ventas + servicios técnicos completados/entregados)
     const totalCombinedProfit = totalProfit + totalTechnicalProfit;
     // Ganancia neta = ganancia total - comisiones pagadas - comisiones aprobadas
     // Las "approved" son deudas reales (el técnico ya hizo el trabajo), así que también se restan
-    const netProfit = totalCombinedProfit - totalPaidCommissions - totalPendingCommissions;
+    const netProfit = totalCombinedProfit - totalPaidCommissions - totalPendingCommissions - totalExpenses;
 
     // Compras totales
     const purchases = await Purchase.find({ userId });
@@ -64,6 +67,7 @@ router.get('/dashboard', async (req, res) => {
     });
     const monthlySalesTotal = monthSales.reduce((sum, s) => sum + s.totalSale, 0);
     const monthlyProfit = monthSales.reduce((sum, s) => sum + s.profit, 0);
+    const monthlySaleIds = monthSales.map(s => s._id);
     
     const monthPurchases = await Purchase.find({ 
       userId, 
@@ -82,6 +86,21 @@ router.get('/dashboard', async (req, res) => {
       return sum + Math.max(0, (ts.partsPrice || 0) - (ts.partsCost || 0));
     }, 0);
     const monthlyTechnicalProfit = monthlyTechnicalRevenue + monthlyTechnicalPartsProfit;
+    const monthlyTechnicalCommissions = monthTechnicalServices.reduce((sum, ts) => sum + (ts.technicianCommission || 0), 0);
+    const monthlySalesCommissions = monthlySaleIds.length
+      ? await Commission.find({
+          userId,
+          referenceId: { $in: monthlySaleIds },
+          status: { $in: ['pending', 'approved', 'paid'] }
+        })
+      : [];
+    const totalMonthlySalesCommissions = monthlySalesCommissions.reduce((sum, commission) => sum + (commission.commissionAmount || 0), 0);
+    const monthExpenses = await Expense.find({
+      userId,
+      expenseDate: { $gte: startOfMonth }
+    });
+    const monthlyExpensesTotal = monthExpenses.reduce((sum, item) => sum + (item.amount || 0), 0);
+    const monthlyNetProfit = monthlyProfit + monthlyTechnicalProfit - totalMonthlySalesCommissions - monthlyTechnicalCommissions - monthlyExpensesTotal;
     
     // Productos más vendidos
     const topProducts = await Sale.aggregate([
@@ -121,6 +140,16 @@ router.get('/dashboard', async (req, res) => {
           totalPaid: totalPaidCommissions,
           totalPending: totalPendingCommissions
         },
+        expenses: {
+          allTime: {
+            total: totalExpenses,
+            count: expenses.length
+          },
+          thisMonth: {
+            total: monthlyExpensesTotal,
+            count: monthExpenses.length
+          }
+        },
         sales: {
           allTime: {
             total: totalSales,
@@ -132,6 +161,8 @@ router.get('/dashboard', async (req, res) => {
           thisMonth: {
             total: monthlySalesTotal,
             profit: monthlyProfit + monthlyTechnicalProfit,
+            netProfit: monthlyNetProfit,
+            commissions: totalMonthlySalesCommissions + monthlyTechnicalCommissions,
             count: monthSales.length
           }
         },

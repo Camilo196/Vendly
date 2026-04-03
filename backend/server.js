@@ -36,6 +36,8 @@ const technicalServiceRoutes = require('./routes/technicalServices');
 const reportsRoutes = require('./routes/reports');
 const employeeRoutes = require('./routes/employees');
 const commissionRoutes = require('./routes/commissions');
+const expenseRoutes = require('./routes/expenses');
+const compatibilityRoutes = require('./routes/compatibility');
 
 const app = express();
 
@@ -76,6 +78,8 @@ app.use('/api/technical-services', technicalServiceRoutes);
 app.use('/api/reports', reportsRoutes);
 app.use('/api/employees', employeeRoutes);
 app.use('/api/commissions', commissionRoutes);
+app.use('/api/expenses', expenseRoutes);
+app.use('/api/compatibility', compatibilityRoutes);
 // Ruta de prueba
 app.get('/', (req, res) => {
   res.json({ 
