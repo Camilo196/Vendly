@@ -384,7 +384,10 @@
                 <div class="card">
                     <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:12px;">
                         <h3 style="margin:0;">Lista de Productos</h3>
-                        <button type="button" class="btn btn-secondary" onclick="generateMissingProductBarcodes()">Generar códigos faltantes</button>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                            <button type="button" class="btn btn-secondary" onclick="generateMissingProductBarcodes()">Generar códigos faltantes</button>
+                            <button type="button" class="btn btn-secondary" onclick="migrateLegacyProductBarcodes()">Migrar códigos antiguos</button>
+                        </div>
                     </div>
                     <!-- Barra de búsqueda en inventario -->
                     <div class="search-bar-container" style="margin-bottom: 20px;">

@@ -1830,6 +1830,20 @@ window.generateMissingProductBarcodes = async function() {
     }
 };
 
+window.migrateLegacyProductBarcodes = async function() {
+    const confirmed = confirm('Esto cambiará una sola vez los códigos internos antiguos tipo VDL- u otros códigos legacy para que usen el formato nuevo numérico. Las etiquetas viejas de esos productos dejarán de servir y tocará reimprimirlas. ¿Continuar?');
+    if (!confirmed) return;
+
+    try {
+        const response = await api.migrateLegacyProductBarcodes();
+        utils.showToast(response.message || 'Migración completada');
+        await app.loadProducts();
+        await app.loadInventory();
+    } catch (error) {
+        utils.showToast(error.message || 'Error al migrar códigos antiguos', 'error');
+    }
+};
+
 window.lookupSaleProductByCode = async function() {
     const input = document.getElementById('saleBarcodeInput');
     const rawValue = input?.value || '';

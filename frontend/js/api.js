@@ -164,6 +164,12 @@ class APIClient {
     });
   }
 
+  async migrateLegacyProductBarcodes() {
+    return this.request('/products/barcode/migrate-legacy', {
+      method: 'POST'
+    });
+  }
+
   async getPrintBridgeHealth() {
     return this.bridgeRequest('/health');
   }

@@ -5,6 +5,22 @@ const ProductUnit = require('../models/ProductUnit');
 const { protect } = require('../middleware/auth');
 const { normalizeCode, normalizeSku, prepareProductCodes } = require('../utils/productCodes');
 
+function isLegacyInternalBarcode(product) {
+  const barcode = String(product?.barcode || '').trim();
+  if (!barcode) return false;
+
+  const barcodeSource = String(product?.barcodeSource || '').toLowerCase();
+  const barcodeFormat = String(product?.barcodeFormat || '').toLowerCase();
+
+  if (/^\d{13}$/.test(barcode)) {
+    return false;
+  }
+
+  return barcodeSource === 'internal'
+    || barcodeFormat === 'code_39'
+    || barcode.startsWith('VDL-');
+}
+
 // Todas las rutas requieren autenticación
 router.use(protect);
 
@@ -440,6 +456,62 @@ router.post('/barcode/backfill', async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error al generar códigos faltantes'
+    });
+  }
+});
+
+// @route   POST /api/products/barcode/migrate-legacy
+// @desc    Migrar códigos internos legacy a formato numérico nuevo
+// @access  Private
+router.post('/barcode/migrate-legacy', async (req, res) => {
+  try {
+    const products = await Product.find({
+      userId: req.user._id,
+      isActive: true,
+      barcode: { $exists: true, $nin: [null, ''] }
+    }).sort({ createdAt: 1 });
+
+    let updatedCount = 0;
+
+    for (const product of products) {
+      if (!isLegacyInternalBarcode(product)) {
+        continue;
+      }
+
+      const codes = await prepareProductCodes(Product, {
+        userId: req.user._id,
+        existingProduct: {
+          ...product.toObject(),
+          barcode: '',
+          barcodeFormat: ''
+        },
+        name: product.name,
+        brand: product.brand,
+        productType: product.productType,
+        barcode: '',
+        barcodeFormat: ''
+      });
+
+      product.sku = product.sku || codes.sku;
+      product.barcode = codes.barcode;
+      product.barcodeFormat = codes.barcodeFormat;
+      product.barcodeSource = 'internal';
+      await product.save();
+      updatedCount += 1;
+    }
+
+    res.json({
+      success: true,
+      message: updatedCount > 0
+        ? `Se migraron ${updatedCount} código(s) legacy a formato nuevo`
+        : 'No se encontraron códigos legacy para migrar',
+      updatedCount
+    });
+  } catch (error) {
+    console.error('Error migrando códigos legacy:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al migrar códigos legacy'
     });
   }
 });
