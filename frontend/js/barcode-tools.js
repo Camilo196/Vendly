@@ -339,7 +339,9 @@ const BarcodeTools = (() => {
         const format = String(product.barcodeFormat || '').toLowerCase();
         const digits = normalizeDigits(rawValue);
 
-        if (format === 'ean_13' || (/^\d{12,13}$/.test(digits) && !format)) {
+        // Si el código ya es totalmente numérico, priorizamos el estándar numérico
+        // aunque el producto arrastre un formato viejo como code_39.
+        if (/^\d{12,13}$/.test(digits) || format === 'ean_13' || format === 'upc_a') {
             const ean13 = resolveEan13Value(rawValue);
             return {
                 svg: renderEan13Svg(ean13),
@@ -348,7 +350,7 @@ const BarcodeTools = (() => {
             };
         }
 
-        if (format === 'ean_8' || (/^\d{7,8}$/.test(digits) && !format)) {
+        if (/^\d{7,8}$/.test(digits) || format === 'ean_8' || format === 'upc_e') {
             const ean8 = resolveEan8Value(rawValue);
             return {
                 svg: renderEan8Svg(ean8),
