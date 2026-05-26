@@ -13,13 +13,15 @@ function getDefaultApiBaseURL() {
 // Configuración de la API
 const API_CONFIG = {
   baseURL: getDefaultApiBaseURL(),
-  timeout: 10000
+  timeout: 10000,
+  printBridgeURL: 'http://127.0.0.1:5399'
 };
 
 // Cliente HTTP simple
 class APIClient {
   constructor() {
     this.baseURL = API_CONFIG.baseURL;
+    this.printBridgeURL = API_CONFIG.printBridgeURL;
     this.token = localStorage.getItem('token');
   }
 
@@ -65,6 +67,26 @@ class APIClient {
       console.error('API Error:', error);
       throw error;
     }
+  }
+
+  async bridgeRequest(endpoint, options = {}) {
+    const url = `${this.printBridgeURL}${endpoint}`;
+    const config = {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(options.headers || {})
+      }
+    };
+
+    const response = await fetch(url, config);
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Error en el puente local');
+    }
+
+    return data;
   }
 
   // ============ AUTH ============
@@ -124,6 +146,33 @@ class APIClient {
     const params = new URLSearchParams();
     if (status) params.set('status', status);
     return this.request(`/products/${productId}/units?${params.toString()}`);
+  }
+
+  async lookupProductByCode(code) {
+    return this.request(`/products/lookup/code/${encodeURIComponent(code)}`);
+  }
+
+  async generateProductBarcode(productId) {
+    return this.request(`/products/${productId}/barcode/generate`, {
+      method: 'POST'
+    });
+  }
+
+  async backfillProductBarcodes() {
+    return this.request('/products/barcode/backfill', {
+      method: 'POST'
+    });
+  }
+
+  async getPrintBridgeHealth() {
+    return this.bridgeRequest('/health');
+  }
+
+  async printBarcodeLabelViaBridge(payload) {
+    return this.bridgeRequest('/print/barcode-label', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
   }
 
   // ============ PURCHASES ============

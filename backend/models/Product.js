@@ -87,6 +87,30 @@ const productSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+
+  sku: {
+    type: String,
+    trim: true,
+    uppercase: true
+  },
+
+  barcode: {
+    type: String,
+    trim: true,
+    uppercase: true
+  },
+
+  barcodeFormat: {
+    type: String,
+    enum: ['code_39', 'code_128', 'ean_13', 'ean_8', 'upc_a', 'upc_e'],
+    default: 'code_39'
+  },
+
+  barcodeSource: {
+    type: String,
+    enum: ['internal', 'supplier'],
+    default: 'internal'
+  },
   
   description: {
     type: String,
@@ -114,6 +138,8 @@ const productSchema = new mongoose.Schema({
 
 // Índice compuesto para búsquedas rápidas por usuario
 productSchema.index({ userId: 1, name: 1 });
+productSchema.index({ userId: 1, barcode: 1 }, { unique: true, sparse: true });
+productSchema.index({ userId: 1, sku: 1 }, { unique: true, sparse: true });
 
 // Método para actualizar el costo promedio
 productSchema.methods.updateAverageCost = function(newQuantity, newCost, skipPriceUpdate = false) {

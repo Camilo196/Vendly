@@ -5,6 +5,7 @@ const Product = require('../models/Product');
 const ProductUnit = require('../models/ProductUnit');
 const User = require('../models/User');
 const { protect } = require('../middleware/auth');
+const { prepareProductCodes } = require('../utils/productCodes');
 
 router.use(protect);
 
@@ -105,7 +106,10 @@ router.post('/', async (req, res) => {
       notes,
       productType,
       commissionRate,
-      serialNumbers
+      serialNumbers,
+      sku,
+      barcode,
+      barcodeFormat
     } = req.body;
 
     const normalizedSerialNumbers = normalizeSerialNumbers(serialNumbers);
@@ -260,6 +264,22 @@ router.post('/', async (req, res) => {
         console.log('  Actualizando productType a:', productType);
         product.productType = productType;
       }
+
+      const nextBrand = product.brand || '';
+      const codes = await prepareProductCodes(Product, {
+        userId: req.user._id,
+        existingProduct: product,
+        name: product.name,
+        brand: nextBrand,
+        productType: product.productType,
+        sku,
+        barcode,
+        barcodeFormat
+      });
+      product.sku = codes.sku;
+      product.barcode = codes.barcode;
+      product.barcodeFormat = codes.barcodeFormat;
+      product.barcodeSource = codes.barcodeSource;
       
       if (commissionRate !== undefined && commissionRate !== null && commissionRate !== '') {
         const rate = parseFloat(commissionRate);
@@ -290,6 +310,16 @@ router.post('/', async (req, res) => {
           ? parseFloat(commissionRate) 
           : null
       };
+
+      const codes = await prepareProductCodes(Product, {
+        userId: req.user._id,
+        name: productName.trim(),
+        productType: productType || 'otro',
+        sku,
+        barcode,
+        barcodeFormat
+      });
+      Object.assign(productData, codes);
       
       if (suggestedPrice && suggestedPrice > 0) {
         productData.suggestedPrice = parseFloat(suggestedPrice);
@@ -362,7 +392,10 @@ router.post('/', async (req, res) => {
         suggestedPrice: product.suggestedPrice,
         productType: product.productType,
         commissionRate: product.commissionRate,
-        trackedUnits: normalizedSerialNumbers.length
+        trackedUnits: normalizedSerialNumbers.length,
+        barcode: product.barcode,
+        barcodeFormat: product.barcodeFormat,
+        sku: product.sku
       }
     });
     

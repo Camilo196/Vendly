@@ -28,3 +28,7 @@ Thumbs.db
 # Build files
 dist/
 build/
+
+# Local print helper
+local-print-bridge/config.json
+local-print-bridge/runtime/

@@ -209,6 +209,47 @@
                             </div>
                         </div>
 
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>SKU (opcional)</label>
+                                <input type="text" id="purchaseSku" placeholder="Ej: SKU-A15-NEGRO">
+                            </div>
+                            <div class="form-group">
+                                <label>Código de barras (opcional)</label>
+                                <input type="text" id="purchaseBarcode" placeholder="Se genera solo si lo dejas vacío">
+                                <small style="display:block; margin-top:5px; color:#666;">Si el proveedor ya trae código, escríbelo. Si no, Vendly crea uno interno.</small>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Formato del código</label>
+                                <select id="purchaseBarcodeFormat">
+                                    <option value="">Automático</option>
+                                    <option value="code_39">Code 39</option>
+                                    <option value="code_128">Code 128</option>
+                                    <option value="ean_13">EAN-13</option>
+                                    <option value="ean_8">EAN-8</option>
+                                    <option value="upc_a">UPC-A</option>
+                                    <option value="upc_e">UPC-E</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="display:flex; align-items:flex-end;">
+                                <label style="display:flex; align-items:center; gap:8px; font-weight:600;">
+                                    <input type="checkbox" id="purchasePrintLabels" checked>
+                                    Imprimir etiquetas al registrar
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-row" id="purchaseLabelQuantityRow">
+                            <div class="form-group">
+                                <label>Cantidad de etiquetas</label>
+                                <input type="number" id="purchaseLabelQuantity" min="1" value="1" placeholder="1">
+                                <small style="display:block; margin-top:5px; color:#666;">Puedes comprar varias unidades y aun así imprimir solo 1 etiqueta para probar.</small>
+                            </div>
+                        </div>
+
                         <!-- Total -->
                         <div class="total-display" style="background: #f0f8ff; padding: 15px; border-radius: 8px; text-align: center; font-size: 1.3em; font-weight: bold; color: #2563eb; margin: 20px 0;">
                             Total: <span id="purchaseTotal">$0</span>
@@ -241,6 +282,23 @@
                             autocomplete="off"
                         >
                         <div id="searchResults" class="search-results"></div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group" style="flex: 2;">
+                            <label>Venta por código</label>
+                            <input type="text" id="saleBarcodeInput" placeholder="Escanea o escribe el código y presiona Enter">
+                            <small style="display:block; margin-top:5px; color:#666;">Sirve con lector USB o con búsqueda manual.</small>
+                        </div>
+                        <div class="form-group sale-barcode-actions">
+                            <button type="button" class="btn btn-secondary" onclick="lookupSaleProductByCode()">Buscar código</button>
+                            <button type="button" class="btn" onclick="openSaleBarcodeScanner()">Escanear cámara</button>
+                        </div>
+                    </div>
+
+                    <div id="saleScanFeedback" class="sale-scan-feedback" style="display:none;">
+                        <div id="saleScanFeedbackTitle" class="sale-scan-feedback-title"></div>
+                        <div id="saleScanFeedbackMessage" class="sale-scan-feedback-message"></div>
                     </div>
 
                     <form id="formSale" class="form-horizontal">
@@ -306,6 +364,10 @@
                         <div class="total-display">
                             Total: <span id="saleTotal">$0</span>
                         </div>
+                        <label style="display:flex; align-items:center; gap:8px; margin: 10px 0 14px; font-size: 14px;">
+                            <input type="checkbox" id="salePrintReceipt" checked>
+                            Imprimir recibo al registrar
+                        </label>
                         <button type="submit" class="btn btn-primary">Registrar Venta</button>
                     </form>
                 </div>
@@ -320,7 +382,10 @@
             <div id="viewInventory" class="view">
                 <h2>Inventario</h2>
                 <div class="card">
-                    <h3>Lista de Productos</h3>
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:12px;">
+                        <h3 style="margin:0;">Lista de Productos</h3>
+                        <button type="button" class="btn btn-secondary" onclick="generateMissingProductBarcodes()">Generar códigos faltantes</button>
+                    </div>
                     <!-- Barra de búsqueda en inventario -->
                     <div class="search-bar-container" style="margin-bottom: 20px;">
                         <input 
@@ -1308,7 +1373,27 @@
                 <label>Comisión (%)</label>
                 <input type="number" id="editProductCommission" min="0" max="100" step="0.1">
             </div>
+            <div class="form-group">
+                <label>SKU</label>
+                <input type="text" id="editProductSku" placeholder="Código interno corto">
+            </div>
+            <div class="form-group">
+                <label>Código de barras</label>
+                <input type="text" id="editProductBarcode" placeholder="Código de barras o interno">
+            </div>
+            <div class="form-group">
+                <label>Formato del código</label>
+                <select id="editProductBarcodeFormat">
+                    <option value="code_39">Code 39</option>
+                    <option value="code_128">Code 128</option>
+                    <option value="ean_13">EAN-13</option>
+                    <option value="ean_8">EAN-8</option>
+                    <option value="upc_a">UPC-A</option>
+                    <option value="upc_e">UPC-E</option>
+                </select>
+            </div>
             <div class="modal-actions">
+                <button type="button" class="btn" onclick="generateProductBarcodeFromModal()">Generar código</button>
                 <button type="submit" class="btn btn-primary">Guardar</button>
                 <button type="button" class="btn btn-secondary" onclick="closeEditProductModal()">Cancelar</button>
             </div>
@@ -1522,6 +1607,7 @@
     </div>
 
     <script src="js/api.js"></script>
+<script src="js/barcode-tools.js"></script>
 <script src="js/app.js"></script>
 <script src="js/new-features.js"></script>
 <script src="js/compatibility-admin.js"></script>

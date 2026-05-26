@@ -1474,6 +1474,113 @@ textarea:focus {
     font-size: 14px;
 }
 
+.inventory-code-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.inventory-code-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(59, 130, 246, 0.1);
+    color: #1d4ed8;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.sale-barcode-actions {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+.sale-barcode-actions .btn {
+    white-space: nowrap;
+}
+
+.sale-scan-feedback {
+    margin: 10px 0 18px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+}
+
+.sale-scan-feedback.is-success {
+    background: rgba(16, 185, 129, 0.12);
+    border-color: rgba(16, 185, 129, 0.25);
+    color: #065f46;
+}
+
+.sale-scan-feedback.is-error {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.22);
+    color: #991b1b;
+}
+
+.sale-scan-feedback-title {
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.sale-scan-feedback-message {
+    font-size: 0.92rem;
+    line-height: 1.45;
+}
+
+.barcode-scanner-modal {
+    max-width: 540px;
+}
+
+.barcode-scanner-box {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: #0f172a;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+.barcode-scanner-box video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.barcode-scan-line {
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    top: 50%;
+    height: 2px;
+    background: #22c55e;
+    box-shadow: 0 0 16px rgba(34, 197, 94, 0.8);
+    animation: barcodeScanPulse 1.4s ease-in-out infinite;
+}
+
+.barcode-scanner-help {
+    margin: 0 0 16px;
+    color: #64748b;
+    text-align: center;
+}
+
+@keyframes barcodeScanPulse {
+    0%, 100% {
+        transform: translateY(-18px);
+        opacity: 0.7;
+    }
+    50% {
+        transform: translateY(18px);
+        opacity: 1;
+    }
+}
+
 /* AGREGAR AL FINAL DE TU styles.css EXISTENTE */
 
 .badge {

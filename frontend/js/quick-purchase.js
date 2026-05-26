@@ -234,6 +234,8 @@ function addToQPBatch(product) {
         qty: 1,
         cost: product.cost || '',
         price: product.price || '',
+        barcode: product.barcode || '',
+        sku: product.sku || '',
     });
     renderQPBatch();
 }
@@ -332,6 +334,8 @@ window.submitQuickPurchase = async function() {
                     unitCost:       parseFloat(item.cost) || 0,
                     suggestedPrice: parseFloat(item.price) || undefined,
                     productType:    'accesorio',
+                    barcode:        item.barcode || undefined,
+                    sku:            item.sku || undefined,
                     supplier:       '',
                     invoice:        '',
                     notes:          `Lote rápido — ${item.brand}`,
@@ -419,12 +423,34 @@ async function handleBarcode(code) {
     );
     if (mine) {
         addToQPBatch({ source:'mine', name: mine.name, brand:'', subtype: mine.productType,
-                       emoji: subtypeEmoji(mine.productType), cost: mine.averageCost, price: mine.suggestedPrice });
+                       emoji: subtypeEmoji(mine.productType), cost: mine.averageCost, price: mine.suggestedPrice,
+                       barcode: mine.barcode, sku: mine.sku });
         utils.showToast(`✅ Encontrado: ${mine.name}`);
         return;
     }
 
-    // 2. Buscar en API pública de códigos de barras
+    // 2. Buscar en backend
+    try {
+        const response = await api.lookupProductByCode(code);
+        if (response.success && response.product) {
+            const product = response.product;
+            addToQPBatch({
+                source: 'mine',
+                name: product.name,
+                brand: product.brand || '',
+                subtype: product.productType,
+                emoji: subtypeEmoji(product.productType),
+                cost: product.averageCost,
+                price: product.suggestedPrice,
+                barcode: product.barcode,
+                sku: product.sku
+            });
+            utils.showToast(`✅ Encontrado: ${product.name}`);
+            return;
+        }
+    } catch (error) {}
+
+    // 3. Buscar en API pública de códigos de barras
     try {
         const res = await fetch(`https://api.upcitemdb.com/prod/trial/lookup?upc=${code}`);
         if (res.ok) {
@@ -439,6 +465,7 @@ async function handleBarcode(code) {
                     emoji:   '📦',
                     cost:    item.lowest_recorded_price || '',
                     price:   item.highest_recorded_price || '',
+                    barcode: code
                 });
                 utils.showToast(`✅ Encontrado: ${item.title}`);
                 return;
@@ -446,11 +473,11 @@ async function handleBarcode(code) {
         }
     } catch(e) {}
 
-    // 3. No encontrado — agregar manualmente
+    // 4. No encontrado — agregar manualmente
     const name = prompt(`Código ${code} no encontrado.\n¿Cómo se llama este producto?`);
     if (name?.trim()) {
         addToQPBatch({ source:'manual', name: name.trim(), brand:'', subtype:'accesorio',
-                       emoji:'📦', cost:'', price:'' });
+                       emoji:'📦', cost:'', price:'', barcode: code });
     }
 }
 

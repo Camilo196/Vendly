@@ -17,6 +17,13 @@ const elements = {
     toastContainer: document.getElementById('toast')
 };
 
+const salesScannerState = {
+    buffer: '',
+    startedAt: 0,
+    lastKeyAt: 0,
+    processing: false
+};
+
 // Utilidades
 const utils = {
     formatMoney(amount) {
@@ -53,6 +60,431 @@ const utils = {
         elements.loadingScreen.style.display = show ? 'flex' : 'none';
     }
 };
+
+function escapeHtml(text) {
+    return String(text || '').replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    }[char]));
+}
+
+function focusSaleBarcodeInput(delayMs = 0) {
+    const focusAction = () => {
+        if (AppState.currentView !== 'sales') return;
+        const input = document.getElementById('saleBarcodeInput');
+        if (!input) return;
+
+        const active = document.activeElement;
+        const isTypingElsewhere = active
+            && active !== document.body
+            && active !== input
+            && (
+                active.tagName === 'INPUT'
+                || active.tagName === 'TEXTAREA'
+                || active.tagName === 'SELECT'
+                || active.isContentEditable
+            );
+
+        if (!isTypingElsewhere) {
+            input.focus();
+        }
+    };
+
+    if (delayMs > 0) {
+        setTimeout(focusAction, delayMs);
+    } else {
+        focusAction();
+    }
+}
+
+function resetGlobalSalesScannerBuffer() {
+    salesScannerState.buffer = '';
+    salesScannerState.startedAt = 0;
+    salesScannerState.lastKeyAt = 0;
+}
+
+function shouldCaptureGlobalScanner(event) {
+    if (AppState.currentView !== 'sales') return false;
+    if (event.ctrlKey || event.altKey || event.metaKey) return false;
+    if (salesScannerState.processing) return false;
+
+    const active = document.activeElement;
+    if (!active || active === document.body) return true;
+    if (active.id === 'saleBarcodeInput') return false;
+
+    const isEditable = (
+        active.tagName === 'INPUT'
+        || active.tagName === 'TEXTAREA'
+        || active.tagName === 'SELECT'
+        || active.isContentEditable
+    );
+
+    return !isEditable;
+}
+
+async function triggerGlobalSalesScannerLookup() {
+    const input = document.getElementById('saleBarcodeInput');
+    const code = salesScannerState.buffer.trim();
+    resetGlobalSalesScannerBuffer();
+
+    if (!input || code.length < 4) return;
+
+    salesScannerState.processing = true;
+    try {
+        input.value = code;
+        await lookupSaleProductByCode();
+    } finally {
+        salesScannerState.processing = false;
+        focusSaleBarcodeInput(40);
+    }
+}
+
+function handleGlobalSalesScanner(event) {
+    if (!shouldCaptureGlobalScanner(event)) {
+        resetGlobalSalesScannerBuffer();
+        return;
+    }
+
+    const key = event.key;
+    const now = Date.now();
+    const gap = now - salesScannerState.lastKeyAt;
+
+    if (gap > 120) {
+        resetGlobalSalesScannerBuffer();
+    }
+
+    if (key === 'Enter') {
+        if (salesScannerState.buffer.length >= 4) {
+            event.preventDefault();
+            triggerGlobalSalesScannerLookup().catch((error) => {
+                console.error('Error processing global sales scan:', error);
+            });
+        } else {
+            resetGlobalSalesScannerBuffer();
+        }
+        return;
+    }
+
+    if (key.length !== 1) return;
+    if (!/[A-Za-z0-9\-.\ $/+%]/.test(key)) return;
+
+    if (!salesScannerState.startedAt) {
+        salesScannerState.startedAt = now;
+    }
+
+    salesScannerState.lastKeyAt = now;
+    salesScannerState.buffer += key;
+    event.preventDefault();
+}
+
+function handleQuickSalePriceEdit(event) {
+    if (AppState.currentView !== 'sales') return;
+    if (event.ctrlKey || event.altKey || event.metaKey) return;
+
+    const active = document.activeElement;
+    const submitButton = document.querySelector('#formSale button[type="submit"]');
+    if (!active || active !== submitButton) return;
+
+    if (!/[0-9.]/.test(event.key)) return;
+
+    const priceField = document.getElementById('saleUnitPrice');
+    if (!priceField) return;
+
+    event.preventDefault();
+    priceField.focus();
+    priceField.value = event.key === '.' ? '0.' : event.key;
+
+    const qty = parseFloat(document.getElementById('saleQuantity')?.value) || 0;
+    const price = parseFloat(priceField.value) || 0;
+    const totalField = document.getElementById('saleTotal');
+    if (totalField) {
+        totalField.textContent = utils.formatMoney(qty * price);
+    }
+}
+
+function getPaymentMethodLabel(method) {
+    const labels = {
+        cash: 'Efectivo',
+        card: 'Tarjeta',
+        transfer: 'Transferencia',
+        other: 'Otro'
+    };
+
+    return labels[method] || method || 'No definido';
+}
+
+function buildSaleReceiptHtml(sale) {
+    const total = Number(sale.totalSale ?? ((sale.quantity || 0) * (sale.unitPrice || 0))) || 0;
+    const businessName = escapeHtml(AppState.user?.businessName || 'Vendly');
+    const productName = escapeHtml(sale.productName || sale.productId?.name || 'Producto');
+    const customer = sale.customer ? escapeHtml(sale.customer) : 'Mostrador';
+    const employeeName = sale.employeeId?.name || sale.employeeName || '';
+    const serialNumbers = Array.isArray(sale.serialNumbers) ? sale.serialNumbers.filter(Boolean) : [];
+    const paymentLabel = getPaymentMethodLabel(sale.paymentMethod);
+    const saleCode = escapeHtml(String(sale._id || '').slice(-8).toUpperCase());
+
+    return `
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <title>Recibo de Venta</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 0; padding: 8px; color: #111; background: #fff; }
+                .ticket { width: 80mm; margin: 0 auto; }
+                .center { text-align: center; }
+                .title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+                .muted { color: #555; font-size: 12px; }
+                .divider { border-top: 1px dashed #222; margin: 10px 0; }
+                .row { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; margin: 4px 0; }
+                .product { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+                .total { font-size: 18px; font-weight: 700; }
+                .serials { font-size: 12px; margin-top: 6px; word-break: break-word; }
+                @media print {
+                    @page { size: 80mm auto; margin: 0; }
+                    body { padding: 4mm; }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="ticket">
+                <div class="center">
+                    <div class="title">${businessName}</div>
+                    <div class="muted">Recibo de venta</div>
+                    <div class="muted">${escapeHtml(utils.formatDate(sale.saleDate || new Date()))}</div>
+                    <div class="muted">Ref: ${saleCode || 'N/A'}</div>
+                </div>
+                <div class="divider"></div>
+                <div class="product">${productName}</div>
+                <div class="row"><span>Cantidad</span><strong>${escapeHtml(String(sale.quantity || 0))}</strong></div>
+                <div class="row"><span>Precio unitario</span><strong>${escapeHtml(utils.formatMoney(sale.unitPrice || 0))}</strong></div>
+                <div class="row"><span>Pago</span><strong>${escapeHtml(paymentLabel)}</strong></div>
+                <div class="row"><span>Cliente</span><strong>${customer}</strong></div>
+                ${employeeName ? `<div class="row"><span>Vendedor</span><strong>${escapeHtml(employeeName)}</strong></div>` : ''}
+                ${serialNumbers.length ? `<div class="serials"><strong>IMEI / Serial:</strong><br>${escapeHtml(serialNumbers.join(', '))}</div>` : ''}
+                <div class="divider"></div>
+                <div class="row total"><span>Total</span><span>${escapeHtml(utils.formatMoney(total))}</span></div>
+                <div class="divider"></div>
+                <div class="center muted">Gracias por tu compra</div>
+            </div>
+            <script>
+                window.onload = function () {
+                    setTimeout(function () { window.print(); }, 180);
+                };
+            <\/script>
+        </body>
+        </html>
+    `;
+}
+
+function printSaleReceipt(sale) {
+    if (!sale) {
+        throw new Error('No se encontro la venta para imprimir');
+    }
+
+    const printWindow = window.open('', '_blank', 'width=420,height=720');
+    if (!printWindow) {
+        throw new Error('El navegador bloqueo la ventana de impresion');
+    }
+
+    printWindow.document.open();
+    printWindow.document.write(buildSaleReceiptHtml(sale));
+    printWindow.document.close();
+}
+
+function normalizeCodeText(value) {
+    if (window.BarcodeTools?.normalizeCode) {
+        return window.BarcodeTools.normalizeCode(value);
+    }
+
+    return String(value || '')
+        .trim()
+        .toUpperCase()
+        .replace(/\s+/g, '')
+        .replace(/[^A-Z0-9\-\.\ $\/\+%]/g, '');
+}
+
+function normalizeSkuText(value) {
+    return String(value || '')
+        .trim()
+        .toUpperCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^A-Z0-9\-_./]/g, '');
+}
+
+function suggestBarcodeFormat(value) {
+    const digits = String(value || '').replace(/\D/g, '');
+    if (/^\d{13}$/.test(digits)) return 'ean_13';
+    if (/^\d{12}$/.test(digits)) return 'ean_13';
+    if (/^\d{8}$/.test(digits)) return 'ean_8';
+    return '';
+}
+
+function getProductCodeSummary(product) {
+    if (!product) return '';
+
+    const chips = [];
+    if (product.sku) {
+        chips.push(`<span class="inventory-code-chip">SKU: ${escapeHtml(product.sku)}</span>`);
+    }
+    if (product.barcode) {
+        chips.push(`<span class="inventory-code-chip">Código: ${escapeHtml(product.barcode)}</span>`);
+    }
+
+    return chips.length ? `<div class="inventory-code-meta">${chips.join('')}</div>` : '';
+}
+
+function playSaleScanTone(type = 'success') {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+
+    try {
+        const context = new AudioContextClass();
+        const oscillator = context.createOscillator();
+        const gain = context.createGain();
+        const now = context.currentTime;
+        const frequency = type === 'success' ? 880 : 240;
+
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(frequency, now);
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(0.08, now + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+
+        oscillator.connect(gain);
+        gain.connect(context.destination);
+        oscillator.start(now);
+        oscillator.stop(now + 0.18);
+        oscillator.onended = () => context.close().catch(() => {});
+    } catch (error) {
+        console.error('No se pudo reproducir el tono del escáner:', error);
+    }
+}
+
+function clearSaleScanFeedback() {
+    const box = document.getElementById('saleScanFeedback');
+    if (!box) return;
+
+    box.style.display = 'none';
+    box.classList.remove('is-success', 'is-error');
+    const title = document.getElementById('saleScanFeedbackTitle');
+    const message = document.getElementById('saleScanFeedbackMessage');
+    if (title) title.textContent = '';
+    if (message) message.textContent = '';
+}
+
+function showSaleScanFeedback(type, titleText, messageText) {
+    const box = document.getElementById('saleScanFeedback');
+    if (!box) return;
+
+    box.style.display = 'block';
+    box.classList.remove('is-success', 'is-error');
+    box.classList.add(type === 'error' ? 'is-error' : 'is-success');
+
+    const title = document.getElementById('saleScanFeedbackTitle');
+    const message = document.getElementById('saleScanFeedbackMessage');
+    if (title) title.textContent = titleText || '';
+    if (message) message.textContent = messageText || '';
+}
+
+async function printProductWithBridge(product, quantity) {
+    const payload = {
+        product: {
+            name: product.name,
+            barcode: product.barcode,
+            barcodeFormat: product.barcodeFormat || '',
+            sku: product.sku || '',
+            price: product.suggestedPrice || ''
+        },
+        quantity
+    };
+
+    await api.printBarcodeLabelViaBridge(payload);
+}
+
+function prepareScannedSale(product) {
+    const quantityField = document.getElementById('saleQuantity');
+    const priceField = document.getElementById('saleUnitPrice');
+    const totalField = document.getElementById('saleTotal');
+    const submitButton = document.querySelector('#formSale button[type="submit"]');
+
+    if (quantityField) {
+        quantityField.value = 1;
+    }
+
+    if (priceField && (!priceField.value || Number(priceField.value) <= 0) && product?.suggestedPrice > 0) {
+        priceField.value = product.suggestedPrice;
+    }
+
+    const quantity = parseFloat(quantityField?.value) || 0;
+    const price = parseFloat(priceField?.value) || 0;
+    if (totalField) {
+        totalField.textContent = utils.formatMoney(quantity * price);
+    }
+
+    showSaleScanFeedback(
+        'success',
+        `Listo para vender: ${product?.name || 'Producto'}`,
+        `Cantidad 1 cargada. Revisa precio o presiona Registrar Venta para confirmar.`
+    );
+    playSaleScanTone('success');
+
+    if (submitButton) {
+        submitButton.focus();
+    }
+}
+
+async function applySaleProductSelection(product, options = {}) {
+    if (!product?._id) return;
+
+    const {
+        focusQuantity = false,
+        forceSuggestedPrice = false
+    } = options;
+
+    const productIdField = document.getElementById('saleProductId');
+    const productNameField = document.getElementById('selectedProductName');
+    const stockField = document.getElementById('availableStock');
+    const suggestedPriceField = document.getElementById('suggestedPrice');
+    const salePriceField = document.getElementById('saleUnitPrice');
+    const quantityField = document.getElementById('saleQuantity');
+    const totalField = document.getElementById('saleTotal');
+
+    if (productIdField) productIdField.value = product._id;
+    if (productNameField) productNameField.value = product.name || '';
+    if (stockField) stockField.value = product.stock ?? 0;
+    if (suggestedPriceField) suggestedPriceField.value = utils.formatMoney(product.suggestedPrice || 0);
+
+    if (salePriceField && product.suggestedPrice > 0) {
+        const currentPrice = parseFloat(salePriceField.value) || 0;
+        if (forceSuggestedPrice || currentPrice <= 0) {
+            salePriceField.value = product.suggestedPrice;
+        }
+    }
+
+    const quantity = parseFloat(quantityField?.value) || 0;
+    const price = parseFloat(salePriceField?.value) || 0;
+    if (totalField) {
+        totalField.textContent = utils.formatMoney(quantity * price);
+    }
+
+    if (typeof window.updateSaleAccessorySuggestions === 'function') {
+        window.updateSaleAccessorySuggestions(product);
+    }
+
+    if (typeof window.loadSaleSerializedUnits === 'function') {
+        await window.loadSaleSerializedUnits(product);
+    }
+
+    if (focusQuantity && quantityField) {
+        quantityField.focus();
+    }
+}
+
+window.applySaleProductSelection = applySaleProductSelection;
 
 // Autenticación
 const auth = {
@@ -260,6 +692,10 @@ const response = await api.getProducts();
     if (filterSelect) {
         filterSelect.innerHTML = '<option value="">Todos los productos</option>';
     }
+
+    if (!saleProductSelect || saleProductSelect.tagName !== 'SELECT') {
+        return;
+    }
         
         if (saleProductSelect) {
     saleProductSelect.innerHTML = '<option value="">Seleccionar producto...</option>';
@@ -332,6 +768,7 @@ const response = await api.getProducts();
         try {
             const response = await api.getSales();
             if (response.success) {
+                AppState.sales = response.sales || [];
                 this.renderSales(response.sales);
             }
         } catch (error) {
@@ -357,6 +794,7 @@ const response = await api.getProducts();
                         <th>Precio</th>
                         <th>Total</th>
                         <th>Ganancia</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -368,6 +806,7 @@ const response = await api.getProducts();
                             <td>${utils.formatMoney(s.unitPrice)}</td>
                             <td style="font-weight: 700; color: var(--success);">${utils.formatMoney(s.totalSale)}</td>
                             <td><span class="badge ${s.profit >= 0 ? 'badge-success' : 'badge-danger'}">${utils.formatMoney(s.profit)}</span></td>
+                            <td><button class="btn btn-sm" onclick="printSaleReceiptById('${s._id}')" title="Imprimir recibo">🧾</button></td>
                         </tr>
                     `).join('')}
                 </tbody>
@@ -423,6 +862,7 @@ const response = await api.getProducts();
                                         p.productType === 'accesorio' ? '🔌 Accesorio' : 
                                         '📦 Otro'}
                                     </small>
+                                    ${getProductCodeSummary(p)}
                                 </td>
                                 <td>${p.stock}</td>
                                 <td>${utils.formatMoney(p.averageCost)}</td>
@@ -430,6 +870,7 @@ const response = await api.getProducts();
                                 <td><span class="badge badge-${status}">${statusText}</span></td>
                                 <td class="action-buttons">
                                     <button class="btn btn-sm" onclick="viewProductHistory('${p._id}')" title="Ver Historial">👁️</button>
+                                    <button class="btn btn-sm" onclick="printProductBarcode('${p._id}')" title="Imprimir etiqueta">🏷️</button>
                                     <button class="btn btn-sm" onclick="editProduct('${p._id}')">✏️</button>
                                     <button class="btn btn-sm" onclick="adjustProductStock('${p._id}', '${p.name}', ${p.stock})" title="Ajustar Stock">🔧</button>
                                     <button class="btn btn-sm btn-danger" onclick="deactivateProduct('${p._id}', '${p.name}')" title="Desactivar">❌</button>
@@ -526,6 +967,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.addEventListener('click', async () => {
             const view = btn.dataset.view;
+            AppState.currentView = view;
             
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
@@ -598,12 +1040,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     adminCargarUsuarios();
                     break;
             }
+
+            if (view === 'sales') {
+                focusSaleBarcodeInput(120);
+            }
         });
     });
 
     // Purchase form
     document.getElementById('formPurchase').addEventListener('submit', async (e) => {
         e.preventDefault();
+        const shouldPrintLabels = document.getElementById('purchasePrintLabels')?.checked;
+        const labelQuantity = parseInt(document.getElementById('purchaseLabelQuantity')?.value, 10) || 1;
+        let printWindow = null;
+
+        if (shouldPrintLabels) {
+            printWindow = window.open('', '_blank', 'width=960,height=720');
+        }
         
         const purchaseData = {
             productName: document.getElementById('purchaseProductName').value.trim(),
@@ -617,6 +1070,9 @@ document.addEventListener('DOMContentLoaded', () => {
             commissionRate: document.getElementById('purchaseCommissionRate').value
                 ? parseFloat(document.getElementById('purchaseCommissionRate').value)
                 : null,  // ⭐ NUEVO
+            sku: document.getElementById('purchaseSku').value.trim(),
+            barcode: document.getElementById('purchaseBarcode').value.trim(),
+            barcodeFormat: document.getElementById('purchaseBarcodeFormat').value || undefined,
             serialNumbers: (document.getElementById('purchaseSerialNumbers')?.value || '')
                 .split(/\r?\n|,/)
                 .map(value => value.trim())
@@ -665,6 +1121,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 
                 console.log(message);
+
+                if (shouldPrintLabels && productInfo.barcode) {
+                    const printableProduct = {
+                        name: productInfo.name,
+                        sku: productInfo.sku,
+                        barcode: productInfo.barcode,
+                        barcodeFormat: productInfo.barcodeFormat || '',
+                        suggestedPrice: productInfo.suggestedPrice
+                    };
+
+                    try {
+                        await printProductWithBridge(printableProduct, labelQuantity);
+                        utils.showToast('Etiqueta enviada a la impresora local');
+                        if (printWindow && !printWindow.closed) {
+                            printWindow.close();
+                        }
+                    } catch (bridgeError) {
+                        console.warn('No se pudo usar el helper local, se usara el navegador:', bridgeError);
+
+                        if (window.BarcodeTools?.printLabels) {
+                            BarcodeTools.printLabels(printableProduct, labelQuantity, printWindow);
+                            utils.showToast('Helper local no disponible. Se abrio la impresion del navegador.');
+                        } else if (printWindow && !printWindow.closed) {
+                            printWindow.close();
+                        }
+                    }
+                } else if (printWindow && !printWindow.closed) {
+                    printWindow.close();
+                }
                 
                 // Limpiar formulario
                 e.target.reset();
@@ -679,6 +1164,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 await app.loadDashboard();
             }
         } catch (error) {
+            if (printWindow && !printWindow.closed) {
+                printWindow.close();
+            }
             utils.showToast(error.message || 'Error al registrar compra', 'error');
         }
     });
@@ -704,20 +1192,42 @@ document.addEventListener('DOMContentLoaded', () => {
             customer: document.getElementById('saleCustomer').value,
             paymentMethod: document.getElementById('salePaymentMethod').value,
             unitIds: typeof getSelectedSaleUnitIds === 'function' ? getSelectedSaleUnitIds() : []
-
         };
+        const shouldPrintReceipt = document.getElementById('salePrintReceipt')?.checked;
 
         try {
             const response = await api.createSale(saleData);
             if (response.success) {
                 utils.showToast('¡Venta registrada exitosamente!');
                 e.target.reset();
+                document.getElementById('selectedProductName').value = '';
+                document.getElementById('availableStock').value = '';
+                document.getElementById('suggestedPrice').value = '';
                 document.getElementById('saleTotal').textContent = '$0';
+                clearSaleScanFeedback();
                 if (typeof clearSaleSerializedUnits === 'function') {
                     clearSaleSerializedUnits();
                 }
+                const accessoryBox = document.getElementById('saleAccessorySuggestions');
+                if (accessoryBox) accessoryBox.style.display = 'none';
+                if (shouldPrintReceipt) {
+                    try {
+                        const receiptSale = {
+                            ...response.sale,
+                            employeeName: document.getElementById('saleEmployee')?.selectedOptions?.[0]?.textContent || '',
+                            paymentMethod: saleData.paymentMethod,
+                            customer: saleData.customer,
+                            totalSale: response.sale?.totalSale ?? (saleData.quantity * saleData.unitPrice)
+                        };
+                        printSaleReceipt(receiptSale);
+                    } catch (printError) {
+                        console.error('No se pudo imprimir el recibo:', printError);
+                        utils.showToast('Venta registrada, pero no se pudo abrir el recibo', 'warning');
+                    }
+                }
                 await app.loadSales();
                 await app.loadProducts();
+                focusSaleBarcodeInput(120);
             }
         } catch (error) {
             utils.showToast(error.message || 'Error al registrar venta', 'error');
@@ -742,6 +1252,42 @@ document.addEventListener('DOMContentLoaded', () => {
         purchaseTypeSelect.addEventListener('change', syncPurchaseSerialVisibility);
         syncPurchaseSerialVisibility();
     }
+
+    document.getElementById('saleBarcodeInput')?.addEventListener('keydown', async (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            await lookupSaleProductByCode();
+        }
+    });
+
+    document.getElementById('saleBarcodeInput')?.addEventListener('input', () => {
+        const currentValue = document.getElementById('saleBarcodeInput').value.trim();
+        if (!currentValue) {
+            clearSaleScanFeedback();
+        }
+    });
+
+    const purchasePrintLabelsCheckbox = document.getElementById('purchasePrintLabels');
+    const purchaseLabelQuantityRow = document.getElementById('purchaseLabelQuantityRow');
+    if (purchasePrintLabelsCheckbox && purchaseLabelQuantityRow) {
+        const syncPurchaseLabelQuantityRow = () => {
+            purchaseLabelQuantityRow.style.display = purchasePrintLabelsCheckbox.checked ? 'flex' : 'none';
+        };
+
+        purchasePrintLabelsCheckbox.addEventListener('change', syncPurchaseLabelQuantityRow);
+        syncPurchaseLabelQuantityRow();
+    }
+
+    document.addEventListener('keydown', handleGlobalSalesScanner);
+    document.addEventListener('keydown', handleQuickSalePriceEdit);
+
+    document.getElementById('purchaseBarcode')?.addEventListener('input', (e) => {
+        const suggested = suggestBarcodeFormat(e.target.value);
+        const formatField = document.getElementById('purchaseBarcodeFormat');
+        if (formatField && suggested) {
+            formatField.value = suggested;
+        }
+    });
 
     // Check if already logged in
     if (api.token) {
@@ -1202,11 +1748,168 @@ window.editProduct = function(productId) {
     document.getElementById('editProductType').value = product.productType || 'otro';
     document.getElementById('editProductSuggestedPrice').value = product.suggestedPrice || '';
     document.getElementById('editProductCommission').value = product.commissionRate ?? '';
+    document.getElementById('editProductSku').value = product.sku || '';
+    document.getElementById('editProductBarcode').value = product.barcode || '';
+    document.getElementById('editProductBarcodeFormat').value = product.barcodeFormat || 'code_39';
     document.getElementById('editProductModal').classList.add('show');
 };
 
 window.closeEditProductModal = function() {
     document.getElementById('editProductModal').classList.remove('show');
+};
+
+window.generateProductBarcodeFromModal = async function() {
+    const id = document.getElementById('editProductId').value;
+    if (!id) return;
+
+    try {
+        const response = await api.generateProductBarcode(id);
+        if (response.success) {
+            document.getElementById('editProductSku').value = response.product.sku || '';
+            document.getElementById('editProductBarcode').value = response.product.barcode || '';
+            document.getElementById('editProductBarcodeFormat').value = response.product.barcodeFormat || 'code_39';
+
+            const idx = AppState.products.findIndex(p => p._id === response.product._id);
+            if (idx >= 0) AppState.products[idx] = response.product;
+
+            utils.showToast('Código generado correctamente');
+        }
+    } catch (error) {
+        utils.showToast(error.message || 'Error al generar código', 'error');
+    }
+};
+
+window.printProductBarcode = async function(productId) {
+    let product = AppState.products?.find(p => p._id === productId);
+
+    try {
+        if (!product) {
+            const response = await api.getProducts();
+            product = response.products?.find(p => p._id === productId);
+        }
+
+        if (!product) {
+            throw new Error('Producto no encontrado');
+        }
+
+        if (!product.barcode) {
+            const response = await api.generateProductBarcode(productId);
+            product = response.product;
+            const idx = AppState.products.findIndex(p => p._id === product._id);
+            if (idx >= 0) AppState.products[idx] = product;
+        }
+
+        const quantityText = prompt('¿Cuántas etiquetas quieres imprimir?', '1');
+        if (quantityText === null) return;
+        const quantity = Math.max(1, parseInt(quantityText, 10) || 1);
+
+        try {
+            await printProductWithBridge(product, quantity);
+            utils.showToast('Etiqueta enviada a la impresora local');
+        } catch (bridgeError) {
+            console.warn('No se pudo usar el helper local, se usara el navegador:', bridgeError);
+            BarcodeTools.printLabels(product, quantity);
+            utils.showToast('Helper local no disponible. Se abrio la impresion del navegador.');
+        }
+    } catch (error) {
+        utils.showToast(error.message || 'Error al imprimir etiqueta', 'error');
+    }
+};
+
+window.generateMissingProductBarcodes = async function() {
+    const confirmed = confirm('Se generarán códigos solo para los productos que todavía no tienen uno. Los productos que ya tienen código conservarán el mismo. ¿Continuar?');
+    if (!confirmed) return;
+
+    try {
+        const response = await api.backfillProductBarcodes();
+        utils.showToast(response.message || 'Proceso completado');
+        await app.loadProducts();
+        await app.loadInventory();
+    } catch (error) {
+        utils.showToast(error.message || 'Error al generar códigos faltantes', 'error');
+    }
+};
+
+window.lookupSaleProductByCode = async function() {
+    const input = document.getElementById('saleBarcodeInput');
+    const rawValue = input?.value || '';
+    const code = normalizeCodeText(rawValue);
+    const skuCode = normalizeSkuText(rawValue);
+
+    if (!code && !skuCode) {
+        utils.showToast('Escribe o escanea un código primero', 'warning');
+        return;
+    }
+
+    try {
+        let product = AppState.products?.find(p => p.barcode === code || p.sku === skuCode);
+
+        if (!product) {
+            const response = await api.lookupProductByCode(rawValue);
+            product = response.product;
+
+            const existingIndex = AppState.products.findIndex(p => p._id === product._id);
+            if (existingIndex >= 0) {
+                AppState.products[existingIndex] = product;
+            } else {
+                AppState.products.push(product);
+            }
+        }
+
+        if (!product || product.stock <= 0) {
+            throw new Error('Ese producto no tiene stock disponible para vender');
+        }
+
+        await applySaleProductSelection(product, {
+            forceSuggestedPrice: true
+        });
+
+        prepareScannedSale(product);
+        input.value = '';
+        utils.showToast(`Producto listo para vender: ${product.name}`);
+    } catch (error) {
+        showSaleScanFeedback(
+            'error',
+            'Código no encontrado',
+            error.message || 'No se encontró un producto con ese código.'
+        );
+        playSaleScanTone('error');
+        utils.showToast(error.message || 'No se encontró un producto con ese código', 'error');
+    }
+};
+
+window.printSaleReceiptById = async function(saleId) {
+    try {
+        let sale = AppState.sales?.find(item => item._id === saleId);
+
+        if (!sale) {
+            const response = await api.getSales();
+            sale = response.sales?.find(item => item._id === saleId);
+        }
+
+        if (!sale) {
+            throw new Error('Venta no encontrada');
+        }
+
+        printSaleReceipt(sale);
+    } catch (error) {
+        utils.showToast(error.message || 'No se pudo imprimir el recibo', 'error');
+    }
+};
+
+window.openSaleBarcodeScanner = async function() {
+    try {
+        await BarcodeTools.openScanner({
+            title: 'Escanear producto para venta',
+            onDetected: async (code) => {
+                const input = document.getElementById('saleBarcodeInput');
+                if (input) input.value = code;
+                await lookupSaleProductByCode();
+            }
+        });
+    } catch (error) {
+        utils.showToast(error.message || 'No fue posible abrir el escáner', 'error');
+    }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -1217,6 +1920,9 @@ document.addEventListener('DOMContentLoaded', () => {
             name: document.getElementById('editProductName').value.trim(),
             productType: document.getElementById('editProductType').value,
             suggestedPrice: parseFloat(document.getElementById('editProductSuggestedPrice').value) || undefined,
+            sku: document.getElementById('editProductSku').value.trim(),
+            barcode: document.getElementById('editProductBarcode').value.trim(),
+            barcodeFormat: document.getElementById('editProductBarcodeFormat').value,
             commissionRate: document.getElementById('editProductCommission').value !== '' 
                 ? parseFloat(document.getElementById('editProductCommission').value) 
                 : null

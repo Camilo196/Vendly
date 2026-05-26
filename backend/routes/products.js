@@ -3,6 +3,7 @@ const router = express.Router();
 const Product = require('../models/Product');
 const ProductUnit = require('../models/ProductUnit');
 const { protect } = require('../middleware/auth');
+const { normalizeCode, normalizeSku, prepareProductCodes } = require('../utils/productCodes');
 
 // Todas las rutas requieren autenticación
 router.use(protect);
@@ -35,7 +36,19 @@ router.get('/', async (req, res) => {
 // @access  Private
 router.post('/', async (req, res) => {
   try {
-    const { name, category, brand, description, profitMargin } = req.body;
+    const {
+      name,
+      category,
+      brand,
+      description,
+      profitMargin,
+      productType,
+      suggestedPrice,
+      commissionRate,
+      sku,
+      barcode,
+      barcodeFormat
+    } = req.body;
     
     if (!name) {
       return res.status(400).json({
@@ -58,6 +71,16 @@ router.post('/', async (req, res) => {
       });
     }
     
+    const codes = await prepareProductCodes(Product, {
+      userId: req.user._id,
+      name: name.trim(),
+      brand,
+      productType: productType || 'otro',
+      sku,
+      barcode,
+      barcodeFormat
+    });
+
     const product = await Product.create({
       userId: req.user._id,
       name: name.trim(),
@@ -66,7 +89,11 @@ router.post('/', async (req, res) => {
       description,
       stock: 0,
       averageCost: 0,
-      profitMargin: profitMargin || 30 // 30% por defecto
+      profitMargin: profitMargin || 30, // 30% por defecto
+      productType: productType || 'otro',
+      suggestedPrice: suggestedPrice || 0,
+      commissionRate: commissionRate !== undefined ? commissionRate : null,
+      ...codes
     });
     
     res.status(201).json({
@@ -84,6 +111,49 @@ router.post('/', async (req, res) => {
 });
 
 // ✅ RUTAS ESPECÍFICAS PRIMERO (antes de /:id)
+
+// @route   GET /api/products/lookup/code/:code
+// @desc    Buscar producto por código de barras o SKU
+// @access  Private
+router.get('/lookup/code/:code', async (req, res) => {
+  try {
+    const barcodeCode = normalizeCode(req.params.code);
+    const skuCode = normalizeSku(req.params.code);
+
+    if (!barcodeCode && !skuCode) {
+      return res.status(400).json({
+        success: false,
+        message: 'Debes enviar un código válido'
+      });
+    }
+
+    const product = await Product.findOne({
+      userId: req.user._id,
+      isActive: true,
+      $or: [
+        { barcode: barcodeCode },
+        { sku: skuCode }
+      ]
+    });
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: 'No se encontró un producto con ese código'
+      });
+    }
+
+    res.json({
+      success: true,
+      product
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error al buscar producto por código'
+    });
+  }
+});
 
 // @route   POST /api/products/:id/adjust
 // @desc    Ajustar stock manualmente
@@ -272,6 +342,108 @@ router.put('/repair/reactivate', async (req, res) => {
   }
 });
 
+// @route   POST /api/products/:id/barcode/generate
+// @desc    Generar código interno para un producto
+// @access  Private
+router.post('/:id/barcode/generate', async (req, res) => {
+  try {
+    const product = await Product.findOne({
+      _id: req.params.id,
+      userId: req.user._id
+    });
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: 'Producto no encontrado'
+      });
+    }
+
+    if (product.barcode) {
+      return res.json({
+        success: true,
+        message: 'Este producto ya tiene un código asignado',
+        product
+      });
+    }
+
+    const codes = await prepareProductCodes(Product, {
+      userId: req.user._id,
+      existingProduct: product,
+      name: product.name,
+      brand: product.brand,
+      productType: product.productType
+    });
+
+    product.sku = codes.sku;
+    product.barcode = codes.barcode;
+    product.barcodeFormat = codes.barcodeFormat;
+    product.barcodeSource = 'internal';
+    await product.save();
+
+    res.json({
+      success: true,
+      message: 'Código generado correctamente',
+      product
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error al generar código de barras'
+    });
+  }
+});
+
+// @route   POST /api/products/barcode/backfill
+// @desc    Generar códigos internos solo para productos que aún no tienen
+// @access  Private
+router.post('/barcode/backfill', async (req, res) => {
+  try {
+    const products = await Product.find({
+      userId: req.user._id,
+      isActive: true,
+      $or: [
+        { barcode: { $exists: false } },
+        { barcode: null },
+        { barcode: '' }
+      ]
+    }).sort({ createdAt: 1 });
+
+    let updatedCount = 0;
+
+    for (const product of products) {
+      const codes = await prepareProductCodes(Product, {
+        userId: req.user._id,
+        existingProduct: product,
+        name: product.name,
+        brand: product.brand,
+        productType: product.productType
+      });
+
+      product.sku = product.sku || codes.sku;
+      product.barcode = codes.barcode;
+      product.barcodeFormat = codes.barcodeFormat;
+      product.barcodeSource = 'internal';
+      await product.save();
+      updatedCount += 1;
+    }
+
+    res.json({
+      success: true,
+      message: updatedCount > 0
+        ? `Se generaron códigos para ${updatedCount} producto(s)`
+        : 'Todos tus productos ya tienen código',
+      updatedCount
+    });
+  } catch (error) {
+    console.error('Error generando códigos faltantes:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al generar códigos faltantes'
+    });
+  }
+});
+
 // ✅ RUTAS GENÉRICAS DESPUÉS (/:id debe ir al final)
 
 // @route   GET /api/products/:id
@@ -308,7 +480,19 @@ router.get('/:id', async (req, res) => {
 // @access  Private
 router.put('/:id', async (req, res) => {
   try {
-    const { name, category, brand, description, profitMargin, productType, suggestedPrice, commissionRate } = req.body;
+    const {
+      name,
+      category,
+      brand,
+      description,
+      profitMargin,
+      productType,
+      suggestedPrice,
+      commissionRate,
+      sku,
+      barcode,
+      barcodeFormat
+    } = req.body;
     
     const product = await Product.findOne({
       _id: req.params.id,
@@ -322,14 +506,36 @@ router.put('/:id', async (req, res) => {
       });
     }
     
-    if (name) product.name = name.trim();
+    const nextName = name ? name.trim() : product.name;
+    const nextBrand = brand !== undefined ? brand : product.brand;
+    const nextType = productType !== undefined ? productType : product.productType;
+
+    if (name) product.name = nextName;
     if (category !== undefined) product.category = category;
     if (brand !== undefined) product.brand = brand;
     if (description !== undefined) product.description = description;
     if (profitMargin !== undefined) product.profitMargin = profitMargin;
-    if (productType !== undefined) product.productType = productType;
+    if (productType !== undefined) product.productType = nextType;
     if (suggestedPrice !== undefined) product.suggestedPrice = suggestedPrice;
     if (commissionRate !== undefined) product.commissionRate = commissionRate;
+
+    if (sku !== undefined || barcode !== undefined || barcodeFormat !== undefined) {
+      const codes = await prepareProductCodes(Product, {
+        userId: req.user._id,
+        existingProduct: product,
+        name: nextName,
+        brand: nextBrand,
+        productType: nextType,
+        sku,
+        barcode,
+        barcodeFormat
+      });
+
+      product.sku = codes.sku;
+      product.barcode = codes.barcode;
+      product.barcodeFormat = codes.barcodeFormat;
+      product.barcodeSource = codes.barcodeSource;
+    }
     
     await product.save();
     

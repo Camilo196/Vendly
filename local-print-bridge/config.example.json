@@ -1,0 +1,18 @@
+{
+  "port": 5399,
+  "printerName": "",
+  "runtimeDir": "./runtime",
+  "dpi": 203,
+  "pageWidthMm": 72,
+  "pageHeightMm": 25,
+  "columns": 2,
+  "labelWidthMm": 35,
+  "labelHeightMm": 25,
+  "horizontalGapMm": 2,
+  "verticalGapMm": 0,
+  "barcodeXOffsetMm": 0.8,
+  "barcodeYOffsetMm": 2.1,
+  "barcodeWidthMm": 33.4,
+  "barcodeHeightMm": 15.2,
+  "textTopGapMm": 0.4
+}
