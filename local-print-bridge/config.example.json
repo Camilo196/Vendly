@@ -6,6 +6,7 @@
   "pageWidthMm": 72,
   "pageHeightMm": 25,
   "columns": 2,
+  "maxLabelsPerJob": 2,
   "labelWidthMm": 35,
   "labelHeightMm": 25,
   "horizontalGapMm": 2,

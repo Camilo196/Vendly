@@ -223,6 +223,21 @@
 
                         <div class="form-row">
                             <div class="form-group">
+                                <label>Origen del código</label>
+                                <select id="purchaseBarcodeMode">
+                                    <option value="auto">Automático</option>
+                                    <option value="supplier">Usar etiqueta existente</option>
+                                    <option value="internal">Generar etiqueta Vendly</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="display:flex; align-items:flex-end; gap:8px; flex-wrap:wrap;">
+                                <button type="button" class="btn btn-secondary" onclick="focusPurchaseBarcodeInput()">Escanear con lector</button>
+                                <button type="button" class="btn" onclick="openPurchaseBarcodeScanner()">Escanear cámara</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
                                 <label>Formato del código</label>
                                 <select id="purchaseBarcodeFormat">
                                     <option value="">Automático</option>

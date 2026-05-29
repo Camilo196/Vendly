@@ -24,6 +24,7 @@ Helper local liviano para imprimir etiquetas desde Vendly sin depender del naveg
 - `pageWidthMm`: `72`
 - `pageHeightMm`: `25`
 - `columns`: `2`
+- `maxLabelsPerJob`: `2`
 - `labelWidthMm`: `35`
 - `labelHeightMm`: `25`
 - `horizontalGapMm`: `2`
@@ -68,3 +69,7 @@ Vendly envia algo como esto:
 2. Imprime desde Vendly.
 3. Si el helper esta disponible, Vendly lo usa primero.
 4. Solo si el helper falla, Vendly cae a la impresion del navegador.
+
+## Nota sobre cantidades grandes
+
+Cuando pides muchas etiquetas, el helper las divide en tandas cortas para evitar que la impresora se descalibre en una sola hoja muy larga.

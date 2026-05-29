@@ -21,6 +21,7 @@ function loadConfig() {
     pageWidthMm: Number(parsed.pageWidthMm) || 70,
     pageHeightMm: Number(parsed.pageHeightMm) || 25,
     columns: Number(parsed.columns) || 2,
+    maxLabelsPerJob: Math.max(1, Number(parsed.maxLabelsPerJob) || Number(parsed.columns) || 2),
     labelWidthMm: Number(parsed.labelWidthMm) || 32,
     labelHeightMm: Number(parsed.labelHeightMm) || 25,
     horizontalGapMm: Number(parsed.horizontalGapMm) || 6,
@@ -125,9 +126,9 @@ function printImage(imagePath, pageHeightMm) {
   });
 }
 
-function createJobFilePath() {
+function createJobFilePath(suffix = '') {
   const stamp = new Date().toISOString().replace(/[:.]/g, '-');
-  return path.join(config.runtimeDir, `vendly-label-${stamp}.bmp`);
+  return path.join(config.runtimeDir, `vendly-label-${stamp}${suffix ? `-${suffix}` : ''}.bmp`);
 }
 
 async function handlePrint(req, res) {
@@ -143,23 +144,39 @@ async function handlePrint(req, res) {
     return;
   }
 
-  const outputPath = createJobFilePath();
-  const { buffer, pageHeightMm } = renderSheetBuffer({
-    product,
-    quantity,
-    config
-  });
+  const maxLabelsPerJob = Math.max(1, config.maxLabelsPerJob || config.columns || 2);
+  const jobs = [];
+  let remaining = quantity;
+  let jobIndex = 1;
 
-  fs.writeFileSync(outputPath, buffer);
-  await printImage(outputPath, pageHeightMm);
+  while (remaining > 0) {
+    const batchQuantity = Math.min(remaining, maxLabelsPerJob);
+    const outputPath = createJobFilePath(`job${jobIndex}`);
+    const { buffer, pageHeightMm } = renderSheetBuffer({
+      product,
+      quantity: batchQuantity,
+      config
+    });
+
+    fs.writeFileSync(outputPath, buffer);
+    await printImage(outputPath, pageHeightMm);
+
+    jobs.push({
+      file: outputPath,
+      quantity: batchQuantity
+    });
+
+    remaining -= batchQuantity;
+    jobIndex += 1;
+  }
 
   sendJson(res, 200, {
     success: true,
     message: 'Etiqueta enviada a la impresora local.',
     job: {
-      file: outputPath,
       quantity,
-      barcode: product.barcode
+      barcode: product.barcode,
+      batches: jobs
     }
   });
 }

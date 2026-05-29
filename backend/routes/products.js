@@ -16,9 +16,8 @@ function isLegacyInternalBarcode(product) {
     return false;
   }
 
-  return barcodeSource === 'internal'
-    || barcodeFormat === 'code_39'
-    || barcode.startsWith('VDL-');
+  return barcode.startsWith('VDL-')
+    || (barcodeSource === 'internal' && barcodeFormat === 'code_39');
 }
 
 // Todas las rutas requieren autenticación
@@ -406,6 +405,56 @@ router.post('/:id/barcode/generate', async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error al generar código de barras'
+    });
+  }
+});
+
+// @route   POST /api/products/:id/barcode/regenerate
+// @desc    Reemplazar el código actual por un código interno nuevo
+// @access  Private
+router.post('/:id/barcode/regenerate', async (req, res) => {
+  try {
+    const product = await Product.findOne({
+      _id: req.params.id,
+      userId: req.user._id
+    });
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: 'Producto no encontrado'
+      });
+    }
+
+    const codes = await prepareProductCodes(Product, {
+      userId: req.user._id,
+      existingProduct: {
+        ...product.toObject(),
+        barcode: '',
+        barcodeFormat: ''
+      },
+      name: product.name,
+      brand: product.brand,
+      productType: product.productType,
+      barcode: '',
+      barcodeFormat: ''
+    });
+
+    product.sku = product.sku || codes.sku;
+    product.barcode = codes.barcode;
+    product.barcodeFormat = codes.barcodeFormat;
+    product.barcodeSource = 'internal';
+    await product.save();
+
+    res.json({
+      success: true,
+      message: 'Código interno regenerado correctamente',
+      product
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error al regenerar código de barras'
     });
   }
 });

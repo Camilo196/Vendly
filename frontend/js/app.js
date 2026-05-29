@@ -334,7 +334,9 @@ function getProductCodeSummary(product) {
         chips.push(`<span class="inventory-code-chip">Código: ${escapeHtml(product.barcode)}</span>`);
     }
 
-    return chips.length ? `<div class="inventory-code-meta">${chips.join('')}</div>` : '';
+    chips.push(`<button type="button" class="inventory-code-chip inventory-code-action" onclick="regenerateProductBarcode('${product._id}')" title="Cambiar solo este producto a código Vendly">Cambiar código</button>`);
+
+    return `<div class="inventory-code-meta">${chips.join('')}</div>`;
 }
 
 function playSaleScanTone(type = 'success') {
@@ -1827,6 +1829,28 @@ window.generateMissingProductBarcodes = async function() {
         await app.loadInventory();
     } catch (error) {
         utils.showToast(error.message || 'Error al generar códigos faltantes', 'error');
+    }
+};
+
+window.regenerateProductBarcode = async function(productId) {
+    const product = AppState.products?.find(p => p._id === productId);
+    const productName = product?.name || 'este producto';
+    const confirmed = confirm(`Esto cambiará el código de ${productName}. Las etiquetas anteriores de ese producto dejarán de servir y tendrás que imprimir la nueva. ¿Continuar?`);
+    if (!confirmed) return;
+
+    try {
+        const response = await api.regenerateProductBarcode(productId);
+        const idx = AppState.products.findIndex(p => p._id === response.product._id);
+        if (idx >= 0) AppState.products[idx] = response.product;
+
+        utils.showToast('Código Vendly generado para este producto');
+        await app.loadInventory();
+
+        if (confirm('¿Quieres imprimir la nueva etiqueta ahora?')) {
+            await printProductBarcode(response.product._id);
+        }
+    } catch (error) {
+        utils.showToast(error.message || 'Error al cambiar código del producto', 'error');
     }
 };
 
