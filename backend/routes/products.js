@@ -459,6 +459,62 @@ router.post('/:id/barcode/regenerate', async (req, res) => {
   }
 });
 
+// @route   PUT /api/products/:id/barcode/assign
+// @desc    Asociar un código existente de proveedor a un producto
+// @access  Private
+router.put('/:id/barcode/assign', async (req, res) => {
+  try {
+    const { barcode, barcodeFormat, sku } = req.body;
+
+    if (!barcode || !String(barcode).trim()) {
+      return res.status(400).json({
+        success: false,
+        message: 'El código de barras es obligatorio'
+      });
+    }
+
+    const product = await Product.findOne({
+      _id: req.params.id,
+      userId: req.user._id
+    });
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: 'Producto no encontrado'
+      });
+    }
+
+    const codes = await prepareProductCodes(Product, {
+      userId: req.user._id,
+      existingProduct: product,
+      name: product.name,
+      brand: product.brand,
+      productType: product.productType,
+      sku: sku !== undefined ? sku : product.sku,
+      barcode,
+      barcodeFormat
+    });
+
+    product.sku = codes.sku;
+    product.barcode = codes.barcode;
+    product.barcodeFormat = codes.barcodeFormat;
+    product.barcodeSource = 'supplier';
+    await product.save();
+
+    res.json({
+      success: true,
+      message: 'Código existente asociado correctamente',
+      product
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Error al asociar código existente'
+    });
+  }
+});
+
 // @route   POST /api/products/barcode/backfill
 // @desc    Generar códigos internos solo para productos que aún no tienen
 // @access  Private

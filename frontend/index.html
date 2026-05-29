@@ -1418,6 +1418,41 @@
         </form>
     </div>
 </div>
+
+    <!-- Modal Registrar Codigo Existente -->
+<div id="assignBarcodeModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeAssignBarcodeModal()">&times;</span>
+        <h2>Registrar codigo existente</h2>
+        <form id="formAssignBarcode">
+            <input type="hidden" id="assignBarcodeProductId">
+            <div class="form-group">
+                <label>Producto</label>
+                <input type="text" id="assignBarcodeProductName" readonly>
+            </div>
+            <div class="form-group">
+                <label>Codigo de barras</label>
+                <input type="text" id="assignBarcodeValue" required placeholder="Escanea o escribe el codigo">
+            </div>
+            <div class="form-group">
+                <label>Formato</label>
+                <select id="assignBarcodeFormat">
+                    <option value="">Automatico</option>
+                    <option value="code_39">Code 39</option>
+                    <option value="code_128">Code 128</option>
+                    <option value="ean_13">EAN-13</option>
+                    <option value="ean_8">EAN-8</option>
+                    <option value="upc_a">UPC-A</option>
+                    <option value="upc_e">UPC-E</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button type="submit" class="btn btn-primary">Guardar codigo</button>
+                <button type="button" class="btn btn-secondary" onclick="closeAssignBarcodeModal()">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
     <!-- Modal Historial de Producto -->
     <div id="productHistoryModal" class="modal">
         <div class="modal-content" style="max-width: 900px;">

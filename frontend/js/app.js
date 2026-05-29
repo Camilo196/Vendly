@@ -334,6 +334,7 @@ function getProductCodeSummary(product) {
         chips.push(`<span class="inventory-code-chip">Código: ${escapeHtml(product.barcode)}</span>`);
     }
 
+    chips.push(`<button type="button" class="inventory-code-chip inventory-code-action" onclick="openAssignBarcodeModal('${product._id}')" title="Registrar código que ya trae el producto">Registrar código</button>`);
     chips.push(`<button type="button" class="inventory-code-chip inventory-code-action" onclick="regenerateProductBarcode('${product._id}')" title="Cambiar solo este producto a código Vendly">Cambiar código</button>`);
 
     return `<div class="inventory-code-meta">${chips.join('')}</div>`;
@@ -1854,6 +1855,28 @@ window.regenerateProductBarcode = async function(productId) {
     }
 };
 
+window.openAssignBarcodeModal = function(productId) {
+    const product = AppState.products?.find(p => p._id === productId);
+    if (!product) {
+        utils.showToast('Producto no encontrado', 'error');
+        return;
+    }
+
+    document.getElementById('assignBarcodeProductId').value = product._id;
+    document.getElementById('assignBarcodeProductName').value = product.name || '';
+    document.getElementById('assignBarcodeValue').value = '';
+    document.getElementById('assignBarcodeFormat').value = '';
+    document.getElementById('assignBarcodeModal').classList.add('show');
+
+    setTimeout(() => {
+        document.getElementById('assignBarcodeValue')?.focus();
+    }, 80);
+};
+
+window.closeAssignBarcodeModal = function() {
+    document.getElementById('assignBarcodeModal')?.classList.remove('show');
+};
+
 window.migrateLegacyProductBarcodes = async function() {
     const confirmed = confirm('Esto cambiará una sola vez los códigos internos antiguos tipo VDL- u otros códigos legacy para que usen el formato nuevo numérico. Las etiquetas viejas de esos productos dejarán de servir y tocará reimprimirlas. ¿Continuar?');
     if (!confirmed) return;
@@ -1951,6 +1974,34 @@ window.openSaleBarcodeScanner = async function() {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('formAssignBarcode')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const productId = document.getElementById('assignBarcodeProductId').value;
+        const barcode = document.getElementById('assignBarcodeValue').value.trim();
+        const barcodeFormat = document.getElementById('assignBarcodeFormat').value || undefined;
+
+        try {
+            const response = await api.assignProductBarcode(productId, { barcode, barcodeFormat });
+            const idx = AppState.products.findIndex(p => p._id === response.product._id);
+            if (idx >= 0) AppState.products[idx] = response.product;
+
+            utils.showToast('Código registrado para el producto');
+            closeAssignBarcodeModal();
+            await app.loadInventory();
+        } catch (error) {
+            utils.showToast(error.message || 'Error al registrar código', 'error');
+        }
+    });
+
+    document.getElementById('assignBarcodeValue')?.addEventListener('input', (e) => {
+        const suggested = suggestBarcodeFormat(e.target.value);
+        const formatField = document.getElementById('assignBarcodeFormat');
+        if (formatField && suggested) {
+            formatField.value = suggested;
+        }
+    });
+
     document.getElementById('formEditProduct')?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const id = document.getElementById('editProductId').value;

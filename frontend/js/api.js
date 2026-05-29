@@ -164,6 +164,13 @@ class APIClient {
     });
   }
 
+  async assignProductBarcode(productId, data) {
+    return this.request(`/products/${productId}/barcode/assign`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  }
+
   async backfillProductBarcodes() {
     return this.request('/products/barcode/backfill', {
       method: 'POST'
