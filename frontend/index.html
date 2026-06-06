@@ -330,7 +330,11 @@
                             </label>
                             <label>
                                 Cantidad
-                                <input type="number" id="quickSaleQuantity" min="1" value="1">
+                                <div class="quick-quantity-stepper">
+                                    <button type="button" onclick="changeQuickSaleQuantity(-1)" aria-label="Restar cantidad">-</button>
+                                    <input type="number" id="quickSaleQuantity" min="1" value="1">
+                                    <button type="button" onclick="changeQuickSaleQuantity(1)" aria-label="Sumar cantidad">+</button>
+                                </div>
                             </label>
                             <label>
                                 Pago
@@ -344,7 +348,7 @@
                             <button type="button" class="btn btn-primary" onclick="confirmQuickScannedSale()">Registrar ya</button>
                             <button type="button" class="btn btn-secondary" onclick="cancelQuickScannedSale()">Cancelar</button>
                         </div>
-                        <div class="quick-sale-hint">Tip: escanea, escribe el precio si cambia y presiona Enter.</div>
+                        <div class="quick-sale-hint">Tip: escanea, cambia precio o cantidad si hace falta y presiona Enter.</div>
                     </div>
 
                     <form id="formSale" class="form-horizontal">

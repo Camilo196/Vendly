@@ -521,6 +521,29 @@ function updateQuickSaleTotal() {
     if (total) total.textContent = `Total: ${utils.formatMoney(quantity * price)}`;
 }
 
+function normalizeQuickSaleQuantity() {
+    const quantityField = document.getElementById('quickSaleQuantity');
+    if (!quantityField) return 1;
+
+    const stock = Math.max(0, Number(quickSaleProduct?.stock ?? 0));
+    const maxQuantity = stock > 0 ? stock : 1;
+    const nextQuantity = Math.min(maxQuantity, Math.max(1, parseInt(quantityField.value, 10) || 1));
+    quantityField.value = nextQuantity;
+    updateQuickSaleTotal();
+    return nextQuantity;
+}
+
+window.changeQuickSaleQuantity = function(delta = 0) {
+    const quantityField = document.getElementById('quickSaleQuantity');
+    if (!quantityField) return;
+
+    const current = parseInt(quantityField.value, 10) || 1;
+    quantityField.value = current + Number(delta || 0);
+    normalizeQuickSaleQuantity();
+    quantityField.focus();
+    quantityField.select();
+};
+
 function showQuickSalePanel(product) {
     quickSaleProduct = product || null;
     const panel = document.getElementById('quickSalePanel');
@@ -1452,10 +1475,29 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     ['quickSalePrice', 'quickSaleQuantity'].forEach(id => {
-        document.getElementById(id)?.addEventListener('input', updateQuickSaleTotal);
+        document.getElementById(id)?.addEventListener('input', () => {
+            if (id === 'quickSaleQuantity') {
+                normalizeQuickSaleQuantity();
+            } else {
+                updateQuickSaleTotal();
+            }
+        });
         document.getElementById(id)?.addEventListener('keydown', async (e) => {
+            if (id === 'quickSaleQuantity' && e.key === 'ArrowUp') {
+                e.preventDefault();
+                changeQuickSaleQuantity(1);
+                return;
+            }
+
+            if (id === 'quickSaleQuantity' && e.key === 'ArrowDown') {
+                e.preventDefault();
+                changeQuickSaleQuantity(-1);
+                return;
+            }
+
             if (e.key !== 'Enter') return;
             e.preventDefault();
+            if (id === 'quickSaleQuantity') normalizeQuickSaleQuantity();
             await confirmQuickScannedSale();
         });
     });
