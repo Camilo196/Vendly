@@ -43,6 +43,10 @@ function mmToPx(mm, dpi) {
   return Math.max(1, Math.round((mm / 25.4) * dpi));
 }
 
+function mmToSignedPx(mm, dpi) {
+  return Math.round((Number(mm || 0) / 25.4) * dpi);
+}
+
 function createCanvas(width, height) {
   const pixels = new Uint8Array(width * height);
   pixels.fill(255);
@@ -233,6 +237,8 @@ function renderSheetBuffer({ product, quantity, config }) {
   const horizontalGapPx = mmToPx(config.horizontalGapMm || 0, dpi);
   const verticalGapPx = mmToPx(config.verticalGapMm || 0, dpi);
   const pageWidthPx = mmToPx(config.pageWidthMm, dpi);
+  const pageXOffsetPx = mmToSignedPx(config.pageXOffsetMm, dpi);
+  const pageYOffsetPx = mmToSignedPx(config.pageYOffsetMm, dpi);
   const rows = Math.max(1, Math.ceil(quantity / columns));
   const pageHeightPx = (rows * labelHeightPx) + ((rows - 1) * verticalGapPx);
   const barcodeXOffsetPx = mmToPx(config.barcodeXOffsetMm || 4.2, dpi);
@@ -253,8 +259,8 @@ function renderSheetBuffer({ product, quantity, config }) {
   for (let index = 0; index < quantity; index += 1) {
     const row = Math.floor(index / columns);
     const col = index % columns;
-    const originX = col * (labelWidthPx + horizontalGapPx);
-    const originY = row * (labelHeightPx + verticalGapPx);
+    const originX = pageXOffsetPx + (col * (labelWidthPx + horizontalGapPx));
+    const originY = pageYOffsetPx + (row * (labelHeightPx + verticalGapPx));
     drawBarcode(
       canvas,
       pattern,

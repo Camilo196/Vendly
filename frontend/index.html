@@ -316,6 +316,37 @@
                         <div id="saleScanFeedbackMessage" class="sale-scan-feedback-message"></div>
                     </div>
 
+                    <div id="quickSalePanel" class="quick-sale-panel" style="display:none;">
+                        <div class="quick-sale-summary">
+                            <span class="quick-sale-kicker">Venta rapida</span>
+                            <strong id="quickSaleProductName">Producto</strong>
+                            <small id="quickSaleProductMeta">Stock disponible: 0</small>
+                            <small id="quickSaleTotal">Total: $0</small>
+                        </div>
+                        <div class="quick-sale-controls">
+                            <label>
+                                En cuanto se vendio
+                                <input type="number" id="quickSalePrice" min="0" step="0.01" placeholder="Precio">
+                            </label>
+                            <label>
+                                Cantidad
+                                <input type="number" id="quickSaleQuantity" min="1" value="1">
+                            </label>
+                            <label>
+                                Pago
+                                <select id="quickSalePaymentMethod">
+                                    <option value="cash">Efectivo</option>
+                                    <option value="card">Tarjeta</option>
+                                    <option value="transfer">Transferencia</option>
+                                    <option value="other">Otro</option>
+                                </select>
+                            </label>
+                            <button type="button" class="btn btn-primary" onclick="confirmQuickScannedSale()">Registrar ya</button>
+                            <button type="button" class="btn btn-secondary" onclick="cancelQuickScannedSale()">Cancelar</button>
+                        </div>
+                        <div class="quick-sale-hint">Tip: escanea, escribe el precio si cambia y presiona Enter.</div>
+                    </div>
+
                     <form id="formSale" class="form-horizontal">
                         <div class="form-row">
                             <div class="form-group">

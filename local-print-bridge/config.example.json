@@ -11,6 +11,8 @@
   "labelHeightMm": 25,
   "horizontalGapMm": 2,
   "verticalGapMm": 0,
+  "pageXOffsetMm": -1.5,
+  "pageYOffsetMm": 0,
   "barcodeXOffsetMm": 0.8,
   "barcodeYOffsetMm": 2.1,
   "barcodeWidthMm": 33.4,

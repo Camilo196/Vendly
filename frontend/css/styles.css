@@ -1533,6 +1533,78 @@ textarea:focus {
     line-height: 1.45;
 }
 
+.quick-sale-panel {
+    margin: 12px 0 18px;
+    padding: 16px;
+    border: 1px solid rgba(37, 99, 235, 0.22);
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(239, 246, 255, 0.96), rgba(240, 253, 250, 0.92));
+    box-shadow: 0 14px 35px rgba(15, 23, 42, 0.08);
+}
+
+.quick-sale-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-bottom: 12px;
+}
+
+.quick-sale-kicker {
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.quick-sale-summary strong {
+    color: #0f172a;
+    font-size: 1.2rem;
+}
+
+.quick-sale-summary small {
+    color: #475569;
+}
+
+.quick-sale-controls {
+    display: grid;
+    grid-template-columns: minmax(160px, 1.3fr) minmax(92px, 0.6fr) minmax(130px, 0.8fr) auto auto;
+    gap: 10px;
+    align-items: end;
+}
+
+.quick-sale-controls label {
+    color: #334155;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.quick-sale-controls input,
+.quick-sale-controls select {
+    margin-top: 5px;
+}
+
+.quick-sale-controls #quickSalePrice {
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+
+.quick-sale-hint {
+    margin-top: 10px;
+    color: #64748b;
+    font-size: 13px;
+}
+
+@media (max-width: 780px) {
+    .quick-sale-controls {
+        grid-template-columns: 1fr;
+    }
+
+    .quick-sale-controls .btn {
+        width: 100%;
+    }
+}
+
 .barcode-scanner-modal {
     max-width: 540px;
 }

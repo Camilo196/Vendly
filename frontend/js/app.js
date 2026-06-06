@@ -24,6 +24,8 @@ const salesScannerState = {
     processing: false
 };
 
+let quickSaleProduct = null;
+
 // Utilidades
 const utils = {
     formatMoney(amount) {
@@ -393,6 +395,81 @@ function showSaleScanFeedback(type, titleText, messageText) {
     if (message) message.textContent = messageText || '';
 }
 
+function getCurrentSaleEmployeeName() {
+    const option = document.getElementById('saleEmployee')?.selectedOptions?.[0];
+    return option?.value ? option.textContent : '';
+}
+
+function resetSaleEntryFields() {
+    const form = document.getElementById('formSale');
+    const currentEmployee = document.getElementById('saleEmployee')?.value || '';
+    const currentPaymentMethod = document.getElementById('salePaymentMethod')?.value || 'cash';
+    const shouldPrintReceipt = document.getElementById('salePrintReceipt')?.checked ?? true;
+
+    if (form) form.reset();
+
+    const employeeField = document.getElementById('saleEmployee');
+    const paymentField = document.getElementById('salePaymentMethod');
+    const receiptField = document.getElementById('salePrintReceipt');
+    if (employeeField) employeeField.value = currentEmployee;
+    if (paymentField) paymentField.value = currentPaymentMethod;
+    if (receiptField) receiptField.checked = shouldPrintReceipt;
+
+    const fieldsToClear = ['selectedProductName', 'availableStock', 'suggestedPrice', 'saleBarcodeInput'];
+    fieldsToClear.forEach(id => {
+        const field = document.getElementById(id);
+        if (field) field.value = '';
+    });
+
+    const totalField = document.getElementById('saleTotal');
+    if (totalField) totalField.textContent = '$0';
+
+    clearSaleScanFeedback();
+    hideQuickSalePanel();
+
+    if (typeof clearSaleSerializedUnits === 'function') {
+        clearSaleSerializedUnits();
+    }
+
+    const accessoryBox = document.getElementById('saleAccessorySuggestions');
+    if (accessoryBox) accessoryBox.style.display = 'none';
+}
+
+async function registerSaleAndRefresh(saleData, options = {}) {
+    const {
+        shouldPrintReceipt = false,
+        employeeName = ''
+    } = options;
+
+    const response = await api.createSale(saleData);
+    if (!response.success) return response;
+
+    utils.showToast('Venta registrada exitosamente');
+
+    if (shouldPrintReceipt) {
+        try {
+            const receiptSale = {
+                ...response.sale,
+                employeeName,
+                paymentMethod: saleData.paymentMethod,
+                customer: saleData.customer,
+                totalSale: response.sale?.totalSale ?? (saleData.quantity * saleData.unitPrice)
+            };
+            printSaleReceipt(receiptSale);
+        } catch (printError) {
+            console.error('No se pudo imprimir el recibo:', printError);
+            utils.showToast('Venta registrada, pero no se pudo abrir el recibo', 'warning');
+        }
+    }
+
+    resetSaleEntryFields();
+    await app.loadSales();
+    await app.loadProducts();
+    await app.loadDashboard();
+    focusSaleBarcodeInput(120);
+    return response;
+}
+
 async function printProductWithBridge(product, quantity) {
     const payload = {
         product: {
@@ -412,7 +489,6 @@ function prepareScannedSale(product) {
     const quantityField = document.getElementById('saleQuantity');
     const priceField = document.getElementById('saleUnitPrice');
     const totalField = document.getElementById('saleTotal');
-    const submitButton = document.querySelector('#formSale button[type="submit"]');
 
     if (quantityField) {
         quantityField.value = 1;
@@ -431,21 +507,126 @@ function prepareScannedSale(product) {
     showSaleScanFeedback(
         'success',
         `Listo para vender: ${product?.name || 'Producto'}`,
-        `Cantidad 1 cargada. Revisa precio o presiona Registrar Venta para confirmar.`
+        `Escribe el precio y presiona Enter para registrar la venta.`
     );
     playSaleScanTone('success');
 
-    if (submitButton) {
-        submitButton.focus();
-    }
+    showQuickSalePanel(product);
 }
+
+function updateQuickSaleTotal() {
+    const quantity = parseFloat(document.getElementById('quickSaleQuantity')?.value) || 0;
+    const price = parseFloat(document.getElementById('quickSalePrice')?.value) || 0;
+    const total = document.getElementById('quickSaleTotal');
+    if (total) total.textContent = `Total: ${utils.formatMoney(quantity * price)}`;
+}
+
+function showQuickSalePanel(product) {
+    quickSaleProduct = product || null;
+    const panel = document.getElementById('quickSalePanel');
+    if (!panel || !quickSaleProduct) return;
+
+    const name = document.getElementById('quickSaleProductName');
+    const meta = document.getElementById('quickSaleProductMeta');
+    const price = document.getElementById('quickSalePrice');
+    const quantity = document.getElementById('quickSaleQuantity');
+    const payment = document.getElementById('quickSalePaymentMethod');
+
+    if (name) name.textContent = quickSaleProduct.name || 'Producto';
+    if (meta) {
+        const suggested = quickSaleProduct.suggestedPrice > 0
+            ? ` | Sugerido: ${utils.formatMoney(quickSaleProduct.suggestedPrice)}`
+            : '';
+        meta.textContent = `Stock disponible: ${quickSaleProduct.stock ?? 0}${suggested}`;
+    }
+
+    if (quantity) quantity.value = 1;
+    if (price) {
+        price.value = quickSaleProduct.suggestedPrice > 0 ? quickSaleProduct.suggestedPrice : '';
+    }
+    if (payment) {
+        payment.value = document.getElementById('salePaymentMethod')?.value || 'cash';
+    }
+
+    panel.style.display = 'block';
+    updateQuickSaleTotal();
+
+    setTimeout(() => {
+        if (!price) return;
+        price.focus();
+        price.select();
+    }, 60);
+}
+
+function hideQuickSalePanel() {
+    quickSaleProduct = null;
+    const panel = document.getElementById('quickSalePanel');
+    if (panel) panel.style.display = 'none';
+}
+
+window.cancelQuickScannedSale = function() {
+    hideQuickSalePanel();
+    clearSaleScanFeedback();
+    focusSaleBarcodeInput(60);
+};
+
+window.confirmQuickScannedSale = async function() {
+    if (!quickSaleProduct?._id) {
+        utils.showToast('Escanea un producto primero', 'warning');
+        focusSaleBarcodeInput(60);
+        return;
+    }
+
+    const quantity = parseInt(document.getElementById('quickSaleQuantity')?.value, 10) || 1;
+    const unitPrice = parseFloat(document.getElementById('quickSalePrice')?.value) || 0;
+
+    if (quantity < 1) {
+        utils.showToast('La cantidad debe ser minimo 1', 'warning');
+        return;
+    }
+
+    if (unitPrice <= 0) {
+        utils.showToast('Escribe en cuanto se vendio', 'warning');
+        document.getElementById('quickSalePrice')?.focus();
+        return;
+    }
+
+    if ((quickSaleProduct.stock ?? 0) < quantity) {
+        utils.showToast('No hay stock suficiente para esa venta', 'error');
+        return;
+    }
+
+    const saleData = {
+        productId: quickSaleProduct._id,
+        quantity,
+        unitPrice,
+        employeeId: document.getElementById('saleEmployee')?.value || '',
+        customer: document.getElementById('saleCustomer')?.value || '',
+        paymentMethod: document.getElementById('quickSalePaymentMethod')?.value || 'cash',
+        unitIds: typeof getSelectedSaleUnitIds === 'function' ? getSelectedSaleUnitIds() : []
+    };
+
+    const salePaymentField = document.getElementById('salePaymentMethod');
+    if (salePaymentField) salePaymentField.value = saleData.paymentMethod;
+
+    try {
+        await registerSaleAndRefresh(saleData, {
+            shouldPrintReceipt: document.getElementById('salePrintReceipt')?.checked,
+            employeeName: getCurrentSaleEmployeeName()
+        });
+    } catch (error) {
+        utils.showToast(error.message || 'Error al registrar venta', 'error');
+        document.getElementById('quickSalePrice')?.focus();
+    }
+};
 
 async function applySaleProductSelection(product, options = {}) {
     if (!product?._id) return;
 
     const {
         focusQuantity = false,
-        forceSuggestedPrice = false
+        forceSuggestedPrice = false,
+        loadDetails = true
     } = options;
 
     const productIdField = document.getElementById('saleProductId');
@@ -474,11 +655,11 @@ async function applySaleProductSelection(product, options = {}) {
         totalField.textContent = utils.formatMoney(quantity * price);
     }
 
-    if (typeof window.updateSaleAccessorySuggestions === 'function') {
+    if (loadDetails && typeof window.updateSaleAccessorySuggestions === 'function') {
         window.updateSaleAccessorySuggestions(product);
     }
 
-    if (typeof window.loadSaleSerializedUnits === 'function') {
+    if (loadDetails && typeof window.loadSaleSerializedUnits === 'function') {
         await window.loadSaleSerializedUnits(product);
     }
 
@@ -936,6 +1117,30 @@ const response = await api.getProducts();
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
+    const saleForm = document.getElementById('formSale');
+    saleForm?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        const saleData = {
+            productId: document.getElementById('saleProductId').value,
+            quantity: parseInt(document.getElementById('saleQuantity').value, 10),
+            unitPrice: parseFloat(document.getElementById('saleUnitPrice').value),
+            employeeId: document.getElementById('saleEmployee').value,
+            customer: document.getElementById('saleCustomer').value,
+            paymentMethod: document.getElementById('salePaymentMethod').value,
+            unitIds: typeof getSelectedSaleUnitIds === 'function' ? getSelectedSaleUnitIds() : []
+        };
+
+        try {
+            await registerSaleAndRefresh(saleData, {
+                shouldPrintReceipt: document.getElementById('salePrintReceipt')?.checked,
+                employeeName: getCurrentSaleEmployeeName()
+            });
+        } catch (error) {
+            utils.showToast(error.message || 'Error al registrar venta', 'error');
+        }
+    }, true);
     utils.showLoading(false);
 
     // Auth forms
@@ -1244,6 +1449,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const price = parseFloat(document.getElementById('saleUnitPrice').value) || 0;
             document.getElementById('saleTotal').textContent = utils.formatMoney(qty * price);
         });
+    });
+
+    ['quickSalePrice', 'quickSaleQuantity'].forEach(id => {
+        document.getElementById(id)?.addEventListener('input', updateQuickSaleTotal);
+        document.getElementById(id)?.addEventListener('keydown', async (e) => {
+            if (e.key !== 'Enter') return;
+            e.preventDefault();
+            await confirmQuickScannedSale();
+        });
+    });
+
+    document.getElementById('quickSalePaymentMethod')?.addEventListener('keydown', async (e) => {
+        if (e.key !== 'Enter') return;
+        e.preventDefault();
+        await confirmQuickScannedSale();
     });
 
     const purchaseTypeSelect = document.getElementById('purchaseProductType');
