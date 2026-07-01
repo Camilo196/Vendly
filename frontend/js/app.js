@@ -25,6 +25,7 @@ const salesScannerState = {
 };
 
 let quickSaleProduct = null;
+const VIEW_STORAGE_KEY = 'vendlyCurrentView';
 
 // Utilidades
 const utils = {
@@ -395,6 +396,89 @@ function showSaleScanFeedback(type, titleText, messageText) {
     if (message) message.textContent = messageText || '';
 }
 
+function getSavedAppView() {
+    const savedView = localStorage.getItem(VIEW_STORAGE_KEY);
+    return document.querySelector(`.nav-btn[data-view="${savedView}"]`) ? savedView : 'dashboard';
+}
+
+async function activateAppView(view, options = {}) {
+    const { persist = true } = options;
+    const navButton = document.querySelector(`.nav-btn[data-view="${view}"]`);
+    const viewElement = document.getElementById(`view${view.charAt(0).toUpperCase() + view.slice(1)}`);
+    if (!navButton || !viewElement) return;
+
+    AppState.currentView = view;
+    if (persist) {
+        localStorage.setItem(VIEW_STORAGE_KEY, view);
+    }
+
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+    navButton.classList.add('active');
+
+    document.querySelectorAll('.view').forEach(item => item.classList.remove('active'));
+    viewElement.classList.add('active');
+
+    switch (view) {
+        case 'dashboard':
+            await app.loadDashboard();
+            break;
+        case 'purchases':
+            await app.loadProducts();
+            await app.loadPurchases();
+            break;
+        case 'sales':
+            await app.loadProducts();
+            await app.loadSales();
+            await app.loadEmployeeSelects();
+            break;
+        case 'inventory':
+            if (typeof loadInventoryProducts === 'function') {
+                await loadInventoryProducts();
+            } else {
+                await app.loadInventory();
+            }
+            break;
+        case 'compatibility':
+            if (typeof loadCompatibilityView === 'function') {
+                await loadCompatibilityView();
+            }
+            break;
+        case 'compatibilityApi':
+            if (typeof loadCompatibilityApiView === 'function') {
+                await loadCompatibilityApiView();
+            }
+            break;
+        case 'technical':
+            if (typeof loadTechnicalServices === 'function') {
+                await loadTechnicalServices();
+            }
+            break;
+        case 'expenses':
+            if (typeof loadExpensesView === 'function') {
+                await loadExpensesView();
+            }
+            break;
+        case 'reports':
+            await app.loadReports();
+            break;
+        case 'employees':
+            app.loadEmployees();
+            app.loadEmployeeSelects();
+            break;
+        case 'commissions':
+            app.loadCommissions();
+            app.loadEmployeeSelects();
+            break;
+        case 'adminPanel':
+            adminCargarUsuarios();
+            break;
+    }
+
+    if (view === 'sales') {
+        focusSaleBarcodeInput(120);
+    }
+}
+
 function getCurrentSaleEmployeeName() {
     const option = document.getElementById('saleEmployee')?.selectedOptions?.[0];
     return option?.value ? option.textContent : '';
@@ -444,29 +528,48 @@ async function registerSaleAndRefresh(saleData, options = {}) {
     const response = await api.createSale(saleData);
     if (!response.success) return response;
 
-    utils.showToast('Venta registrada exitosamente');
-
-    if (shouldPrintReceipt) {
-        try {
-            const receiptSale = {
-                ...response.sale,
-                employeeName,
-                paymentMethod: saleData.paymentMethod,
-                customer: saleData.customer,
-                totalSale: response.sale?.totalSale ?? (saleData.quantity * saleData.unitPrice)
-            };
-            printSaleReceipt(receiptSale);
-        } catch (printError) {
-            console.error('No se pudo imprimir el recibo:', printError);
-            utils.showToast('Venta registrada, pero no se pudo abrir el recibo', 'warning');
-        }
+    const soldProductId = String(saleData.productId || response.sale?.productId || '');
+    const soldQuantity = Number(saleData.quantity || response.sale?.quantity || 0);
+    const productIndex = AppState.products.findIndex(product => String(product._id) === soldProductId);
+    if (productIndex >= 0) {
+        AppState.products[productIndex].stock = Math.max(0, (AppState.products[productIndex].stock || 0) - soldQuantity);
+        AppState.products[productIndex].totalSold = (AppState.products[productIndex].totalSold || 0) + (response.sale?.totalSale || 0);
     }
 
+    if (Array.isArray(AppState.sales) && response.sale) {
+        AppState.sales.unshift(response.sale);
+    }
+
+    utils.showToast('Venta registrada exitosamente');
+
     resetSaleEntryFields();
-    await app.loadSales();
-    await app.loadProducts();
-    await app.loadDashboard();
     focusSaleBarcodeInput(120);
+
+    if (shouldPrintReceipt) {
+        const receiptSale = {
+            ...response.sale,
+            employeeName,
+            paymentMethod: saleData.paymentMethod,
+            customer: saleData.customer,
+            totalSale: response.sale?.totalSale ?? (saleData.quantity * saleData.unitPrice)
+        };
+
+        setTimeout(() => {
+            try {
+                printSaleReceipt(receiptSale);
+            } catch (printError) {
+                console.error('No se pudo imprimir el recibo:', printError);
+                utils.showToast('Venta registrada, pero no se pudo abrir el recibo', 'warning');
+            }
+        }, 20);
+    }
+
+    Promise.allSettled([
+        app.loadSales(),
+        app.loadProducts(),
+        app.loadDashboard()
+    ]).catch(error => console.error('Error refrescando venta en segundo plano:', error));
+
     return response;
 }
 
@@ -517,8 +620,15 @@ function prepareScannedSale(product) {
 function updateQuickSaleTotal() {
     const quantity = parseFloat(document.getElementById('quickSaleQuantity')?.value) || 0;
     const price = parseFloat(document.getElementById('quickSalePrice')?.value) || 0;
+    const unitCost = Number(quickSaleProduct?.averageCost || 0);
     const total = document.getElementById('quickSaleTotal');
+    const profit = document.getElementById('quickSaleProfit');
     if (total) total.textContent = `Total: ${utils.formatMoney(quantity * price)}`;
+    if (profit) {
+        const estimatedProfit = (price - unitCost) * quantity;
+        profit.textContent = `Ganancia estimada: ${utils.formatMoney(estimatedProfit)}`;
+        profit.classList.toggle('quick-sale-loss', estimatedProfit < 0);
+    }
 }
 
 function normalizeQuickSaleQuantity() {
@@ -551,6 +661,7 @@ function showQuickSalePanel(product) {
 
     const name = document.getElementById('quickSaleProductName');
     const meta = document.getElementById('quickSaleProductMeta');
+    const cost = document.getElementById('quickSaleCost');
     const price = document.getElementById('quickSalePrice');
     const quantity = document.getElementById('quickSaleQuantity');
     const payment = document.getElementById('quickSalePaymentMethod');
@@ -561,6 +672,9 @@ function showQuickSalePanel(product) {
             ? ` | Sugerido: ${utils.formatMoney(quickSaleProduct.suggestedPrice)}`
             : '';
         meta.textContent = `Stock disponible: ${quickSaleProduct.stock ?? 0}${suggested}`;
+    }
+    if (cost) {
+        cost.textContent = `Costo promedio / compra: ${utils.formatMoney(quickSaleProduct.averageCost || 0)}`;
     }
 
     if (quantity) quantity.value = 1;
@@ -756,7 +870,7 @@ const auth = {
             document.getElementById('adminPanel').style.display = 'block';
             adminCargarUsuarios();
         } else {
-            app.loadDashboard();
+            activateAppView(getSavedAppView(), { persist: false }).catch(() => app.loadDashboard());
             // Cargar empleados al inicio para tenerlos disponibles en el select de ventas
             api.getEmployees({ isActive: true }).then(r => {
                 if (r.employees) AppState.employees = r.employees;
@@ -817,6 +931,18 @@ renderDashboard(stats) {
             <div class="stat-card">
                 <div class="stat-label">Ventas Este Mes</div>
                 <div class="stat-value">${utils.formatMoney(stats.sales.thisMonth.total)}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Ganancia Neta Este Mes</div>
+                <div class="stat-value success">${utils.formatMoney(stats.sales.thisMonth.netProfit || 0)}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Gastos Este Mes</div>
+                <div class="stat-value warning">${utils.formatMoney(stats.expenses?.thisMonth?.total || 0)}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Invertido Este Mes</div>
+                <div class="stat-value">${utils.formatMoney(stats.purchases?.thisMonth?.total || 0)}</div>
             </div>
         `;
     }
@@ -1192,6 +1318,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (confirm('¿Seguro que quieres salir?')) {
             auth.logout();
         }
+    });
+
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', async (event) => {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            await activateAppView(btn.dataset.view);
+        }, true);
     });
 
     // Navigation
@@ -2184,7 +2318,8 @@ window.lookupSaleProductByCode = async function() {
         }
 
         await applySaleProductSelection(product, {
-            forceSuggestedPrice: true
+            forceSuggestedPrice: true,
+            loadDetails: product.productType === 'celular'
         });
 
         prepareScannedSale(product);

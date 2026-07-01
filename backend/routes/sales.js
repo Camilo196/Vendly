@@ -135,7 +135,13 @@ router.post('/', async (req, res) => {
       });
     }
 
-    const { trackedAvailableCount, availableUntrackedStock } = await getTrackedAvailability(req.user._id, product);
+    let trackedAvailableCount = 0;
+    let availableUntrackedStock = Math.max(0, parseFloat(product.stock) || 0);
+    if (product.productType === 'celular') {
+      const availability = await getTrackedAvailability(req.user._id, product);
+      trackedAvailableCount = availability.trackedAvailableCount;
+      availableUntrackedStock = availability.availableUntrackedStock;
+    }
 
     let selectedUnits = [];
     if (normalizedUnitIds.length > 0) {
@@ -212,7 +218,15 @@ router.post('/', async (req, res) => {
     // Actualizar stock del producto
     product.stock -= parseFloat(quantity);
     product.totalSold += sale.totalSale;
-    await product.save();
+    await Product.updateOne(
+      { _id: product._id, userId: req.user._id },
+      {
+        $inc: {
+          stock: -parseFloat(quantity),
+          totalSold: sale.totalSale
+        }
+      }
+    );
 
     if (selectedUnits.length > 0) {
       await ProductUnit.updateMany(
@@ -231,21 +245,19 @@ router.post('/', async (req, res) => {
     }
     
     // Actualizar estadísticas del usuario
-    await User.findByIdAndUpdate(req.user._id, {
+    User.findByIdAndUpdate(req.user._id, {
       $inc: { 'stats.totalSales': 1 }
-    });
+    }).catch(error => console.error('Error actualizando estadisticas de usuario:', error));
     
-    try {
-      await createSaleCommission({
+    createSaleCommission({
         userId: req.user._id,
         sale,
         product,
         employeeId
-      });
-    } catch (commError) {
+    }).catch(commError => {
       console.error('❌ Error al crear comisión:', commError);
       console.error('   Stack:', commError.stack);
-    }
+    });
     
     res.status(201).json({
       success: true,

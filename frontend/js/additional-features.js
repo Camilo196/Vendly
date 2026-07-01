@@ -133,30 +133,47 @@ function getPaymentLabel(method) {
 // ========================================
 
 let allInventoryProducts = [];
+const INVENTORY_SEARCH_STORAGE_KEY = 'vendlyInventorySearch';
+
+function getInventorySearchQuery() {
+    return (document.getElementById('inventorySearchBar')?.value || '').trim().toLowerCase();
+}
+
+function filterInventoryProducts(products = [], query = '') {
+    if (!query) return products;
+
+    return products.filter(product => {
+        const name = (product.name || '').toLowerCase();
+        const category = (product.category || '').toLowerCase();
+        const brand = (product.brand || '').toLowerCase();
+        const sku = (product.sku || '').toLowerCase();
+        const barcode = (product.barcode || '').toLowerCase();
+
+        return name.includes(query)
+            || category.includes(query)
+            || brand.includes(query)
+            || sku.includes(query)
+            || barcode.includes(query);
+    });
+}
+
+function renderInventoryWithCurrentSearch() {
+    displayInventoryProducts(filterInventoryProducts(allInventoryProducts, getInventorySearchQuery()));
+}
 
 function initInventorySearch() {
     const searchBar = document.getElementById('inventorySearchBar');
     if (!searchBar) return;
+
+    const savedQuery = localStorage.getItem(INVENTORY_SEARCH_STORAGE_KEY) || '';
+    if (savedQuery && !searchBar.value) {
+        searchBar.value = savedQuery;
+    }
     
     searchBar.addEventListener('input', (e) => {
         const query = e.target.value.trim().toLowerCase();
-        
-        if (query.length === 0) {
-            displayInventoryProducts(allInventoryProducts);
-            return;
-        }
-        
-        const filtered = allInventoryProducts.filter(product => {
-            const name = product.name.toLowerCase();
-            const category = (product.category || '').toLowerCase();
-            const brand = (product.brand || '').toLowerCase();
-            
-            return name.includes(query) || 
-                   category.includes(query) || 
-                   brand.includes(query);
-        });
-        
-        displayInventoryProducts(filtered);
+        localStorage.setItem(INVENTORY_SEARCH_STORAGE_KEY, e.target.value.trim());
+        displayInventoryProducts(filterInventoryProducts(allInventoryProducts, query));
     });
 }
 
@@ -228,7 +245,7 @@ async function loadInventoryProducts() {
         if (response.success) {
             allInventoryProducts = response.products || [];
             AppState.products = response.products; // ✅ Guardar en AppState
-            displayInventoryProducts(allInventoryProducts);
+            renderInventoryWithCurrentSearch();
         }
     } catch (error) {
         console.error('Error loading inventory:', error);
