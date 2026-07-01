@@ -55,6 +55,16 @@ router.get('/dashboard', async (req, res) => {
     // Compras totales
     const purchases = await Purchase.find({ userId });
     const totalPurchases = purchases.reduce((sum, p) => sum + p.totalCost, 0);
+
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const todaySales = await Sale.find({
+      userId,
+      saleDate: { $gte: startOfDay }
+    });
+    const dailySalesTotal = todaySales.reduce((sum, s) => sum + s.totalSale, 0);
+    const dailyProfit = todaySales.reduce((sum, s) => sum + s.profit, 0);
     
     // Estadísticas de este mes
     const startOfMonth = new Date();
@@ -158,6 +168,11 @@ router.get('/dashboard', async (req, res) => {
             netProfit,
             technicalProfit: totalTechnicalProfit,
             count: sales.length
+          },
+          today: {
+            total: dailySalesTotal,
+            profit: dailyProfit,
+            count: todaySales.length
           },
           thisMonth: {
             total: monthlySalesTotal,

@@ -1058,6 +1058,10 @@ if (typeof app !== 'undefined') {
                     <div class="stat-value">${utils.formatMoney(stats.sales.thisMonth.total)}</div>
                 </div>
                 <div class="stat-card">
+                    <div class="stat-label">Venta Diaria</div>
+                    <div class="stat-value success">${utils.formatMoney(stats.sales?.today?.total || 0)}</div>
+                </div>
+                <div class="stat-card">
                     <div class="stat-label">Ganancia Neta Este Mes</div>
                     <div class="stat-value success">${utils.formatMoney(stats.sales.thisMonth.netProfit ?? stats.sales.thisMonth.profit ?? 0)}</div>
                 </div>
