@@ -134,7 +134,8 @@ router.get('/dashboard', async (req, res) => {
         inventory: {
           totalProducts,
           totalStock,
-          currentInvestment
+          currentInvestment,
+          monthlyInvestment: monthlyPurchasesTotal
         },
         commissions: {
           totalPaid: totalPaidCommissions,

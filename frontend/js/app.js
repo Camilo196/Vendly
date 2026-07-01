@@ -941,8 +941,8 @@ renderDashboard(stats) {
                 <div class="stat-value warning">${utils.formatMoney(stats.expenses?.thisMonth?.total || 0)}</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Invertido Este Mes</div>
-                <div class="stat-value">${utils.formatMoney(stats.purchases?.thisMonth?.total || 0)}</div>
+                <div class="stat-label">Inversión Mensual</div>
+                <div class="stat-value">${utils.formatMoney(stats.inventory?.monthlyInvestment ?? stats.purchases?.thisMonth?.total ?? 0)}</div>
             </div>
         `;
     }

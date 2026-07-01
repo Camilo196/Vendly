@@ -1078,6 +1078,10 @@ if (typeof app !== 'undefined') {
                     <div class="stat-value">${utils.formatMoney(stats.inventory.currentInvestment)}</div>
                 </div>
                 <div class="stat-card">
+                    <div class="stat-label">Inversión Mensual</div>
+                    <div class="stat-value">${utils.formatMoney(stats.inventory?.monthlyInvestment ?? stats.purchases?.thisMonth?.total ?? 0)}</div>
+                </div>
+                <div class="stat-card">
                     <div class="stat-label">Comisiones Pagadas</div>
                     <div class="stat-value warning">${utils.formatMoney(stats.commissions?.totalPaid || 0)}</div>
                 </div>
