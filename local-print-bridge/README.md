@@ -47,7 +47,22 @@ Queda escuchando en:
 ## Rutas
 
 - `GET /health`
+- `GET /config`
+- `POST /config`
 - `POST /print/barcode-label`
+- `POST /print/test-label`
+
+## Calibracion desde Vendly
+
+En Vendly entra a `Impresora`:
+
+1. Presiona `Probar conexion`.
+2. Presiona `Imprimir prueba`.
+3. Si la etiqueta sale corrida, usa `Mover izquierda`, `Mover derecha`, `Subir` o `Bajar`.
+4. Si el codigo sale pequeno o grande, usa `Agrandar codigo`, `Reducir codigo`, `Mas alto` o `Mas bajo`.
+5. Presiona `Guardar configuracion`.
+
+La configuracion queda guardada en `config.json` en ese computador. Cada cliente calibra su propia impresora una sola vez.
 
 ## Datos que recibe
 

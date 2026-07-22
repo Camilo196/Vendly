@@ -1571,6 +1571,35 @@ textarea:focus {
     font-weight: 800;
 }
 
+.printer-help {
+    color: #64748b;
+    line-height: 1.5;
+    margin-bottom: 14px;
+}
+
+.printer-calibration-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(120px, 1fr));
+    gap: 10px;
+    margin: 14px 0;
+}
+
+.printer-values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 12px 0 16px;
+}
+
+.printer-values span {
+    border: 1px solid #e2e8f0;
+    border-radius: 999px;
+    background: #f8fafc;
+    color: #334155;
+    padding: 7px 10px;
+    font-size: 13px;
+}
+
 .quick-sale-controls {
     display: grid;
     grid-template-columns: minmax(160px, 1.3fr) minmax(92px, 0.6fr) minmax(130px, 0.8fr) auto auto;

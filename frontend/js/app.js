@@ -458,6 +458,9 @@ async function activateAppView(view, options = {}) {
                 await loadExpensesView();
             }
             break;
+        case 'printer':
+            await loadPrinterSettingsView();
+            break;
         case 'reports':
             await app.loadReports();
             break;
@@ -587,6 +590,187 @@ async function printProductWithBridge(product, quantity) {
 
     await api.printBarcodeLabelViaBridge(payload);
 }
+
+function ensurePrinterSettingsView() {
+    const nav = document.querySelector('.app-nav');
+    if (nav && !document.querySelector('.nav-btn[data-view="printer"]')) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'nav-btn';
+        button.dataset.view = 'printer';
+        button.textContent = 'Impresora';
+        const reportsButton = document.querySelector('.nav-btn[data-view="reports"]');
+        nav.insertBefore(button, reportsButton || null);
+    }
+
+    const content = document.querySelector('.app-content');
+    if (!content || document.getElementById('viewPrinter')) return;
+
+    const view = document.createElement('div');
+    view.id = 'viewPrinter';
+    view.className = 'view';
+    view.innerHTML = `
+        <h2>Configuracion de Impresora</h2>
+        <div class="card printer-settings-card">
+            <h3>Etiquetas de codigo de barras</h3>
+            <p class="printer-help">Instala y deja abierto Vendly Print Helper en el computador que tiene conectada la impresora. Luego calibra aqui sin tocar codigo.</p>
+            <div id="printerStatus" class="sale-scan-feedback" style="display:none;"></div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nombre de impresora</label>
+                    <input type="text" id="printerNameSetting" placeholder="Vacio = impresora predeterminada">
+                </div>
+                <div class="form-group">
+                    <label>DPI</label>
+                    <input type="number" id="printerDpiSetting" min="100" step="1">
+                </div>
+                <div class="form-group">
+                    <label>Columnas</label>
+                    <input type="number" id="printerColumnsSetting" min="1" step="1">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Ancho papel mm</label>
+                    <input type="number" id="printerPageWidthSetting" step="0.1">
+                </div>
+                <div class="form-group">
+                    <label>Alto etiqueta mm</label>
+                    <input type="number" id="printerLabelHeightSetting" step="0.1">
+                </div>
+                <div class="form-group">
+                    <label>Ancho etiqueta mm</label>
+                    <input type="number" id="printerLabelWidthSetting" step="0.1">
+                </div>
+            </div>
+
+            <div class="printer-calibration-grid">
+                <button type="button" class="btn btn-secondary" onclick="adjustPrinterSetting('pageXOffsetMm', -0.5)">Mover izquierda</button>
+                <button type="button" class="btn btn-secondary" onclick="adjustPrinterSetting('pageXOffsetMm', 0.5)">Mover derecha</button>
+                <button type="button" class="btn btn-secondary" onclick="adjustPrinterSetting('pageYOffsetMm', -0.5)">Subir</button>
+                <button type="button" class="btn btn-secondary" onclick="adjustPrinterSetting('pageYOffsetMm', 0.5)">Bajar</button>
+                <button type="button" class="btn btn-secondary" onclick="adjustPrinterSetting('barcodeWidthMm', 1)">Agrandar codigo</button>
+                <button type="button" class="btn btn-secondary" onclick="adjustPrinterSetting('barcodeWidthMm', -1)">Reducir codigo</button>
+                <button type="button" class="btn btn-secondary" onclick="adjustPrinterSetting('barcodeHeightMm', 1)">Mas alto</button>
+                <button type="button" class="btn btn-secondary" onclick="adjustPrinterSetting('barcodeHeightMm', -1)">Mas bajo</button>
+            </div>
+
+            <div class="printer-values" id="printerCalibrationValues"></div>
+
+            <div class="form-actions">
+                <button type="button" class="btn" onclick="testPrinterConnection()">Probar conexion</button>
+                <button type="button" class="btn btn-secondary" onclick="savePrinterSettings()">Guardar configuracion</button>
+                <button type="button" class="btn btn-primary" onclick="printPrinterTestLabel()">Imprimir prueba</button>
+            </div>
+        </div>
+    `;
+    content.appendChild(view);
+}
+
+function getPrinterSettingsFromForm() {
+    return {
+        ...(window.currentPrinterConfig || {}),
+        printerName: document.getElementById('printerNameSetting')?.value || '',
+        dpi: Number(document.getElementById('printerDpiSetting')?.value) || 203,
+        columns: Number(document.getElementById('printerColumnsSetting')?.value) || 2,
+        pageWidthMm: Number(document.getElementById('printerPageWidthSetting')?.value) || 72,
+        labelHeightMm: Number(document.getElementById('printerLabelHeightSetting')?.value) || 25,
+        labelWidthMm: Number(document.getElementById('printerLabelWidthSetting')?.value) || 35
+    };
+}
+
+function setPrinterStatus(message, type = 'success') {
+    const box = document.getElementById('printerStatus');
+    if (!box) return;
+    box.style.display = 'block';
+    box.classList.remove('is-success', 'is-error');
+    box.classList.add(type === 'error' ? 'is-error' : 'is-success');
+    box.textContent = message;
+}
+
+function renderPrinterConfig(config = {}) {
+    window.currentPrinterConfig = {
+        ...(window.currentPrinterConfig || {}),
+        ...config
+    };
+
+    const assignValue = (id, value) => {
+        const input = document.getElementById(id);
+        if (input) input.value = value ?? '';
+    };
+
+    assignValue('printerNameSetting', config.printerName || '');
+    assignValue('printerDpiSetting', config.dpi || 203);
+    assignValue('printerColumnsSetting', config.columns || 2);
+    assignValue('printerPageWidthSetting', config.pageWidthMm || 72);
+    assignValue('printerLabelHeightSetting', config.labelHeightMm || 25);
+    assignValue('printerLabelWidthSetting', config.labelWidthMm || 35);
+
+    const values = document.getElementById('printerCalibrationValues');
+    if (values) {
+        values.innerHTML = `
+            <span>Izq/Der: <strong>${config.pageXOffsetMm ?? 0}mm</strong></span>
+            <span>Arriba/Abajo: <strong>${config.pageYOffsetMm ?? 0}mm</strong></span>
+            <span>Ancho codigo: <strong>${config.barcodeWidthMm ?? 0}mm</strong></span>
+            <span>Alto codigo: <strong>${config.barcodeHeightMm ?? 0}mm</strong></span>
+        `;
+    }
+}
+
+async function loadPrinterSettingsView() {
+    ensurePrinterSettingsView();
+    try {
+        const response = await api.getPrintBridgeConfig();
+        renderPrinterConfig(response.config || {});
+        setPrinterStatus('Helper conectado. Puedes calibrar e imprimir prueba.');
+    } catch (error) {
+        setPrinterStatus('No se encontro Vendly Print Helper abierto en este computador. Abre el helper local y vuelve a probar.', 'error');
+    }
+}
+
+window.adjustPrinterSetting = function(key, delta) {
+    const config = {
+        ...(window.currentPrinterConfig || getPrinterSettingsFromForm())
+    };
+    config[key] = Number((Number(config[key] || 0) + delta).toFixed(2));
+    renderPrinterConfig(config);
+};
+
+window.savePrinterSettings = async function() {
+    try {
+        const config = {
+            ...(window.currentPrinterConfig || {}),
+            ...getPrinterSettingsFromForm()
+        };
+        const response = await api.savePrintBridgeConfig(config);
+        renderPrinterConfig(response.config || config);
+        setPrinterStatus('Configuracion guardada en este computador.');
+        utils.showToast('Configuracion de impresora guardada');
+    } catch (error) {
+        setPrinterStatus(error.message || 'No se pudo guardar la configuracion.', 'error');
+    }
+};
+
+window.testPrinterConnection = async function() {
+    try {
+        await loadPrinterSettingsView();
+        utils.showToast('Helper local conectado');
+    } catch (error) {
+        utils.showToast(error.message || 'Helper local no disponible', 'error');
+    }
+};
+
+window.printPrinterTestLabel = async function() {
+    try {
+        await savePrinterSettings();
+        await api.printTestBarcodeLabel({ quantity: Number(window.currentPrinterConfig?.columns || 2) });
+        setPrinterStatus('Etiqueta de prueba enviada. Si sale corrida, ajusta con los botones y vuelve a imprimir prueba.');
+    } catch (error) {
+        setPrinterStatus(error.message || 'No se pudo imprimir la prueba.', 'error');
+    }
+};
 
 function prepareScannedSale(product) {
     const quantityField = document.getElementById('saleQuantity');
@@ -1270,6 +1454,8 @@ const response = await api.getProducts();
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
+    ensurePrinterSettingsView();
+
     const saleForm = document.getElementById('formSale');
     saleForm?.addEventListener('submit', async (e) => {
         e.preventDefault();

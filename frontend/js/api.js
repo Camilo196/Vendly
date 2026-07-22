@@ -187,6 +187,24 @@ class APIClient {
     return this.bridgeRequest('/health');
   }
 
+  async getPrintBridgeConfig() {
+    return this.bridgeRequest('/config');
+  }
+
+  async savePrintBridgeConfig(config) {
+    return this.bridgeRequest('/config', {
+      method: 'POST',
+      body: JSON.stringify({ config })
+    });
+  }
+
+  async printTestBarcodeLabel(payload = {}) {
+    return this.bridgeRequest('/print/test-label', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+  }
+
   async printBarcodeLabelViaBridge(payload) {
     return this.bridgeRequest('/print/barcode-label', {
       method: 'POST',

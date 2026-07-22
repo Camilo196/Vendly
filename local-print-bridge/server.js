@@ -5,12 +5,31 @@ const { spawn } = require('child_process');
 const { renderSheetBuffer } = require('./renderer');
 
 const DEFAULT_PORT = 5399;
+const CONFIG_FILE = path.join(__dirname, 'config.json');
+const CONFIG_EXAMPLE_FILE = path.join(__dirname, 'config.example.json');
+const CONFIG_KEYS = [
+  'printerName',
+  'dpi',
+  'pageWidthMm',
+  'pageHeightMm',
+  'columns',
+  'maxLabelsPerJob',
+  'labelWidthMm',
+  'labelHeightMm',
+  'horizontalGapMm',
+  'verticalGapMm',
+  'pageXOffsetMm',
+  'pageYOffsetMm',
+  'barcodeXOffsetMm',
+  'barcodeYOffsetMm',
+  'barcodeWidthMm',
+  'barcodeHeightMm',
+  'textTopGapMm'
+];
 
 function loadConfig() {
   const baseDir = __dirname;
-  const configPath = path.join(baseDir, 'config.json');
-  const examplePath = path.join(baseDir, 'config.example.json');
-  const sourcePath = fs.existsSync(configPath) ? configPath : examplePath;
+  const sourcePath = fs.existsSync(CONFIG_FILE) ? CONFIG_FILE : CONFIG_EXAMPLE_FILE;
   const raw = fs.readFileSync(sourcePath, 'utf8');
   const parsed = JSON.parse(raw);
 
@@ -31,7 +50,50 @@ function loadConfig() {
   };
 }
 
-const config = loadConfig();
+function getPublicConfig() {
+  return CONFIG_KEYS.reduce((acc, key) => {
+    acc[key] = config[key];
+    return acc;
+  }, {});
+}
+
+function coerceConfigValue(key, value) {
+  if (key === 'printerName') {
+    return String(value || '').trim();
+  }
+
+  const numericValue = Number(value);
+  return Number.isFinite(numericValue) ? numericValue : config[key];
+}
+
+function saveConfig(partialConfig = {}) {
+  const nextConfig = {
+    ...config,
+    ...CONFIG_KEYS.reduce((acc, key) => {
+      if (Object.prototype.hasOwnProperty.call(partialConfig, key)) {
+        acc[key] = coerceConfigValue(key, partialConfig[key]);
+      }
+      return acc;
+    }, {})
+  };
+
+  const persisted = {
+    ...getPublicConfig(),
+    ...CONFIG_KEYS.reduce((acc, key) => {
+      acc[key] = nextConfig[key];
+      return acc;
+    }, {}),
+    port: nextConfig.port,
+    runtimeDir: './runtime'
+  };
+
+  fs.writeFileSync(CONFIG_FILE, `${JSON.stringify(persisted, null, 2)}\n`, 'utf8');
+  config = loadConfig();
+  fs.mkdirSync(config.runtimeDir, { recursive: true });
+  return getPublicConfig();
+}
+
+let config = loadConfig();
 fs.mkdirSync(config.runtimeDir, { recursive: true });
 
 function sendJson(res, statusCode, payload) {
@@ -181,6 +243,44 @@ async function handlePrint(req, res) {
   });
 }
 
+async function handleConfigUpdate(req, res) {
+  const payload = await parseJsonBody(req);
+  const savedConfig = saveConfig(payload.config || payload || {});
+
+  sendJson(res, 200, {
+    success: true,
+    message: 'Configuracion guardada.',
+    config: savedConfig
+  });
+}
+
+async function handleTestPrint(req, res) {
+  const payload = await parseJsonBody(req);
+  const testBarcode = String(payload.barcode || '2001234567890').trim();
+
+  const testPayload = {
+    product: {
+      name: 'Prueba Vendly',
+      barcode: testBarcode,
+      barcodeFormat: /^\d{13}$/.test(testBarcode) ? 'ean_13' : 'code_39',
+      sku: 'TEST',
+      price: ''
+    },
+    quantity: Math.max(1, parseInt(payload.quantity, 10) || config.columns || 2)
+  };
+
+  req.emit = () => {};
+  const fakeReq = {
+    on(event, callback) {
+      if (event === 'data') callback(Buffer.from(JSON.stringify(testPayload)));
+      if (event === 'end') callback();
+      return this;
+    }
+  };
+
+  await handlePrint(fakeReq, res);
+}
+
 const server = http.createServer(async (req, res) => {
   try {
     if (req.method === 'OPTIONS') {
@@ -210,8 +310,26 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    if (req.method === 'GET' && url.pathname === '/config') {
+      sendJson(res, 200, {
+        success: true,
+        config: getPublicConfig()
+      });
+      return;
+    }
+
+    if (req.method === 'POST' && url.pathname === '/config') {
+      await handleConfigUpdate(req, res);
+      return;
+    }
+
     if (req.method === 'POST' && url.pathname === '/print/barcode-label') {
       await handlePrint(req, res);
+      return;
+    }
+
+    if (req.method === 'POST' && url.pathname === '/print/test-label') {
+      await handleTestPrint(req, res);
       return;
     }
 
