@@ -35,6 +35,15 @@ Helper local liviano para imprimir etiquetas desde Vendly sin depender del naveg
 
 ## Ejecucion
 
+### Opcion facil para clientes
+
+1. Instala Node.js LTS si el computador no lo tiene: https://nodejs.org/
+2. Abre `iniciar-helper.bat` con doble clic.
+3. Deja esa ventana abierta mientras imprimes etiquetas.
+4. En Vendly entra a `Impresora` y presiona `Probar conexion`.
+
+### Opcion tecnica
+
 ```powershell
 cd D:\inventario-saas-FINAL-COMPLETO\inventario-saas-final\local-print-bridge
 node server.js
