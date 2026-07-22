@@ -613,7 +613,7 @@ function ensurePrinterSettingsView() {
         <h2>Configuracion de Impresora</h2>
         <div class="card printer-settings-card">
             <h3>Etiquetas de codigo de barras</h3>
-            <p class="printer-help">Instala y deja abierto Vendly Print Helper en el computador que tiene conectada la impresora. Luego calibra aqui sin tocar codigo.</p>
+            <p class="printer-help">Puedes imprimir desde navegador sin instalar nada. Para etiquetas termicas exactas y calibracion guardada por computador, usa Vendly Print Helper.</p>
             <div id="printerStatus" class="sale-scan-feedback" style="display:none;"></div>
 
             <div class="form-row">
@@ -663,6 +663,7 @@ function ensurePrinterSettingsView() {
                 <button type="button" class="btn" onclick="testPrinterConnection()">Probar conexion</button>
                 <button type="button" class="btn btn-secondary" onclick="savePrinterSettings()">Guardar configuracion</button>
                 <button type="button" class="btn btn-primary" onclick="printPrinterTestLabel()">Imprimir prueba</button>
+                <button type="button" class="btn btn-secondary" onclick="printBrowserTestLabel()">Prueba navegador</button>
             </div>
         </div>
     `;
@@ -726,7 +727,7 @@ async function loadPrinterSettingsView() {
         renderPrinterConfig(response.config || {});
         setPrinterStatus('Helper conectado. Puedes calibrar e imprimir prueba.');
     } catch (error) {
-        setPrinterStatus('No se encontro Vendly Print Helper abierto en este computador. Abre el helper local y vuelve a probar.', 'error');
+        setPrinterStatus('Modo navegador disponible. Para calibracion perfecta, abre Vendly Print Helper en este computador.', 'error');
     }
 }
 
@@ -768,8 +769,34 @@ window.printPrinterTestLabel = async function() {
         await api.printTestBarcodeLabel({ quantity: Number(window.currentPrinterConfig?.columns || 2) });
         setPrinterStatus('Etiqueta de prueba enviada. Si sale corrida, ajusta con los botones y vuelve a imprimir prueba.');
     } catch (error) {
-        setPrinterStatus(error.message || 'No se pudo imprimir la prueba.', 'error');
+        setPrinterStatus('No se encontro el helper. Abriendo prueba desde navegador.', 'error');
+        printBrowserTestLabel();
     }
+};
+
+window.printBrowserTestLabel = function() {
+    if (!window.BarcodeTools?.printLabels) {
+        setPrinterStatus('No se pudo abrir la impresion del navegador.', 'error');
+        return;
+    }
+
+    const config = getPrinterSettingsFromForm();
+    const layout = {
+        columns: Number(config.columns || 2),
+        labelWidthMm: Number(config.labelWidthMm || 35),
+        labelHeightMm: Number(config.labelHeightMm || 25),
+        gapMm: Number(config.horizontalGapMm || 2),
+        pagePaddingMm: Math.max(0, Number(config.pageXOffsetMm || 0))
+    };
+
+    BarcodeTools.printLabels({
+        name: 'Prueba Vendly',
+        barcode: '2001234567890',
+        barcodeFormat: 'ean_13',
+        sku: 'TEST'
+    }, layout.columns, null, layout);
+
+    setPrinterStatus('Prueba abierta desde navegador. En la ventana de imprimir usa escala 100%, margenes ninguno y papel del tamano de la etiqueta.');
 };
 
 function prepareScannedSale(product) {
