@@ -840,7 +840,8 @@ window.printBrowserTestLabel = function() {
         labelWidthMm: Number(config.labelWidthMm || 35),
         labelHeightMm: Number(config.labelHeightMm || 25),
         gapMm: Number(config.horizontalGapMm || 2),
-        pagePaddingMm: Math.max(0, Number(config.pageXOffsetMm || 0))
+        rowGapMm: Number(config.verticalGapMm || 0),
+        pagePaddingMm: 0
     };
 
     BarcodeTools.printLabels({
@@ -850,7 +851,7 @@ window.printBrowserTestLabel = function() {
         sku: 'TEST'
     }, layout.columns, null, layout);
 
-    setPrinterStatus('Prueba abierta desde navegador. En la ventana de imprimir usa escala 100%, margenes ninguno y papel del tamano de la etiqueta.');
+    setPrinterStatus('Prueba abierta desde navegador. Deja copias en 1; la cantidad se maneja desde Vendly. Usa escala 100%, margenes ninguno y papel del tamano de la etiqueta.');
 };
 
 function prepareScannedSale(product) {

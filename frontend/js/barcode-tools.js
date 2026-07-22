@@ -1,10 +1,10 @@
 const BarcodeTools = (() => {
     const DEFAULT_LABEL_LAYOUT = {
         columns: 2,
-        labelWidthMm: 32,
+        labelWidthMm: 35,
         labelHeightMm: 25,
-        gapMm: 1.5,
-        pagePaddingMm: 1.5
+        gapMm: 2,
+        pagePaddingMm: 0
     };
 
     const CODE39_PATTERNS = {
@@ -376,6 +376,10 @@ const BarcodeTools = (() => {
         const pageWidthMm = (layout.columns * layout.labelWidthMm)
             + ((layout.columns - 1) * layout.gapMm)
             + (layout.pagePaddingMm * 2);
+        const rows = Math.max(1, Math.ceil(safeQuantity / layout.columns));
+        const pageHeightMm = (rows * layout.labelHeightMm)
+            + ((rows - 1) * (layout.rowGapMm || 0))
+            + (layout.pagePaddingMm * 2);
         const labels = Array.from({ length: safeQuantity }, () => `
             <div class="barcode-label">
                 <div class="barcode-svg">${barcode.svg}</div>
@@ -394,20 +398,35 @@ const BarcodeTools = (() => {
                         font-family: Arial, sans-serif;
                         margin: 0;
                         padding: ${layout.pagePaddingMm}mm;
+                        width: ${pageWidthMm}mm;
+                        min-height: ${pageHeightMm}mm;
                         background: #fff;
                         color: #111827;
+                    }
+                    .print-note {
+                        box-sizing: border-box;
+                        width: ${pageWidthMm}mm;
+                        margin: 0 0 4mm;
+                        padding: 3mm;
+                        border: 1px solid #dbeafe;
+                        border-radius: 8px;
+                        background: #eff6ff;
+                        color: #1e3a8a;
+                        font-size: 12px;
+                        line-height: 1.35;
                     }
                     .labels-grid {
                         display: grid;
                         grid-template-columns: repeat(${layout.columns}, ${layout.labelWidthMm}mm);
-                        gap: ${layout.gapMm}mm;
+                        column-gap: ${layout.gapMm}mm;
+                        row-gap: ${layout.rowGapMm || 0}mm;
                         width: ${pageWidthMm}mm;
                     }
                     .barcode-label {
                         width: ${layout.labelWidthMm}mm;
                         height: ${layout.labelHeightMm}mm;
                         box-sizing: border-box;
-                        padding: 1.4mm 1.8mm 1.2mm;
+                        padding: 0.7mm 1.2mm 0.6mm;
                         break-inside: avoid;
                         display: flex;
                         flex-direction: column;
@@ -420,29 +439,34 @@ const BarcodeTools = (() => {
                         justify-content: center;
                         align-items: center;
                         margin: 0;
-                        min-height: 11.5mm;
+                        min-height: 16mm;
                         width: 100%;
                     }
                     .barcode-svg svg {
                         width: 100%;
                         height: auto;
-                        max-height: 11.5mm;
+                        max-height: 16mm;
                     }
                     .barcode-code {
                         text-align: center;
-                        font-size: 8pt;
+                        font-size: 8.5pt;
                         font-weight: 700;
                         letter-spacing: 0.3px;
-                        margin-top: 1.2mm;
+                        margin-top: 0.8mm;
                         line-height: 1.1;
                     }
                     @media print {
                         @page {
-                            size: ${pageWidthMm}mm auto;
+                            size: ${pageWidthMm}mm ${pageHeightMm}mm;
                             margin: 0;
+                        }
+                        .print-note {
+                            display: none;
                         }
                         body {
                             padding: ${layout.pagePaddingMm}mm;
+                            width: ${pageWidthMm}mm;
+                            min-height: ${pageHeightMm}mm;
                         }
                         .barcode-label {
                             page-break-inside: avoid;
@@ -451,6 +475,10 @@ const BarcodeTools = (() => {
                 </style>
             </head>
             <body>
+                <div class="print-note">
+                    Importante: deja las copias del navegador en 1. La cantidad de etiquetas se controla desde Vendly.
+                    Usa escala 100%, margenes ninguno y papel personalizado de ${pageWidthMm} x ${pageHeightMm} mm.
+                </div>
                 <div class="labels-grid">${labels}</div>
                 <script>
                     window.onload = function () {
