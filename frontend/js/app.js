@@ -26,6 +26,7 @@ const salesScannerState = {
 
 let quickSaleProduct = null;
 const VIEW_STORAGE_KEY = 'vendlyCurrentView';
+const PRINTER_CONFIG_STORAGE_KEY = 'vendlyPrinterConfig';
 
 // Utilidades
 const utils = {
@@ -401,6 +402,46 @@ function getSavedAppView() {
     return document.querySelector(`.nav-btn[data-view="${savedView}"]`) ? savedView : 'dashboard';
 }
 
+function getDefaultPrinterConfig() {
+    return {
+        printerName: '',
+        dpi: 203,
+        pageWidthMm: 72,
+        pageHeightMm: 25,
+        columns: 2,
+        maxLabelsPerJob: 2,
+        labelWidthMm: 35,
+        labelHeightMm: 25,
+        horizontalGapMm: 2,
+        verticalGapMm: 0,
+        pageXOffsetMm: 0,
+        pageYOffsetMm: 0,
+        barcodeWidthMm: 33.4,
+        barcodeHeightMm: 15.2
+    };
+}
+
+function getLocalPrinterConfig() {
+    try {
+        const saved = JSON.parse(localStorage.getItem(PRINTER_CONFIG_STORAGE_KEY) || '{}');
+        return {
+            ...getDefaultPrinterConfig(),
+            ...(saved && typeof saved === 'object' ? saved : {})
+        };
+    } catch (error) {
+        return getDefaultPrinterConfig();
+    }
+}
+
+function saveLocalPrinterConfig(config = {}) {
+    const nextConfig = {
+        ...getLocalPrinterConfig(),
+        ...config
+    };
+    localStorage.setItem(PRINTER_CONFIG_STORAGE_KEY, JSON.stringify(nextConfig));
+    return nextConfig;
+}
+
 async function activateAppView(view, options = {}) {
     const { persist = true } = options;
     const navButton = document.querySelector(`.nav-btn[data-view="${view}"]`);
@@ -693,6 +734,7 @@ function setPrinterStatus(message, type = 'success') {
 
 function renderPrinterConfig(config = {}) {
     window.currentPrinterConfig = {
+        ...getDefaultPrinterConfig(),
         ...(window.currentPrinterConfig || {}),
         ...config
     };
@@ -722,6 +764,7 @@ function renderPrinterConfig(config = {}) {
 
 async function loadPrinterSettingsView() {
     ensurePrinterSettingsView();
+    renderPrinterConfig(getLocalPrinterConfig());
     try {
         const response = await api.getPrintBridgeConfig();
         renderPrinterConfig(response.config || {});
@@ -740,17 +783,24 @@ window.adjustPrinterSetting = function(key, delta) {
 };
 
 window.savePrinterSettings = async function() {
+    const config = {
+        ...(window.currentPrinterConfig || {}),
+        ...getPrinterSettingsFromForm()
+    };
+    const localConfig = saveLocalPrinterConfig(config);
+    renderPrinterConfig(localConfig);
+
     try {
-        const config = {
-            ...(window.currentPrinterConfig || {}),
-            ...getPrinterSettingsFromForm()
-        };
         const response = await api.savePrintBridgeConfig(config);
-        renderPrinterConfig(response.config || config);
-        setPrinterStatus('Configuracion guardada en este computador.');
+        const savedConfig = saveLocalPrinterConfig(response.config || config);
+        renderPrinterConfig(savedConfig);
+        setPrinterStatus('Configuracion guardada en helper y navegador.');
         utils.showToast('Configuracion de impresora guardada');
+        return { mode: 'helper', config: savedConfig };
     } catch (error) {
-        setPrinterStatus(error.message || 'No se pudo guardar la configuracion.', 'error');
+        setPrinterStatus('Helper no conectado. Configuracion guardada para impresion por navegador en este computador.', 'error');
+        utils.showToast('Configuracion guardada en navegador');
+        return { mode: 'browser', config: localConfig };
     }
 };
 
@@ -765,7 +815,11 @@ window.testPrinterConnection = async function() {
 
 window.printPrinterTestLabel = async function() {
     try {
-        await savePrinterSettings();
+        const result = await savePrinterSettings();
+        if (result?.mode === 'browser') {
+            printBrowserTestLabel();
+            return;
+        }
         await api.printTestBarcodeLabel({ quantity: Number(window.currentPrinterConfig?.columns || 2) });
         setPrinterStatus('Etiqueta de prueba enviada. Si sale corrida, ajusta con los botones y vuelve a imprimir prueba.');
     } catch (error) {
