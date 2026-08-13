@@ -6,34 +6,34 @@ const TechnicalService = require('../models/TechnicalService');
 const Commission = require('../models/Commission');
 const Expense = require('../models/Expense');
 const { protect } = require('../middleware/auth');
+const {
+  getBusinessDayRange,
+  getBusinessMonthRange,
+  getBusinessRollingDaysRange,
+  getBusinessYearRange
+} = require('../utils/businessDateRange');
 
 router.use(protect);
 
 function getDateRange(period, startDate, endDate) {
-  const now = new Date();
   let from = null;
   let to = null;
   let label = 'Personalizado';
 
   if (period === 'daily') {
-    from = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    to = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+    ({ from, to } = getBusinessDayRange());
     label = 'Hoy';
   } else if (period === 'weekly') {
-    to = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-    from = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6);
+    ({ from, to } = getBusinessRollingDaysRange(7));
     label = 'Últimos 7 días';
   } else if (period === 'monthly') {
-    from = new Date(now.getFullYear(), now.getMonth(), 1);
-    to = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    ({ from, to } = getBusinessMonthRange());
     label = 'Mes actual';
   } else if (period === 'previous_month') {
-    from = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-    to = new Date(now.getFullYear(), now.getMonth(), 1);
+    ({ from, to } = getBusinessMonthRange(new Date(), -1));
     label = 'Mes anterior';
   } else if (period === 'yearly') {
-    from = new Date(now.getFullYear(), 0, 1);
-    to = new Date(now.getFullYear() + 1, 0, 1);
+    ({ from, to } = getBusinessYearRange());
     label = 'Año actual';
   } else if (startDate && endDate) {
     from = new Date(startDate);

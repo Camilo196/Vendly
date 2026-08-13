@@ -2,30 +2,32 @@ const express = require('express');
 const router = express.Router();
 const Expense = require('../models/Expense');
 const { protect } = require('../middleware/auth');
+const { getBusinessDayRange, getBusinessMonthRange } = require('../utils/businessDateRange');
 
 router.use(protect);
 
 function getDateRange(period) {
-  const now = new Date();
-
   if (period === 'monthly') {
+    const { from, to } = getBusinessMonthRange();
     return {
-      $gte: new Date(now.getFullYear(), now.getMonth(), 1),
-      $lt: new Date(now.getFullYear(), now.getMonth() + 1, 1)
+      $gte: from,
+      $lt: to
     };
   }
 
   if (period === 'previous_month') {
+    const { from, to } = getBusinessMonthRange(new Date(), -1);
     return {
-      $gte: new Date(now.getFullYear(), now.getMonth() - 1, 1),
-      $lt: new Date(now.getFullYear(), now.getMonth(), 1)
+      $gte: from,
+      $lt: to
     };
   }
 
   if (period === 'daily') {
+    const { from, to } = getBusinessDayRange();
     return {
-      $gte: new Date(now.getFullYear(), now.getMonth(), now.getDate()),
-      $lt: new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)
+      $gte: from,
+      $lt: to
     };
   }
 

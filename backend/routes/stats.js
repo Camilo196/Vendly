@@ -7,6 +7,7 @@ const TechnicalService = require('../models/TechnicalService');
 const Commission = require('../models/Commission');
 const Expense = require('../models/Expense');
 const { protect } = require('../middleware/auth');
+const { getBusinessDayRange, getBusinessMonthRange } = require('../utils/businessDateRange');
 
 router.use(protect);
 
@@ -56,24 +57,21 @@ router.get('/dashboard', async (req, res) => {
     const purchases = await Purchase.find({ userId });
     const totalPurchases = purchases.reduce((sum, p) => sum + p.totalCost, 0);
 
-    const startOfDay = new Date();
-    startOfDay.setHours(0, 0, 0, 0);
+    const todayRange = getBusinessDayRange();
 
     const todaySales = await Sale.find({
       userId,
-      saleDate: { $gte: startOfDay }
+      saleDate: { $gte: todayRange.from, $lt: todayRange.to }
     });
     const dailySalesTotal = todaySales.reduce((sum, s) => sum + s.totalSale, 0);
     const dailyProfit = todaySales.reduce((sum, s) => sum + s.profit, 0);
     
     // Estadísticas de este mes
-    const startOfMonth = new Date();
-    startOfMonth.setDate(1);
-    startOfMonth.setHours(0, 0, 0, 0);
+    const monthRange = getBusinessMonthRange();
     
     const monthSales = await Sale.find({ 
       userId, 
-      saleDate: { $gte: startOfMonth } 
+      saleDate: { $gte: monthRange.from, $lt: monthRange.to } 
     });
     const monthlySalesTotal = monthSales.reduce((sum, s) => sum + s.totalSale, 0);
     const monthlyProfit = monthSales.reduce((sum, s) => sum + s.profit, 0);
@@ -81,7 +79,7 @@ router.get('/dashboard', async (req, res) => {
     
     const monthPurchases = await Purchase.find({ 
       userId, 
-      purchaseDate: { $gte: startOfMonth } 
+      purchaseDate: { $gte: monthRange.from, $lt: monthRange.to } 
     });
     const monthlyPurchasesTotal = monthPurchases.reduce((sum, p) => sum + p.totalCost, 0);
 
@@ -89,7 +87,7 @@ router.get('/dashboard', async (req, res) => {
     const monthTechnicalServices = await TechnicalService.find({
       userId,
       status: { $in: ['completed', 'delivered'] },
-      createdAt: { $gte: startOfMonth }
+      createdAt: { $gte: monthRange.from, $lt: monthRange.to }
     });
     const monthlyTechnicalRevenue = monthTechnicalServices.reduce((sum, ts) => sum + (ts.laborCost || 0), 0);
     const monthlyTechnicalPartsProfit = monthTechnicalServices.reduce((sum, ts) => {
@@ -107,7 +105,7 @@ router.get('/dashboard', async (req, res) => {
     const totalMonthlySalesCommissions = monthlySalesCommissions.reduce((sum, commission) => sum + (commission.commissionAmount || 0), 0);
     const monthExpenses = await Expense.find({
       userId,
-      expenseDate: { $gte: startOfMonth }
+      expenseDate: { $gte: monthRange.from, $lt: monthRange.to }
     });
     const monthlyExpensesTotal = monthExpenses.reduce((sum, item) => sum + (item.amount || 0), 0);
     const monthlyNetProfit = monthlyProfit + monthlyTechnicalProfit - totalMonthlySalesCommissions - monthlyTechnicalCommissions - monthlyExpensesTotal;
