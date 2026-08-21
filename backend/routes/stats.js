@@ -65,6 +65,33 @@ router.get('/dashboard', async (req, res) => {
     });
     const dailySalesTotal = todaySales.reduce((sum, s) => sum + s.totalSale, 0);
     const dailyProfit = todaySales.reduce((sum, s) => sum + s.profit, 0);
+    const dailySaleIds = todaySales.map(s => s._id);
+
+    const todayTechnicalServices = await TechnicalService.find({
+      userId,
+      status: { $in: ['completed', 'delivered'] },
+      createdAt: { $gte: todayRange.from, $lt: todayRange.to }
+    });
+    const dailyTechnicalRevenue = todayTechnicalServices.reduce((sum, ts) => sum + (ts.laborCost || 0), 0);
+    const dailyTechnicalPartsProfit = todayTechnicalServices.reduce((sum, ts) => {
+      return sum + Math.max(0, (ts.partsPrice || 0) - (ts.partsCost || 0));
+    }, 0);
+    const dailyTechnicalProfit = dailyTechnicalRevenue + dailyTechnicalPartsProfit;
+    const dailyTechnicalCommissions = todayTechnicalServices.reduce((sum, ts) => sum + (ts.technicianCommission || 0), 0);
+    const dailySalesCommissions = dailySaleIds.length
+      ? await Commission.find({
+          userId,
+          referenceId: { $in: dailySaleIds },
+          status: { $in: ['pending', 'approved', 'paid'] }
+        })
+      : [];
+    const totalDailySalesCommissions = dailySalesCommissions.reduce((sum, commission) => sum + (commission.commissionAmount || 0), 0);
+    const todayExpenses = await Expense.find({
+      userId,
+      expenseDate: { $gte: todayRange.from, $lt: todayRange.to }
+    });
+    const dailyExpensesTotal = todayExpenses.reduce((sum, item) => sum + (item.amount || 0), 0);
+    const dailyNetProfit = dailyProfit + dailyTechnicalProfit - totalDailySalesCommissions - dailyTechnicalCommissions - dailyExpensesTotal;
     
     // Estadísticas de este mes
     const monthRange = getBusinessMonthRange();
@@ -157,6 +184,10 @@ router.get('/dashboard', async (req, res) => {
           thisMonth: {
             total: monthlyExpensesTotal,
             count: monthExpenses.length
+          },
+          today: {
+            total: dailyExpensesTotal,
+            count: todayExpenses.length
           }
         },
         sales: {
@@ -170,6 +201,10 @@ router.get('/dashboard', async (req, res) => {
           today: {
             total: dailySalesTotal,
             profit: dailyProfit,
+            netProfit: dailyNetProfit,
+            technicalProfit: dailyTechnicalProfit,
+            commissions: totalDailySalesCommissions + dailyTechnicalCommissions,
+            expenses: dailyExpensesTotal,
             count: todaySales.length
           },
           thisMonth: {

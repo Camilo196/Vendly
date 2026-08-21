@@ -1061,6 +1061,10 @@ if (typeof app !== 'undefined') {
                     <div class="stat-label">Venta Diaria</div>
                     <div class="stat-value success">${utils.formatMoney(stats.sales?.today?.total || 0)}</div>
                 </div>
+                <div class="stat-card" style="border: 2px solid var(--success);">
+                    <div class="stat-label">Ganancia Neta Hoy</div>
+                    <div class="stat-value success">${utils.formatMoney(stats.sales?.today?.netProfit ?? stats.sales?.today?.profit ?? 0)}</div>
+                </div>
                 <div class="stat-card">
                     <div class="stat-label">Ganancia Neta Este Mes</div>
                     <div class="stat-value success">${utils.formatMoney(stats.sales.thisMonth.netProfit ?? stats.sales.thisMonth.profit ?? 0)}</div>
